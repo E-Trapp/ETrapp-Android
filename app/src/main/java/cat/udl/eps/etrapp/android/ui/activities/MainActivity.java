@@ -1,16 +1,26 @@
 package cat.udl.eps.etrapp.android.ui.activities;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
+import cat.udl.eps.etrapp.android.ui.fragments.HomeFragment;
+import cat.udl.eps.etrapp.android.ui.fragments.ProfileFragment;
+import cat.udl.eps.etrapp.android.ui.fragments.SearchFragment;
 
 public class MainActivity extends BaseActivity {
+
+    @BindView(R.id.navigation) BottomNavigationView bottomNavigationView;
 
     @Override
     protected int getLayout() {
@@ -22,9 +32,26 @@ public class MainActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            Fragment f = null;
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            switch (item.getItemId()) {
+                case R.id.action_home:
+                    f = HomeFragment.newInstance();
+                    break;
+                case R.id.action_profile:
+                    f = ProfileFragment.newInstance();
+                    break;
+                case R.id.action_search:
+                    f = SearchFragment.newInstance();
+                    break;
+                default:
+                    return false;
+            }
+            fragmentTransaction.replace(R.id.main_content, f);
+            fragmentTransaction.commit();
+            return true;
+        });
     }
 
     @Override
