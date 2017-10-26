@@ -10,19 +10,18 @@
 
     <FrameLayout
         android:id="@+id/main_content"
-        android:layout_above="@+id/navigation"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/navigation" />
 
-    <android.support.design.widget.BottomNavigationView
-        android:background="@android:color/white"
-        android:layout_alignParentBottom="true"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/navigation"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/bottom_navigation_height"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="start"
+        android:background="@android:color/white"
         app:menu="@menu/menu_navigation" />
 
 </RelativeLayout>

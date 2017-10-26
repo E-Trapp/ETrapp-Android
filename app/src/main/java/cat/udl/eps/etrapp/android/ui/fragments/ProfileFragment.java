@@ -4,8 +4,9 @@ import android.view.View;
 
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.ui.base.BaseFragment;
+import cat.udl.eps.etrapp.android.ui.base.ScrollableFragment;
 
-public class ProfileFragment extends BaseFragment {
+public class ProfileFragment extends ScrollableFragment {
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -18,6 +19,11 @@ public class ProfileFragment extends BaseFragment {
 
     @Override
     protected void configView(View fragmentView) {
+
+    }
+
+    @Override
+    public void scroll() {
 
     }
 }

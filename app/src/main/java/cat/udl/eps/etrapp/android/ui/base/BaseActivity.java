@@ -3,9 +3,13 @@ package cat.udl.eps.etrapp.android.ui.base;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
+import cat.udl.eps.etrapp.android.R;
+import timber.log.Timber;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -20,4 +24,30 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract int getLayout();
 
     protected abstract void configView();
+
+    protected void loadFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_content, fragment)
+                .commit();
+    }
+
+    protected void loadFragment(Fragment fragment, String tag) {
+        loadFragment(fragment, tag, true);
+    }
+
+    protected void loadFragment(Fragment fragment, String tag, boolean addToBackStack) {
+        FragmentTransaction ft = getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_content, fragment, tag);
+        if(addToBackStack) ft.addToBackStack(tag);
+        ft.commit();
+    }
+
+    protected void scrollFragment(String tag) {
+        Timber.d("Perform scroll");
+        ScrollableFragment scrollableFragment = (ScrollableFragment) getSupportFragmentManager().findFragmentByTag(tag);
+        if (scrollableFragment != null && scrollableFragment.isVisible())
+            scrollableFragment.scroll();
+    }
 }
