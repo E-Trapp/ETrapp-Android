@@ -1,7 +1,3 @@
-plugins {
-    id "me.tatarka.retrolambda" version "3.7.0"
-}
-
 apply plugin: 'com.android.application'
 
 android {
@@ -33,19 +29,19 @@ ext {
     butterknife = '8.8.1'
 }
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
-    compile "com.android.support:design:${supportLibraryVersion}"
+    implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
+    implementation "com.android.support:design:${supportLibraryVersion}"
 
-    compile "com.jakewharton:butterknife:${butterknife}"
+    implementation "com.jakewharton:butterknife:${butterknife}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife}"
 
-    compile 'com.jakewharton.timber:timber:4.5.1'
+    implementation 'com.jakewharton.timber:timber:4.5.1'
 
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
 }
