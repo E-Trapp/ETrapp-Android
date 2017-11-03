@@ -6,4 +6,9 @@
     <string name="menu_profile">Profile</string>
     <string name="search_title">Search</string>
     <string name="search_hint">Search for events</string>
+    <string name="title_login">Sign in</string>
+    <string name="email_or_user">email or username</string>
+    <string name="password">password</string>
+    <string name="sign_in_text">Sign in</string>
+    <string name="success_sign_in">You\'re now signed in.</string>
 </resources>

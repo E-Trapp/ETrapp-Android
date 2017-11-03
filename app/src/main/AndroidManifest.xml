@@ -20,6 +20,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activities.LoginActivity"
+            android:label="@string/title_login"
+            android:parentActivityName=".ui.activities.MainActivity"
+            android:windowSoftInputMode="stateUnchanged|adjustResize" />
     </application>
 
 </manifest>

@@ -7,6 +7,16 @@ import cat.udl.eps.etrapp.android.models.Event;
 
 public class Mockups {
 
+    private static boolean loggedIn = false;
+
+    public static boolean isUserLoggedIn(){
+        return loggedIn;
+    }
+
+    public static void changeLoginStatus() {
+        loggedIn = !loggedIn;
+    }
+
     private static final int maxEvents = 25;
 
     public static List<Event> mockEventList = generateMockupList();

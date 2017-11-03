@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import butterknife.ButterKnife;
 import cat.udl.eps.etrapp.android.R;
@@ -50,4 +51,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (scrollableFragment != null && scrollableFragment.isVisible())
             scrollableFragment.scroll();
     }
+
 }

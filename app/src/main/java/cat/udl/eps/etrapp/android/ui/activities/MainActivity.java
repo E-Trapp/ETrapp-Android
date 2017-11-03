@@ -1,5 +1,6 @@
 package cat.udl.eps.etrapp.android.ui.activities;
 
+import android.content.Intent;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +13,10 @@ import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
 import cat.udl.eps.etrapp.android.ui.fragments.HomeFragment;
 import cat.udl.eps.etrapp.android.ui.fragments.ProfileFragment;
 import cat.udl.eps.etrapp.android.ui.fragments.SearchFragment;
+import cat.udl.eps.etrapp.android.utils.Mockups;
+import cat.udl.eps.etrapp.android.utils.Toaster;
 
+import static cat.udl.eps.etrapp.android.utils.Constants.RC_SIGN_IN;
 import static cat.udl.eps.etrapp.android.utils.Constants.TAG_HOME_FRAGMENT;
 import static cat.udl.eps.etrapp.android.utils.Constants.TAG_PROFILE_FRAGMENT;
 import static cat.udl.eps.etrapp.android.utils.Constants.TAG_SEARCH_FRAGMENT;
@@ -40,8 +44,13 @@ public class  MainActivity extends BaseActivity {
                     tag = TAG_HOME_FRAGMENT;
                     break;
                 case R.id.navigation_profile:
-                    f = ProfileFragment.newInstance();
-                    tag = TAG_PROFILE_FRAGMENT;
+                    if(Mockups.isUserLoggedIn()) {
+                        f = ProfileFragment.newInstance();
+                        tag = TAG_PROFILE_FRAGMENT;
+                    } else {
+                        startActivityForResult(LoginActivity.start(this), RC_SIGN_IN);
+                        return false;
+                    }
                     break;
                 case R.id.navigation_search:
                     f = SearchFragment.newInstance();
@@ -70,6 +79,18 @@ public class  MainActivity extends BaseActivity {
             }
             scrollFragment(tag);
         });
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+         switch (requestCode) {
+             case RC_SIGN_IN:
+                 if (resultCode == RESULT_OK) {
+                     Mockups.changeLoginStatus();
+                     Toaster.show(this, getString(R.string.success_sign_in));
+                     bottomNavigationView.setSelectedItemId(R.id.navigation_profile);
+                 }
+         }
     }
 
     @Override
