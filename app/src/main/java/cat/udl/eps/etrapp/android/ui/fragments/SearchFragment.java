@@ -3,16 +3,25 @@ package cat.udl.eps.etrapp.android.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 
+import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.ui.adapters.SearchEventsAdapter;
 import cat.udl.eps.etrapp.android.ui.base.BaseFragment;
 import cat.udl.eps.etrapp.android.ui.base.ScrollableFragment;
+import cat.udl.eps.etrapp.android.utils.Mockups;
 
 public class SearchFragment extends ScrollableFragment implements SearchView.OnQueryTextListener {
+
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+
+    private SearchEventsAdapter searchEventsAdapter;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -25,7 +34,9 @@ public class SearchFragment extends ScrollableFragment implements SearchView.OnQ
 
     @Override
     protected void configView(View fragmentView) {
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        searchEventsAdapter = new SearchEventsAdapter();
+        recyclerView.setAdapter(searchEventsAdapter);
     }
 
     @Override
@@ -61,7 +72,8 @@ public class SearchFragment extends ScrollableFragment implements SearchView.OnQ
     }
 
     @Override public boolean onQueryTextSubmit(String query) {
-        return false;
+        searchEventsAdapter.setItems(Mockups.mockEventList);
+        return true;
     }
 
     @Override public boolean onQueryTextChange(String newText) {

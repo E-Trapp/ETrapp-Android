@@ -17,7 +17,7 @@ import static cat.udl.eps.etrapp.android.utils.Constants.TAG_HOME_FRAGMENT;
 import static cat.udl.eps.etrapp.android.utils.Constants.TAG_PROFILE_FRAGMENT;
 import static cat.udl.eps.etrapp.android.utils.Constants.TAG_SEARCH_FRAGMENT;
 
-public class MainActivity extends BaseActivity {
+public class  MainActivity extends BaseActivity {
 
     @BindView(R.id.navigation) BottomNavigationView bottomNavigationView;
 
