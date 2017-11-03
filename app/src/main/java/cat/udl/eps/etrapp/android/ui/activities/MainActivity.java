@@ -36,8 +36,9 @@ public class  MainActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            Fragment f = null;
-            String tag = null;
+            Fragment f;
+            String tag;
+            boolean showTitle = true;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     f = HomeFragment.newInstance();
@@ -53,6 +54,7 @@ public class  MainActivity extends BaseActivity {
                     }
                     break;
                 case R.id.navigation_search:
+                    showTitle = false;
                     f = SearchFragment.newInstance();
                     tag = TAG_SEARCH_FRAGMENT;
                     break;
@@ -60,6 +62,7 @@ public class  MainActivity extends BaseActivity {
                     return false;
             }
             loadFragment(f, tag);
+            getCurrentActionBar().setDisplayShowTitleEnabled(showTitle);
             return true;
         });
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
