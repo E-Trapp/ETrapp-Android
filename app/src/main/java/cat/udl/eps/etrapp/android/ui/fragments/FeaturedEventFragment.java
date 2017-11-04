@@ -2,6 +2,7 @@ package cat.udl.eps.etrapp.android.ui.fragments;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -21,6 +22,7 @@ public class FeaturedEventFragment extends BaseFragment {
     }
 
     @BindView(R.id.featured_image) SimpleDraweeView featuredImage;
+    @BindView(R.id.featured_title) TextView featuredTitle;
 
     private Event event;
 
@@ -30,5 +32,6 @@ public class FeaturedEventFragment extends BaseFragment {
 
     @Override protected void configView(View fragmentView) {
         featuredImage.setImageURI(event.getImageUrl());
+        featuredTitle.setText(event.getTitle());
     }
 }
