@@ -7,15 +7,21 @@ public class Event {
     private long created_at;
     private long updated_at;
     private String description;
+    private String imageUrl;
     private long datetime;
 
-    public Event(long id, String title, String description, long datetime) {
+    public Event(long id, String title, String description, long datetime, String imageUrl) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.datetime = datetime;
         this.created_at = System.currentTimeMillis();
         this.updated_at = created_at;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public long getId() {

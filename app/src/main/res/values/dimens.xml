@@ -1,4 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="bottom_navigation_height">56dp</dimen>
+    <dimen name="home_screen_header_height">150dp</dimen>
+    <dimen name="paddingItemDecorationDefault">4dp</dimen>
+    <dimen name="paddingItemDecorationEdge">0dp</dimen>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/search_result_card"
+    android:id="@+id/home_content_card"
     android:layout_width="match_parent"
     android:layout_height="72dp"
     app:cardCornerRadius="2dp"
@@ -12,18 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/search_result_iv"
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/home_content_iv"
             android:layout_width="72dp"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            app:placeholderImage="@drawable/event_placeholder" />
 
         <TextView
-            android:id="@+id/search_result_title"
+            android:id="@+id/home_content_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_toEndOf="@id/search_result_iv"
+            android:layout_toEndOf="@id/home_content_iv"
             android:textColor="@color/textBlack" />
     </RelativeLayout>
 

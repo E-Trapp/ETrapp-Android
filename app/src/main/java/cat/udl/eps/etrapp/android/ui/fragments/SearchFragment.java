@@ -2,7 +2,6 @@ package cat.udl.eps.etrapp.android.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -13,8 +12,8 @@ import android.view.View;
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.ui.adapters.SearchEventsAdapter;
-import cat.udl.eps.etrapp.android.ui.base.BaseFragment;
 import cat.udl.eps.etrapp.android.ui.base.ScrollableFragment;
+import cat.udl.eps.etrapp.android.ui.views.PaddingItemDecoration;
 import cat.udl.eps.etrapp.android.utils.Mockups;
 
 public class SearchFragment extends ScrollableFragment implements SearchView.OnQueryTextListener {
@@ -35,6 +34,7 @@ public class SearchFragment extends ScrollableFragment implements SearchView.OnQ
     @Override
     protected void configView(View fragmentView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.addItemDecoration(new PaddingItemDecoration(getContext()));
         searchEventsAdapter = new SearchEventsAdapter();
         recyclerView.setAdapter(searchEventsAdapter);
     }
@@ -68,7 +68,7 @@ public class SearchFragment extends ScrollableFragment implements SearchView.OnQ
 
     @Override
     public void scroll() {
-
+        recyclerView.smoothScrollToPosition(0);
     }
 
     @Override public boolean onQueryTextSubmit(String query) {
