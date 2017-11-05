@@ -38,6 +38,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         loadFragment(fragment, tag, true);
     }
 
+    protected Fragment findFragmentByTag(String tag) {
+        return getSupportFragmentManager().findFragmentByTag(tag);
+    }
+
     protected void loadFragment(Fragment fragment, String tag, boolean addToBackStack) {
         FragmentTransaction ft = getSupportFragmentManager()
                 .beginTransaction()
@@ -58,6 +62,16 @@ public abstract class BaseActivity extends AppCompatActivity {
             return getSupportActionBar();
         }
         return null;
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

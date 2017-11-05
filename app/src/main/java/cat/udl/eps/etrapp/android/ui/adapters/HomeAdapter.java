@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -29,6 +30,12 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Event> events = Mockups.mockEventList;
     private List<Event> featuredEvents = Mockups.mockFeaturedEventList;
 
+    private View.OnClickListener clickListener;
+
+    public void setOnClickListener(View.OnClickListener listener) {
+        this.clickListener = listener;
+    }
+
     @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == VIEW_TYPE_HEADER) {
@@ -42,9 +49,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (position == 0) {
             HomeHeaderViewHolder viewHolder = (HomeHeaderViewHolder)holder;
             viewHolder.viewPager.setAdapter(new HomeFragmentAdapter(fragment.getChildFragmentManager(), featuredEvents));
+            viewHolder.indicator.setViewPager(viewHolder.viewPager);
+
         } else {
             Event event = events.get(position - 1);
             HomeContentViewHolder viewHolder = (HomeContentViewHolder)holder;
+            viewHolder.container.setTag(event.getId());
+            viewHolder.container.setOnClickListener(clickListener);
         }
     }
 

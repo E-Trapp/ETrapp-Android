@@ -7,6 +7,9 @@ public class Constants {
     public static final String TAG_PROFILE_FRAGMENT = "profile";
     public static final String TAG_SEARCH_FRAGMENT = "search";
 
+    // Intent extra args
+    public static final String EXTRA_EVENT_ID = "eventKey";
+
     // Request codes
     public static final int RC_SIGN_IN = 0x0A;
 

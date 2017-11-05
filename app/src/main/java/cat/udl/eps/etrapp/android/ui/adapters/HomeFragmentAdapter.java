@@ -11,7 +11,7 @@ import cat.udl.eps.etrapp.android.ui.fragments.FeaturedEventFragment;
 
 public class HomeFragmentAdapter extends FragmentStatePagerAdapter {
 
-    private List<Event> eventList;
+    private final List<Event> eventList;
 
     public HomeFragmentAdapter(FragmentManager fm, List<Event> eventList) {
         super(fm);
@@ -23,6 +23,7 @@ public class HomeFragmentAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override public int getCount() {
-        return 3;
+        return eventList.size();
     }
+
 }

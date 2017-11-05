@@ -5,7 +5,7 @@ import android.view.View;
 
 import butterknife.ButterKnife;
 
-public class ButterizedViewHolder extends RecyclerView.ViewHolder {
+public abstract class ButterizedViewHolder extends RecyclerView.ViewHolder {
 
     public ButterizedViewHolder(View itemView) {
         super(itemView);

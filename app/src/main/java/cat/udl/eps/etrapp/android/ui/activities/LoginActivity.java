@@ -2,6 +2,7 @@ package cat.udl.eps.etrapp.android.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.MenuItem;
 import android.widget.Button;
 
 import butterknife.BindView;
@@ -25,5 +26,9 @@ public class LoginActivity extends BaseActivity {
             setResult(RESULT_OK);
             finish();
         });
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }

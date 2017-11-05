@@ -49,5 +49,11 @@ public class Mockups {
         return tmp;
     }
 
-
+    public static Event getEventById(long eventKey) {
+        if (eventKey < 100) {
+            return new Event(eventKey,"event " + (eventKey+1), "Event "+ (eventKey+1) + " description", System.currentTimeMillis(), "no_image");
+        } else {
+            return new Event(eventKey,"event " + (eventKey+1), "Event "+ (eventKey+1) + " description", System.currentTimeMillis(), "no_image");
+        }
+    }
 }

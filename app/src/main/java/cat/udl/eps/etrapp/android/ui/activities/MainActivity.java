@@ -21,7 +21,7 @@ import static cat.udl.eps.etrapp.android.utils.Constants.TAG_HOME_FRAGMENT;
 import static cat.udl.eps.etrapp.android.utils.Constants.TAG_PROFILE_FRAGMENT;
 import static cat.udl.eps.etrapp.android.utils.Constants.TAG_SEARCH_FRAGMENT;
 
-public class  MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.navigation) BottomNavigationView bottomNavigationView;
 
@@ -41,13 +41,13 @@ public class  MainActivity extends BaseActivity {
             boolean showTitle = true;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    f = HomeFragment.newInstance();
                     tag = TAG_HOME_FRAGMENT;
+                    if ((f = findFragmentByTag(tag)) == null) f = HomeFragment.newInstance();
                     break;
                 case R.id.navigation_profile:
-                    if(Mockups.isUserLoggedIn()) {
-                        f = ProfileFragment.newInstance();
+                    if (Mockups.isUserLoggedIn()) {
                         tag = TAG_PROFILE_FRAGMENT;
+                        if ((f = findFragmentByTag(tag)) == null) f = ProfileFragment.newInstance();
                     } else {
                         startActivityForResult(LoginActivity.start(this), RC_SIGN_IN);
                         return false;
@@ -55,8 +55,8 @@ public class  MainActivity extends BaseActivity {
                     break;
                 case R.id.navigation_search:
                     showTitle = false;
-                    f = SearchFragment.newInstance();
                     tag = TAG_SEARCH_FRAGMENT;
+                    if ((f = findFragmentByTag(tag)) == null) f = SearchFragment.newInstance();
                     break;
                 default:
                     return false;
@@ -86,14 +86,14 @@ public class  MainActivity extends BaseActivity {
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-         switch (requestCode) {
-             case RC_SIGN_IN:
-                 if (resultCode == RESULT_OK) {
-                     Mockups.changeLoginStatus();
-                     Toaster.show(this, getString(R.string.success_sign_in));
-                     bottomNavigationView.setSelectedItemId(R.id.navigation_profile);
-                 }
-         }
+        switch (requestCode) {
+            case RC_SIGN_IN:
+                if (resultCode == RESULT_OK) {
+                    Mockups.changeLoginStatus();
+                    Toaster.show(this, getString(R.string.success_sign_in));
+                    bottomNavigationView.setSelectedItemId(R.id.navigation_profile);
+                }
+        }
     }
 
     @Override
