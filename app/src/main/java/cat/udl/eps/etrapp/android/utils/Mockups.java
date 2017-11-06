@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cat.udl.eps.etrapp.android.models.Event;
+import cat.udl.eps.etrapp.android.models.User;
 
 public class Mockups {
 
@@ -56,4 +57,8 @@ public class Mockups {
             return new Event(eventKey,"event " + (eventKey+1), "Event "+ (eventKey+1) + " description", System.currentTimeMillis(), "no_image");
         }
     }
-}
+
+    public static User getUserById(long userKey) {
+        return new User(userKey, "user " + userKey);
+    }
+    }

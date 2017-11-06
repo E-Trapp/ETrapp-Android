@@ -15,4 +15,5 @@
     <string name="create_event">Create event</string>
     <string name="signup_no_account">No account? Sign up now!</string>
     <string name="sign_up">Sign up</string>
+    <string name="add">Add event</string>
 </resources>

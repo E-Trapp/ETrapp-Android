@@ -21,6 +21,10 @@ public class CreateOrEditEvent extends BaseActivity {
         return i;
     }
 
+    public static Intent startCreateMode(Context context) {
+        return new Intent(context, CreateOrEditEvent.class);
+    }
+
     @Override protected int getLayout() {
         return R.layout.activity_create_edit_event;
     }

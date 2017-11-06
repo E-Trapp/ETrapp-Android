@@ -1,5 +1,7 @@
 package cat.udl.eps.etrapp.android.models;
 
+import java.util.Random;
+
 public class Event {
 
     private long id;
@@ -19,6 +21,7 @@ public class Event {
         this.created_at = System.currentTimeMillis();
         this.updated_at = created_at;
         this.imageUrl = imageUrl;
+        owner = Math.abs(new Random().nextInt() % 3);
     }
 
     public String getImageUrl() {
