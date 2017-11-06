@@ -13,4 +13,6 @@
     <string name="success_sign_in">You\'re now signed in.</string>
     <string name="edit">edit</string>
     <string name="create_event">Create event</string>
+    <string name="signup_no_account">No account? Sign up now!</string>
+    <string name="sign_up">Sign up</string>
 </resources>
