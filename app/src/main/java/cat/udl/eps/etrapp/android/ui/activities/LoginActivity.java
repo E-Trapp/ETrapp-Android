@@ -11,11 +11,11 @@ import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
 
 public class LoginActivity extends BaseActivity {
 
+    @BindView(R.id.sign_in_button) Button button;
+
     public static Intent start(Context context) {
         return new Intent(context, LoginActivity.class);
     }
-
-    @BindView(R.id.sign_in_button) Button button;
 
     @Override protected int getLayout() {
         return R.layout.activity_login;

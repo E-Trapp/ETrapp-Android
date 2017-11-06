@@ -3,6 +3,7 @@ package cat.udl.eps.etrapp.android.models;
 public class Event {
 
     private long id;
+    private long owner;
     private String title;
     private long created_at;
     private long updated_at;
@@ -22,6 +23,10 @@ public class Event {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public long getOwner() {
+        return owner;
     }
 
     public long getId() {

@@ -12,11 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/search_result_iv"
             android:layout_width="72dp"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            app:placeholderImage="@drawable/event_placeholder" />
 
         <TextView
             android:id="@+id/search_result_title"

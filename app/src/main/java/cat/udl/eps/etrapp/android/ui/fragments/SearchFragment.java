@@ -15,6 +15,7 @@ import cat.udl.eps.etrapp.android.ui.adapters.SearchEventsAdapter;
 import cat.udl.eps.etrapp.android.ui.base.ScrollableFragment;
 import cat.udl.eps.etrapp.android.ui.views.PaddingItemDecoration;
 import cat.udl.eps.etrapp.android.utils.Mockups;
+import cat.udl.eps.etrapp.android.utils.Utils;
 
 public class SearchFragment extends ScrollableFragment implements SearchView.OnQueryTextListener {
 
@@ -73,6 +74,7 @@ public class SearchFragment extends ScrollableFragment implements SearchView.OnQ
 
     @Override public boolean onQueryTextSubmit(String query) {
         searchEventsAdapter.setItems(Mockups.mockEventList);
+        Utils.hideIME(getContext(), getActivity().getCurrentFocus());
         return true;
     }
 

@@ -17,6 +17,7 @@ public class SearchEventsAdapter extends RecyclerView.Adapter<SearchResultViewHo
 
     public void setItems(List<Event> items) {
         this.items = items;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -27,7 +28,7 @@ public class SearchEventsAdapter extends RecyclerView.Adapter<SearchResultViewHo
     @Override
     public void onBindViewHolder(SearchResultViewHolder holder, int position) {
         Event e = items.get(position);
-        holder.search_result_image.setImageResource(R.drawable.ic_account_black_36dp);
+        holder.search_result_image.setImageURI(e.getImageUrl());
         holder.search_result_title.setText(e.getTitle());
     }
 
