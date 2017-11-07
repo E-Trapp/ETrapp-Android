@@ -21,7 +21,6 @@
             app:roundingBorderColor="@color/material_black"
             app:roundingBorderWidth="2dp" />
 
-
         <include
             android:id="@+id/profile_followers_container"
             layout="@layout/layout_follow_counters"
@@ -43,10 +42,10 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/userEventsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="User events"
         android:textSize="24sp" />
 
     <include layout="@layout/recycler" />

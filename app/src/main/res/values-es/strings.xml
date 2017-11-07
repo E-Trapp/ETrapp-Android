@@ -19,4 +19,6 @@
     <string name="write_a_message">Escribe un mensaje…</string>
     <string name="following">Siguiendo</string>
     <string name="followers">Seguidores</string>
+    <string name="my_events">Mis eventos</string>
+    <string name="user_events">Eventos de %s</string>
 </resources>

@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.ui.activities.settings.SettingsActivity;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
 import cat.udl.eps.etrapp.android.ui.fragments.HomeFragment;
 import cat.udl.eps.etrapp.android.ui.fragments.ProfileFragment;
@@ -112,6 +113,7 @@ public class MainActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 

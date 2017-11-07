@@ -21,6 +21,7 @@ public class UserProfileActivity extends BaseActivity {
     @BindView(R.id.profile_followers_container) ViewGroup followers;
     @BindView(R.id.profile_following_container) ViewGroup following;
     @BindView(R.id.profile_user_image) SimpleDraweeView profilePicture;
+    @BindView(R.id.userEventsText) TextView userEventsText;
 
     private TextView user_followers_count;
     private TextView user_followers_text;
@@ -52,6 +53,8 @@ public class UserProfileActivity extends BaseActivity {
 
         user_following_count.setText("" + (Math.abs(new Random().nextInt() % 14522)));
         user_followers_count.setText("" + (Math.abs(new Random().nextInt() % 14522)));
+
+        userEventsText.setText(String.format(getString(R.string.user_events), user.getUsername()));
     }
 
     private void handleIntent(Intent intent) {
