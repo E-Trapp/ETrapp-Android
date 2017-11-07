@@ -8,31 +8,29 @@ import cat.udl.eps.etrapp.android.models.User;
 
 public class Mockups {
 
-    private static boolean loggedIn = false;
+    private static final int maxEvents = 25;
+    public static List<Event> mockEventList = generateMockupList();
+    public static List<Event> mockFeaturedEventList = generateFeaturedMockupList();
+    private static User currentUser;
 
-    public static boolean isUserLoggedIn(){
-        return loggedIn;
+    public static boolean isUserLoggedIn() {
+        return currentUser != null;
     }
 
     public static void changeLoginStatus() {
-        loggedIn = !loggedIn;
+        if (currentUser == null) currentUser = new User(0, "testUser");
+        else currentUser = null;
     }
-
-    private static final int maxEvents = 25;
-
-    public static List<Event> mockEventList = generateMockupList();
 
     private static List<Event> generateMockupList() {
         List<Event> tmp = new ArrayList<>();
 
         for (int i = 0; i < maxEvents; i++) {
-            tmp.add(new Event(i,"event " + (i+1), "Event "+ (i+1) + " description", System.currentTimeMillis(), "no_image"));
+            tmp.add(new Event(i, "event " + (i + 1), "Event " + (i + 1) + " description", System.currentTimeMillis(), "no_image"));
         }
 
         return tmp;
     }
-
-    public static List<Event> mockFeaturedEventList = generateFeaturedMockupList();
 
     private static List<Event> generateFeaturedMockupList() {
         List<Event> tmp = new ArrayList<>();
@@ -44,7 +42,7 @@ public class Mockups {
         };
 
         for (int i = 0; i < 3; i++) {
-            tmp.add(new Event(288 + i, "Featured Event " + (i+1), "Featured event description.", 1510704000, images[i]));
+            tmp.add(new Event(288 + i, "Featured Event " + (i + 1), "Featured event description.", 1510704000, images[i]));
         }
 
         return tmp;
@@ -52,13 +50,18 @@ public class Mockups {
 
     public static Event getEventById(long eventKey) {
         if (eventKey < 100) {
-            return new Event(eventKey,"event " + (eventKey+1), "Event "+ (eventKey+1) + " description", System.currentTimeMillis(), "no_image");
+            return new Event(eventKey, "event " + (eventKey + 1), "Event " + (eventKey + 1) + " description", System.currentTimeMillis(), "no_image");
         } else {
-            return new Event(eventKey,"event " + (eventKey+1), "Event "+ (eventKey+1) + " description", System.currentTimeMillis(), "no_image");
+            return new Event(eventKey, "event " + (eventKey + 1), "Event " + (eventKey + 1) + " description", System.currentTimeMillis(), "no_image");
         }
     }
 
     public static User getUserById(long userKey) {
+        if (userKey == 0 && isUserLoggedIn()) return currentUser;
         return new User(userKey, "user " + userKey);
     }
+
+    public static User getCurrentUser() {
+        return currentUser;
     }
+}

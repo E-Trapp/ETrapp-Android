@@ -2,14 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp">
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp">
 
     <TextView
         android:id="@+id/event_message_stream_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00:00" />
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:text="00:00"
+        android:textColor="@color/md_amber500"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/event_message_stream_content"

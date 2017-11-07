@@ -4,6 +4,7 @@ public class User {
 
     private long id;
     private String username;
+    private String imageUrl;
 
     public User(long id, String username) {
         this.id = id;

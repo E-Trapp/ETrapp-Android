@@ -4,18 +4,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.thedeanda.lorem.LoremIpsum;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.StreamMessage;
@@ -29,28 +30,21 @@ import static cat.udl.eps.etrapp.android.utils.Constants.ID_MENU_ITEM_EDIT_EVENT
 
 public class EventActivity extends BaseActivity {
 
-    @BindView(R.id.event_header_user_name) TextView userName;
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.event_stream_header) ViewGroup header;
+    @BindView(R.id.event_stream_recycler) RecyclerView recyclerView;
+    @BindView(R.id.event_stream_send_container) ViewGroup sendContainer;
     Handler handler = new Handler(Looper.getMainLooper());
     private Event event;
     private EventStreamAdapter eventStreamAdapter;
+
+    private TextView userName;
+    private ImageView rateUp;
+    private ImageView rateDown;
 
     public static Intent start(Context context, long eventKey) {
         Intent i = new Intent(context, EventActivity.class);
         i.putExtra(EXTRA_EVENT_ID, eventKey);
         return i;
-    }
-
-    @OnClick(R.id.event_header_container) void onClickHeader() {
-        startActivity(UserProfileActivity.start(this, event.getOwner()));
-    }
-
-    @OnClick(R.id.event_header_rate_user_up) void voteUp() {
-        Toaster.show(this, "ETrapper Upvoted!");
-    }
-
-    @OnClick(R.id.event_header_rate_user_down) void voteDown() {
-        Toaster.show(this, "ETrapper Downvoted!");
     }
 
     @Override protected int getLayout() {
@@ -60,12 +54,40 @@ public class EventActivity extends BaseActivity {
     @Override protected void configView() {
         handleIntent(getIntent());
         getCurrentActionBar().setTitle(event.getTitle());
+
+        //recyclerView = findViewById(R.id.recyclerView);
+        userName = header.findViewById(R.id.event_header_user_name);
+        rateUp = header.findViewById(R.id.event_header_rate_user_up);
+        rateDown = header.findViewById(R.id.event_header_rate_user_down);
+
+        View.OnClickListener clickListener = view -> {
+            switch (view.getId()) {
+                case R.id.event_stream_header:
+                    startActivity(UserProfileActivity.start(this, event.getOwner()));
+                    break;
+                case R.id.event_header_rate_user_up:
+                    Toaster.show(this, "ETrapper Upvoted!");
+                    break;
+                case R.id.event_header_rate_user_down:
+                    Toaster.show(this, "ETrapper Downvoted!");
+                    break;
+            }
+        };
+
+        header.setOnClickListener(clickListener);
+        rateUp.setOnClickListener(clickListener);
+        rateDown.setOnClickListener(clickListener);
+
         userName.setText(Mockups.getUserById(event.getOwner()).getUsername());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
         eventStreamAdapter = new EventStreamAdapter();
         recyclerView.setAdapter(eventStreamAdapter);
+
+        if (Mockups.isUserLoggedIn() && Mockups.getCurrentUser().getId() == event.getOwner()) {
+            sendContainer.setVisibility(View.VISIBLE);
+        }
 
         new Thread(() -> {
             while (true) {
@@ -89,10 +111,12 @@ public class EventActivity extends BaseActivity {
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        menu.add(0, ID_MENU_ITEM_EDIT_EVENT, 50, R.string.edit)
-                .setIcon(R.drawable.ic_pencil_white_24dp)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        // getMenuInflater().inflate(R.menu.menu_main, menu);
+        if (Mockups.isUserLoggedIn() && Mockups.getCurrentUser().getId() == event.getOwner()) {
+            menu.add(0, ID_MENU_ITEM_EDIT_EVENT, 50, R.string.edit)
+                    .setIcon(R.drawable.ic_pencil_white_24dp)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -105,5 +129,16 @@ public class EventActivity extends BaseActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    static class IncludedLayout1 {
+        @BindView(R.id.event_header_user_name) TextView userName;
+        @BindView(R.id.event_header_rate_user_up) ImageView rateUp;
+        @BindView(R.id.event_header_rate_user_down) ImageView rateDown;
+        @BindView(R.id.event_header_container) ViewGroup headerContainer;
+    }
+
+    static class IncludedLayout2 {
+        @BindView(R.id.recyclerView) RecyclerView recyclerView;
     }
 }

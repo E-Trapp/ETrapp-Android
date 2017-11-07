@@ -16,4 +16,7 @@
     <string name="signup_no_account">No account? Sign up now!</string>
     <string name="sign_up">Sign up</string>
     <string name="add">Add event</string>
+    <string name="write_a_message">Write a message…</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
 </resources>
