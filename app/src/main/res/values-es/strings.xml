@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">etrapp</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="menu_search">Buscar</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_profile">Perfil</string>
+    <string name="search_title">Buscar</string>
+    <string name="search_hint">Busca eventos</string>
+    <string name="title_login">Iniciar sesión</string>
+    <string name="email_or_user">email o nombre de usuario</string>
+    <string name="password">contraseña</string>
+    <string name="sign_in_text">Iniciar sesión</string>
+    <string name="success_sign_in">Has iniciado sesión.</string>
+    <string name="edit">editar</string>
+    <string name="create_event">Crear evento</string>
+    <string name="signup_no_account">No tienes cuenta? ¡Regístrate!</string>
+    <string name="sign_up">Registrarse</string>
+    <string name="add">Añadir evento</string>
+    <string name="write_a_message">Escribe un mensaje…</string>
+    <string name="following">Siguiendo</string>
+    <string name="followers">Seguidores</string>
+</resources>
