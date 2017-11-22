@@ -44,4 +44,23 @@ public class EventController {
         return tcs.getTask();
     }
 
+    public Task<Event> getEventById(long eventKey) {
+        final TaskCompletionSource<Event> tcs = new TaskCompletionSource<>();
+
+        ApiServiceManager.getService().getEvent(eventKey).enqueue(new Callback<Event>() {
+            @Override
+            public void onResponse(Call<Event> call, Response<Event> response) {
+                if (response.code() == 200) tcs.trySetResult(response.body());
+                else tcs.trySetException(new Exception(response.message()));
+            }
+
+            @Override
+            public void onFailure(Call<Event> call, Throwable t) {
+                tcs.trySetException(new Exception(t.getCause()));
+            }
+        });
+
+        return tcs.getTask();
+    }
+
 }

@@ -18,6 +18,7 @@ import com.thedeanda.lorem.LoremIpsum;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.EventController;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.StreamMessage;
 import cat.udl.eps.etrapp.android.ui.adapters.EventStreamAdapter;
@@ -52,10 +53,6 @@ public class EventActivity extends BaseActivity {
     }
 
     @Override protected void configView() {
-        handleIntent(getIntent());
-        getCurrentActionBar().setTitle(event.getTitle());
-
-        //recyclerView = findViewById(R.id.recyclerView);
         userName = header.findViewById(R.id.event_header_user_name);
         rateUp = header.findViewById(R.id.event_header_rate_user_up);
         rateDown = header.findViewById(R.id.event_header_rate_user_down);
@@ -74,9 +71,32 @@ public class EventActivity extends BaseActivity {
             }
         };
 
+
         header.setOnClickListener(clickListener);
         rateUp.setOnClickListener(clickListener);
         rateDown.setOnClickListener(clickListener);
+
+        handleIntent(getIntent());
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent == null) return;
+        if (intent.hasExtra(EXTRA_EVENT_ID)) {
+            EventController.getInstance().getEventById(intent.getLongExtra(EXTRA_EVENT_ID, -1)).addOnSuccessListener(e -> {
+                event = e;
+                setupUI();
+            }).addOnFailureListener(e -> {
+                Toaster.show(this, "Something went wrong. Event not found.");
+                finish();
+            });
+        } else {
+            finish();
+        }
+    }
+
+    private void setupUI() {
+        getCurrentActionBar().setTitle(event.getTitle());
+
 
         userName.setText(Mockups.getUserById(event.getOwner()).getUsername());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -99,15 +119,6 @@ public class EventActivity extends BaseActivity {
                 }
             }
         }).start();
-    }
-
-    private void handleIntent(Intent intent) {
-        if (intent == null) return;
-        if (intent.hasExtra(EXTRA_EVENT_ID)) {
-            event = Mockups.getEventById(intent.getLongExtra(EXTRA_EVENT_ID, -1));
-        } else {
-            finish();
-        }
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
