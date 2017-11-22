@@ -20,12 +20,17 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_CONTENT = 1;
 
     private final Fragment fragment;
-    private List<Event> events = Mockups.mockEventList;
-    private List<Event> featuredEvents = Mockups.mockFeaturedEventList;
+    private List<Event> events; //Mockups.mockEventList;
+    private List<Event> featuredEvents; //Mockups.mockFeaturedEventList;
     private View.OnClickListener clickListener;
 
     public HomeAdapter(Fragment fragment) {
         this.fragment = fragment;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+        notifyDataSetChanged();
     }
 
     public void setOnClickListener(View.OnClickListener listener) {
@@ -42,13 +47,16 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position == 0) {
+        if (position == 0 && featuredEvents != null) {
             HomeHeaderViewHolder viewHolder = (HomeHeaderViewHolder) holder;
-            viewHolder.viewPager.setAdapter(new HomeFragmentAdapter(fragment.getChildFragmentManager(), featuredEvents));
-            viewHolder.indicator.setViewPager(viewHolder.viewPager);
-
+            if (featuredEvents == null || featuredEvents.isEmpty()) {
+                viewHolder.itemView.setVisibility(View.GONE);
+            } else {
+                viewHolder.viewPager.setAdapter(new HomeFragmentAdapter(fragment.getChildFragmentManager(), featuredEvents));
+                viewHolder.indicator.setViewPager(viewHolder.viewPager);
+            }
         } else {
-            Event event = events.get(position - 1);
+            Event event = events.get((featuredEvents != null) ? position - 1 : position);
             HomeContentViewHolder viewHolder = (HomeContentViewHolder) holder;
             viewHolder.container.setTag(event.getId());
             viewHolder.container.setOnClickListener(clickListener);
@@ -57,7 +65,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override public int getItemViewType(int position) {
-        if (position == 0) {
+        if (position == 0 && (featuredEvents != null && !featuredEvents.isEmpty())) {
             return VIEW_TYPE_HEADER;
         } else {
             return VIEW_TYPE_CONTENT;
@@ -65,6 +73,24 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override public int getItemCount() {
-        return events.size() + 1;
+
+        int featuredSize = 0;
+        int eventsSize = 0;
+
+        if (events != null) eventsSize = events.size();
+        if (featuredEvents != null) featuredSize = featuredEvents.size();
+
+        return featuredSize + eventsSize;
+    }
+
+    public void setFeaturedEvents(List<Event> featuredEvents) {
+        this.featuredEvents = featuredEvents;
+        notifyDataSetChanged();
+    }
+
+    public void setBothEvents(List<Event> feature, List<Event> normal) {
+        this.events = normal;
+        this.featuredEvents = feature;
+        notifyDataSetChanged();
     }
 }

@@ -8,14 +8,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.EventController;
+import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.ui.activities.CreateOrEditEvent;
 import cat.udl.eps.etrapp.android.ui.activities.EventActivity;
 import cat.udl.eps.etrapp.android.ui.adapters.HomeAdapter;
 import cat.udl.eps.etrapp.android.ui.base.ScrollableFragment;
 import cat.udl.eps.etrapp.android.ui.views.PaddingItemDecoration;
 import cat.udl.eps.etrapp.android.utils.Mockups;
+import cat.udl.eps.etrapp.android.utils.Toaster;
 import timber.log.Timber;
 
 import static cat.udl.eps.etrapp.android.utils.Constants.ID_MENU_ITEM_CREATE_EVENT;
@@ -23,7 +29,8 @@ import static cat.udl.eps.etrapp.android.utils.Constants.ID_MENU_ITEM_CREATE_EVE
 public class HomeFragment extends ScrollableFragment {
 
 
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -44,6 +51,19 @@ public class HomeFragment extends ScrollableFragment {
         homeAdapter.setOnClickListener(v -> {
             startActivity(EventActivity.start(getContext(), (long) v.getTag()));
         });
+
+        EventController.getInstance().getAllEvents()
+                .addOnSuccessListener(events -> {
+                    List<Event> tmpEvents = new ArrayList<>();
+                    List<Event> tmpFeatured = new ArrayList<>();
+
+                    for (Event e: events) {
+                        if(e.isFeatured()) tmpFeatured.add(e); else tmpEvents.add(e);
+                    }
+
+                    homeAdapter.setBothEvents(tmpFeatured, tmpEvents);
+                })
+                .addOnFailureListener(e -> Toaster.show(getContext(), e.getMessage()));
     }
 
     @Override
@@ -63,7 +83,8 @@ public class HomeFragment extends ScrollableFragment {
         }
     }
 
-    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         if (Mockups.isUserLoggedIn()) {
             menu.add(0, ID_MENU_ITEM_CREATE_EVENT, 50, R.string.add)
@@ -72,7 +93,8 @@ public class HomeFragment extends ScrollableFragment {
         }
     }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case ID_MENU_ITEM_CREATE_EVENT:
                 startActivity(CreateOrEditEvent.startCreateMode(getContext()));

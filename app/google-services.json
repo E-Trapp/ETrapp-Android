@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "985003932337",
+    "firebase_url": "https://e-trapp.firebaseio.com",
+    "project_id": "e-trapp",
+    "storage_bucket": "e-trapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985003932337:android:a2326ac400635190",
+        "android_client_info": {
+          "package_name": "cat.udl.eps.etrapp.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985003932337-i5e1p04qv2ie0b7v28dmj9c11kgihhnp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cat.udl.eps.etrapp.android",
+            "certificate_hash": "663417db7ffab1d402b5028eb9620ebe96a424e8"
+          }
+        },
+        {
+          "client_id": "985003932337-dscuknlg83ukffvrq6rm5ajs91dcv3e1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6swtZvUGFA7gb8FLS4_KTwL4ep3qgfIs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "985003932337-dscuknlg83ukffvrq6rm5ajs91dcv3e1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

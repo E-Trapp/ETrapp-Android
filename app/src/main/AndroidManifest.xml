@@ -48,6 +48,17 @@
             android:label="@string/title_activity_settings"
             android:parentActivityName=".ui.activities.MainActivity"
             android:screenOrientation="portrait" />
+
+        <service android:name=".services.EtrappInstanceService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".services.EtrappMessageService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

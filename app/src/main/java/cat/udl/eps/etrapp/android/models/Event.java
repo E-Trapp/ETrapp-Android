@@ -12,6 +12,7 @@ public class Event {
     private String description;
     private String imageUrl;
     private long datetime;
+    private boolean isFeatured;
 
     public Event(long id, String title, String description, long datetime, String imageUrl) {
         this.id = id;
@@ -54,5 +55,9 @@ public class Event {
 
     public long getDatetime() {
         return datetime;
+    }
+
+    public boolean isFeatured() {
+        return isFeatured;
     }
 }
