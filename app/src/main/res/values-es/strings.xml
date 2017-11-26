@@ -24,4 +24,7 @@
     <string name="event_title">Título</string>
     <string name="event_description">Descripcion</string>
     <string name="event_start_date">Fecha de inicio</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="new_password">Contraseña</string>
+    <string name="password_confirm">Confirmar contraseña</string>
 </resources>
