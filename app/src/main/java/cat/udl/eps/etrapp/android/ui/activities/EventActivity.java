@@ -35,9 +35,9 @@ public class EventActivity extends BaseActivity {
     @BindView(R.id.event_stream_recycler) RecyclerView recyclerView;
     @BindView(R.id.event_stream_send_container) ViewGroup sendContainer;
     Handler handler = new Handler(Looper.getMainLooper());
+    Menu menu;
     private Event event;
     private EventStreamAdapter eventStreamAdapter;
-
     private TextView userName;
     private ImageView rateUp;
     private ImageView rateDown;
@@ -82,13 +82,16 @@ public class EventActivity extends BaseActivity {
     private void handleIntent(Intent intent) {
         if (intent == null) return;
         if (intent.hasExtra(EXTRA_EVENT_ID)) {
-            EventController.getInstance().getEventById(intent.getLongExtra(EXTRA_EVENT_ID, -1)).addOnSuccessListener(e -> {
-                event = e;
-                setupUI();
-            }).addOnFailureListener(e -> {
-                Toaster.show(this, "Something went wrong. Event not found.");
-                finish();
-            });
+            EventController.getInstance()
+                    .getEventById(intent.getLongExtra(EXTRA_EVENT_ID, -1))
+                    .addOnSuccessListener(e -> {
+                        event = e;
+                        setupUI();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toaster.show(this, "Something went wrong. Event not found.");
+                        finish();
+                    });
         } else {
             finish();
         }
@@ -97,6 +100,9 @@ public class EventActivity extends BaseActivity {
     private void setupUI() {
         getCurrentActionBar().setTitle(event.getTitle());
 
+        if (Mockups.isUserLoggedIn() && Mockups.getCurrentUser().getId() == event.getId()) {
+            menu.getItem(0).setVisible(true);
+        }
 
         userName.setText(Mockups.getUserById(event.getOwner()).getUsername());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -123,11 +129,14 @@ public class EventActivity extends BaseActivity {
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         // getMenuInflater().inflate(R.menu.menu_main, menu);
-        if (Mockups.isUserLoggedIn() && Mockups.getCurrentUser().getId() == event.getOwner()) {
-            menu.add(0, ID_MENU_ITEM_EDIT_EVENT, 50, R.string.edit)
-                    .setIcon(R.drawable.ic_pencil_white_24dp)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        }
+        menu.add(0, ID_MENU_ITEM_EDIT_EVENT, 50, R.string.edit)
+                .setIcon(R.drawable.ic_pencil_white_24dp)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        menu.getItem(0).setVisible(false);
+
+        this.menu = menu;
+
         return super.onCreateOptionsMenu(menu);
     }
 

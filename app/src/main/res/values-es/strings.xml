@@ -21,4 +21,7 @@
     <string name="followers">Seguidores</string>
     <string name="my_events">Mis eventos</string>
     <string name="user_events">Eventos de %s</string>
+    <string name="event_title">Título</string>
+    <string name="event_description">Descripcion</string>
+    <string name="event_start_date">Fecha de inicio</string>
 </resources>

@@ -18,7 +18,7 @@ public class Mockups {
     }
 
     public static void changeLoginStatus() {
-        if (currentUser == null) currentUser = new User(0, "testUser");
+        if (currentUser == null) currentUser = new User(1, "testUser");
         else currentUser = null;
     }
 

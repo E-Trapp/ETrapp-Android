@@ -60,4 +60,18 @@ public class Event {
     public boolean isFeatured() {
         return isFeatured;
     }
+
+    @Override public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", owner=" + owner +
+                ", title='" + title + '\'' +
+                ", created_at=" + created_at +
+                ", updated_at=" + updated_at +
+                ", description='" + description + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", datetime=" + datetime +
+                ", isFeatured=" + isFeatured +
+                '}';
+    }
 }
