@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.ui.activities.settings.SettingsActivity;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
 import cat.udl.eps.etrapp.android.ui.fragments.HomeFragment;
@@ -16,6 +17,7 @@ import cat.udl.eps.etrapp.android.ui.fragments.ProfileFragment;
 import cat.udl.eps.etrapp.android.ui.fragments.SearchFragment;
 import cat.udl.eps.etrapp.android.utils.Mockups;
 import cat.udl.eps.etrapp.android.utils.Toaster;
+import timber.log.Timber;
 
 import static cat.udl.eps.etrapp.android.utils.Constants.RC_SIGN_IN;
 import static cat.udl.eps.etrapp.android.utils.Constants.TAG_HOME_FRAGMENT;
@@ -46,7 +48,7 @@ public class MainActivity extends BaseActivity {
                     if ((f = findFragmentByTag(tag)) == null) f = HomeFragment.newInstance();
                     break;
                 case R.id.navigation_profile:
-                    if (Mockups.isUserLoggedIn()) {
+                    if (UserController.getInstance().isUserLoggedIn()) {
                         tag = TAG_PROFILE_FRAGMENT;
                         if ((f = findFragmentByTag(tag)) == null) f = ProfileFragment.newInstance();
                     } else {

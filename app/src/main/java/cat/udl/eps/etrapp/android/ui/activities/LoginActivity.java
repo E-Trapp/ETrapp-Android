@@ -2,19 +2,27 @@ package cat.udl.eps.etrapp.android.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
+
+import com.google.android.gms.tasks.OnFailureListener;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
+import timber.log.Timber;
 
 import static cat.udl.eps.etrapp.android.utils.Constants.RC_SIGN_UP;
 
 public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.sign_in_button) Button button;
+    @BindView(R.id.sign_in_username) EditText username;
+    @BindView(R.id.sign_in_password) EditText password;
 
     public static Intent start(Context context) {
         return new Intent(context, LoginActivity.class);
@@ -30,8 +38,15 @@ public class LoginActivity extends BaseActivity {
 
     @Override protected void configView() {
         button.setOnClickListener(v -> {
-            setResult(RESULT_OK);
-            finish();
+            UserController.getInstance()
+                    .authenticate(username.getText().toString(), password.getText().toString())
+                    .addOnSuccessListener(s -> {
+                        Timber.d("Signed in successfully, new Token: %s", s);
+                        setResult(RESULT_OK);
+                        finish();
+                    })
+                    .addOnFailureListener(Timber::d)
+            ;
         });
     }
 

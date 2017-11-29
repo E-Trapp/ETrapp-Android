@@ -19,8 +19,10 @@ import com.thedeanda.lorem.LoremIpsum;
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.controllers.EventController;
+import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.StreamMessage;
+import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.ui.adapters.EventStreamAdapter;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
 import cat.udl.eps.etrapp.android.utils.Mockups;
@@ -100,8 +102,11 @@ public class EventActivity extends BaseActivity {
     private void setupUI() {
         getCurrentActionBar().setTitle(event.getTitle());
 
-        if (Mockups.isUserLoggedIn() && Mockups.getCurrentUser().getId() == event.getId()) {
-            menu.getItem(0).setVisible(true);
+        if (UserController.getInstance().isUserLoggedIn()) {
+            UserController.getInstance().getCurrentUser()
+            .addOnSuccessListener(user -> {
+                if (user.getId() == event.getOwner()) menu.getItem(0).setVisible(true);
+            });
         }
 
         userName.setText(Mockups.getUserById(event.getOwner()).getUsername());

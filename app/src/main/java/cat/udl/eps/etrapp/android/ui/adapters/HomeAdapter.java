@@ -47,21 +47,22 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position == 0 && featuredEvents != null) {
+        if (position == 0 && (featuredEvents != null && !featuredEvents.isEmpty())) {
             HomeHeaderViewHolder viewHolder = (HomeHeaderViewHolder) holder;
-            if (featuredEvents == null || featuredEvents.isEmpty()) {
+            if (featuredEvents.isEmpty()) {
                 viewHolder.itemView.setVisibility(View.GONE);
             } else {
                 viewHolder.viewPager.setAdapter(new HomeFragmentAdapter(fragment.getChildFragmentManager(), featuredEvents));
                 viewHolder.indicator.setViewPager(viewHolder.viewPager);
             }
         } else {
-            Event event = events.get((featuredEvents != null) ? position - 1 : position);
-            HomeContentViewHolder viewHolder = (HomeContentViewHolder) holder;
-            viewHolder.container.setTag(event.getId());
-            viewHolder.container.setOnClickListener(clickListener);
-            viewHolder.home_content_title.setText(event.getTitle());
+                Event event = events.get(position);
+                HomeContentViewHolder viewHolder = (HomeContentViewHolder) holder;
+                viewHolder.container.setTag(event.getId());
+                viewHolder.container.setOnClickListener(clickListener);
+                viewHolder.home_content_title.setText(event.getTitle());
         }
+
     }
 
     @Override public int getItemViewType(int position) {
