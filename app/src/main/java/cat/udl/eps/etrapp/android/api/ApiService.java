@@ -26,4 +26,7 @@ public interface ApiService {
     @GET("auth")
     Call<User> getCurrentUser();
 
+    @POST("users")
+    Call<User> createUser(@Body SignInRequest signInRequest);
+
 }

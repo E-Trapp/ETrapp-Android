@@ -93,4 +93,28 @@ public class UserController {
         return tcs.getTask();
     }
 
+
+    public Task<User> createUser(String username, String password) {
+        final TaskCompletionSource<User> tcs = new TaskCompletionSource<>();
+
+        SignInRequest request = new SignInRequest();
+        request.username = username;
+        request.password = password;
+
+        ApiServiceManager.getService().createUser(request).enqueue(
+                new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        System.out.println("response");
+                        tcs.trySetResult(response.body());
+                    }
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        tcs.trySetException(new Exception(t.getCause()));
+                    }
+                }
+        );
+
+        return tcs.getTask();
+    }
 }

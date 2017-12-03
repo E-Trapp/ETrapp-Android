@@ -6,6 +6,30 @@
     android:padding="16dp">
 
     <EditText
+        android:id="@+id/new_user_firstname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/firstname"
+        android:inputType="text"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/new_user_lastname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/lastname"
+        android:inputType="text"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/new_user_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/email"
+        android:inputType="text"
+        android:maxLines="1" />
+
+    <EditText
         android:id="@+id/new_user_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,5 +52,14 @@
         android:hint="@string/password_confirm"
         android:inputType="textPassword"
         android:maxLines="1" />
+
+    <Button
+        android:id="@+id/new_user_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/register" />
+
+
 
 </LinearLayout>

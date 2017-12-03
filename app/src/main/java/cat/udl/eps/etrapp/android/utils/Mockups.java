@@ -18,7 +18,7 @@ public class Mockups {
     }
 
     public static void changeLoginStatus() {
-        if (currentUser == null) currentUser = new User(1, "testUser");
+        if (currentUser == null) currentUser = new User(1, "","testUser", "","", "");
         else currentUser = null;
     }
 
@@ -58,7 +58,7 @@ public class Mockups {
 
     public static User getUserById(long userKey) {
         if (userKey == 0 && isUserLoggedIn()) return currentUser;
-        return new User(userKey, "user " + userKey);
+        return new User(userKey, "","user " + userKey, "", "", "");
     }
 
     public static User getCurrentUser() {

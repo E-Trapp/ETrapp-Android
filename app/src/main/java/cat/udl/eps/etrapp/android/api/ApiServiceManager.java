@@ -13,8 +13,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiServiceManager {
 
-    private static Retrofit retrofit = new Retrofit.Builder()
+    /*private static Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("http://172.16.100.20:8080/etrapp-server/v1/")
+            .client(getHttpClient())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();*/
+
+    private static Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:8080/EtrappArtefact/v1/")
             .client(getHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build();

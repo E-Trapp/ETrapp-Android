@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ETrapp-Android.iml" filepath="$PROJECT_DIR$/ETrapp-Android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ETrapp-Android.iml" filepath="$PROJECT_DIR$/.idea/ETrapp-Android.iml" />
+      <module fileurl="file://C:\Users\kinta\AndroidStudioProjects\ETrapp-Android\ETrapp-Android.iml" filepath="C:\Users\kinta\AndroidStudioProjects\ETrapp-Android\ETrapp-Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

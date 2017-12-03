@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_content_card"
     android:layout_width="match_parent"
     android:layout_height="72dp"
@@ -19,13 +20,70 @@
             android:scaleType="centerCrop"
             app:placeholderImage="@drawable/event_placeholder" />
 
-        <TextView
-            android:id="@+id/home_content_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_toEndOf="@id/home_content_iv"
-            android:textColor="@color/textBlack" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="72dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/home_content_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginTop="5dp"
+                                android:paddingLeft="10dp"
+                                android:layout_toEndOf="@id/home_content_iv"
+                                android:textColor="@color/textBlack" />
+
+                            <TextView
+                                android:id="@+id/home_content_owner"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginTop="5dp"
+                                android:paddingLeft="10dp"
+                                android:layout_toEndOf="@id/home_content_iv"
+                                android:textColor="@color/textBlack"
+                                android:text="[OWNER]" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/home_content_updated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginTop="5dp"
+                            android:paddingLeft="10dp"
+                            android:layout_toEndOf="@id/home_content_iv"
+                            android:textColor="@color/textBlack"
+                            android:text="[UPDATE]"/>
+
+                        <RatingBar
+                            android:id="@+id/ratingBar"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="15dp"
+                            android:paddingTop="25dp"
+                            android:numStars="4"
+                            android:stepSize="1.0"
+                            android:rating="2.0"
+                            android:text="oooouuuu"
+                            />
+                    </LinearLayout>
+            </LinearLayout>
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
