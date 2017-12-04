@@ -9,11 +9,14 @@ public class Event {
     private String description;
     private long startsAt;
     private boolean isFeatured;
-
+    private String imageUrl;
 
     public Event() {
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
     public boolean isFeatured() {
         return isFeatured;
     }

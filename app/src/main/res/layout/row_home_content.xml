@@ -48,9 +48,8 @@
                                 android:layout_weight="1"
                                 android:layout_marginTop="5dp"
                                 android:paddingLeft="10dp"
-                                android:layout_toEndOf="@id/home_content_iv"
                                 android:textColor="@color/textBlack"
-                                android:text="[OWNER]" />
+                                />
                     </LinearLayout>
 
                     <LinearLayout

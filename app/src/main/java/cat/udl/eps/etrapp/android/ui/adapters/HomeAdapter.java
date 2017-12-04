@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.ui.viewHolders.HomeContentViewHolder;
 import cat.udl.eps.etrapp.android.ui.viewHolders.HomeHeaderViewHolder;
@@ -67,8 +68,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 viewHolder.container.setOnClickListener(clickListener);
                 viewHolder.home_content_title.setText(event.getTitle());
 
+
+                UserController.getInstance().getUserById(event.getOwner()).addOnSuccessListener(user -> {
+                    viewHolder.home_content_owner.setText(user.getUsername());
+                });
+
                 System.out.println(event.toString());
-                viewHolder.home_content_updated.setText(new Date(event.getCreated_at()).toString());
+                viewHolder.home_content_updated.setText(new Date(event.getStartsAt()).toString());
         }
 
     }

@@ -26,7 +26,7 @@ public class Mockups {
         List<Event> tmp = new ArrayList<>();
 
         for (int i = 0; i < maxEvents; i++) {
-            tmp.add(new Event(i, "event " + (i + 1), "Event " + (i + 1) + " description", System.currentTimeMillis(), "no_image"));
+            //tmp.add(new Event(i, "event " + (i + 1), "Event " + (i + 1) + " description", System.currentTimeMillis(), "no_image"));
         }
 
         return tmp;
@@ -42,19 +42,19 @@ public class Mockups {
         };
 
         for (int i = 0; i < 3; i++) {
-            tmp.add(new Event(288 + i, "Featured Event " + (i + 1), "Featured event description.", 1510704000, images[i]));
+            //tmp.add(new Event(288 + i, "Featured Event " + (i + 1), "Featured event description.", 1510704000, images[i]));
         }
 
         return tmp;
     }
 
-    public static Event getEventById(long eventKey) {
-        if (eventKey < 100) {
-            return new Event(eventKey, "event " + (eventKey + 1), "Event " + (eventKey + 1) + " description", System.currentTimeMillis(), "no_image");
-        } else {
-            return new Event(eventKey, "event " + (eventKey + 1), "Event " + (eventKey + 1) + " description", System.currentTimeMillis(), "no_image");
-        }
-    }
+//    public static Event getEventById(long eventKey) {
+//        if (eventKey < 100) {
+//            return new Event(eventKey, "event " + (eventKey + 1), "Event " + (eventKey + 1) + " description", System.currentTimeMillis(), "no_image");
+//        } else {
+//            return new Event(eventKey, "event " + (eventKey + 1), "Event " + (eventKey + 1) + " description", System.currentTimeMillis(), "no_image");
+//        }
+//    }
 
     public static User getUserById(long userKey) {
         if (userKey == 0 && isUserLoggedIn()) return currentUser;

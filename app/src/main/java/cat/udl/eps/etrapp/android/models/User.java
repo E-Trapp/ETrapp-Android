@@ -2,13 +2,16 @@ package cat.udl.eps.etrapp.android.models;
 
 public class User {
 
-    public long id;
-    public String username;
-    public String password;
-    public String imageUrl;
-    public String email;
-    public String firstName;
-    public String lastName;
+    private long id;
+    private String username;
+    private String password;
+    private String imageUrl;
+    private String email;
+    private String firstName;
+    private String lastName;
+
+    public User() {
+    }
 
     public User(String username, String password, String email, String firstName, String lastname) {
         this.username = username;

@@ -115,7 +115,7 @@ public class EventActivity extends BaseActivity {
 
         //userName.setText(Mockups.getUserById(event.getOwner()).getUsername());
         userName.setText(event.getTitle());
-        created_date.setText(new Date(event.getCreated_at()).toString());
+        created_date.setText(new Date(event.getStartsAt()).toString());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);

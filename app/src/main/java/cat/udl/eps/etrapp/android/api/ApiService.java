@@ -30,4 +30,7 @@ public interface ApiService {
     @POST("users")
     Call<User> createUser(@Body UserAuth userauth);
 
+    @GET("users/{id}")
+    Call<User> getUserById(@Path("id") long ownerKey);
+
 }

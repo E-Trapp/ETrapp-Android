@@ -16,6 +16,7 @@ public class HomeContentViewHolder extends ButterizedViewHolder {
     @BindView(R.id.home_content_iv) public SimpleDraweeView home_content_image;
     @BindView(R.id.home_content_title) public TextView home_content_title;
     @BindView(R.id.home_content_updated) public TextView home_content_updated;
+    @BindView(R.id.home_content_owner) public TextView home_content_owner;
 
     public HomeContentViewHolder(View itemView) {
         super(itemView);
