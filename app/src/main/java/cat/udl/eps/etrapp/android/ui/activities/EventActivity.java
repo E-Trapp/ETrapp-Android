@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.thedeanda.lorem.LoremIpsum;
 
+import java.sql.Date;
+
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.controllers.EventController;
@@ -41,6 +43,7 @@ public class EventActivity extends BaseActivity {
     private Event event;
     private EventStreamAdapter eventStreamAdapter;
     private TextView userName;
+    private TextView created_date;
     private ImageView rateUp;
     private ImageView rateDown;
 
@@ -56,6 +59,7 @@ public class EventActivity extends BaseActivity {
 
     @Override protected void configView() {
         userName = header.findViewById(R.id.event_header_user_name);
+        created_date = header.findViewById(R.id.event_header_created);
         rateUp = header.findViewById(R.id.event_header_rate_user_up);
         rateDown = header.findViewById(R.id.event_header_rate_user_down);
 
@@ -109,7 +113,9 @@ public class EventActivity extends BaseActivity {
             });
         }
 
-        userName.setText(Mockups.getUserById(event.getOwner()).getUsername());
+        //userName.setText(Mockups.getUserById(event.getOwner()).getUsername());
+        userName.setText(event.getTitle());
+        created_date.setText(new Date(event.getCreated_at()).toString());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
@@ -158,6 +164,7 @@ public class EventActivity extends BaseActivity {
 
     static class IncludedLayout1 {
         @BindView(R.id.event_header_user_name) TextView userName;
+        @BindView(R.id.event_header_created) TextView created_date;
         @BindView(R.id.event_header_rate_user_up) ImageView rateUp;
         @BindView(R.id.event_header_rate_user_down) ImageView rateDown;
         @BindView(R.id.event_header_container) ViewGroup headerContainer;

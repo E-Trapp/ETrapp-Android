@@ -16,15 +16,36 @@
         app:roundingBorderColor="@color/material_black"
         app:roundingBorderWidth="2dp" />
 
-    <TextView
-        android:id="@+id/event_header_user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@+id/event_header_user_image"
-        android:layout_toStartOf="@+id/event_header_rate_user_container"
-        android:textSize="16sp" />
+    <LinearLayout
+        android:id="@+id/event_header_information_container"
+        android:orientation="vertical"
+        android:layout_width="120dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/event_header_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/event_header_user_image"
+            android:layout_toStartOf="@+id/event_header_rate_user_container"
+            android:textSize="16sp"
+            android:text="oiiititiulo"/>
+
+        <TextView
+            android:id="@+id/event_header_created"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/event_header_user_image"
+            android:layout_toStartOf="@+id/event_header_rate_user_container"
+            android:textSize="16sp"
+            android:text="oiiititiulo22"/>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/event_header_rate_user_container"

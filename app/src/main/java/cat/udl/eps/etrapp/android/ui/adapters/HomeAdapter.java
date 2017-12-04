@@ -6,7 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+import java.sql.Date;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
 
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.models.Event;
@@ -61,6 +66,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 viewHolder.container.setTag(event.getId());
                 viewHolder.container.setOnClickListener(clickListener);
                 viewHolder.home_content_title.setText(event.getTitle());
+
+                System.out.println(event.toString());
+                viewHolder.home_content_updated.setText(new Date(event.getCreated_at()).toString());
         }
 
     }

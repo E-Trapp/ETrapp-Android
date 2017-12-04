@@ -50,7 +50,7 @@ public class HomeFragment extends ScrollableFragment {
         recyclerView.setAdapter(homeAdapter);
         homeAdapter.setOnClickListener(v -> {
             startActivity(EventActivity.start(getContext(), (long) v.getTag()));
-    });
+        });
 
         EventController.getInstance().getAllEvents()
                 .addOnSuccessListener(events -> {
