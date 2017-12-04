@@ -6,6 +6,7 @@ import java.util.Map;
 import cat.udl.eps.etrapp.android.api.requests.SignInRequest;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.User;
+import cat.udl.eps.etrapp.android.models.UserAuth;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -27,6 +28,6 @@ public interface ApiService {
     Call<User> getCurrentUser();
 
     @POST("users")
-    Call<User> createUser(@Body SignInRequest signInRequest);
+    Call<User> createUser(@Body UserAuth userauth);
 
 }

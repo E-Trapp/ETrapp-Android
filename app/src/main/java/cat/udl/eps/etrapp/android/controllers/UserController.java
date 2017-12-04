@@ -8,6 +8,7 @@ import java.util.Map;
 import cat.udl.eps.etrapp.android.api.ApiServiceManager;
 import cat.udl.eps.etrapp.android.api.requests.SignInRequest;
 import cat.udl.eps.etrapp.android.models.User;
+import cat.udl.eps.etrapp.android.models.UserAuth;
 import cat.udl.eps.etrapp.android.models.realm.TokenPersistence;
 import io.realm.Realm;
 import retrofit2.Call;
@@ -94,14 +95,10 @@ public class UserController {
     }
 
 
-    public Task<User> createUser(String username, String password) {
+    public Task<User> createUser(UserAuth userauth) {
         final TaskCompletionSource<User> tcs = new TaskCompletionSource<>();
 
-        SignInRequest request = new SignInRequest();
-        request.username = username;
-        request.password = password;
-
-        ApiServiceManager.getService().createUser(request).enqueue(
+        ApiServiceManager.getService().createUser(userauth).enqueue(
                 new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {

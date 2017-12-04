@@ -10,6 +10,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.controllers.UserController;
+import cat.udl.eps.etrapp.android.models.UserAuth;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
 
 
@@ -30,8 +31,13 @@ public class RegisterActivity extends BaseActivity {
 
     @OnClick(R.id.new_user_button) void eventClickRegister() {
 
-        UserController.getInstance().createUser(firstname.getText().toString(),
-                                                lastname.getText().toString()).
+        UserAuth userauth = new UserAuth(firstname.getText().toString(),
+                                         lastname.getText().toString(),
+                                        email.getText().toString(),
+                                        username.getText().toString(),
+                                        password.getText().toString());
+
+        UserController.getInstance().createUser(userauth).
         addOnSuccessListener(response -> {
             System.out.println("deu bom.");
             System.out.println(response);
