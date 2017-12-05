@@ -125,4 +125,22 @@ public class UserController {
 
         return tcs.getTask();
     }
+
+    public Task<User> getUserById(long owner) {
+        TaskCompletionSource<User> tcs = new TaskCompletionSource<>();
+
+        ApiServiceManager.getService().getUserById(owner).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                tcs.setResult(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                tcs.trySetException(new Exception(t.getMessage()));
+            }
+        });
+
+        return tcs.getTask();
+    }
 }
