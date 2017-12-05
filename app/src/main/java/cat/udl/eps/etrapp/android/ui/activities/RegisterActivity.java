@@ -32,20 +32,18 @@ public class RegisterActivity extends BaseActivity {
     @OnClick(R.id.new_user_button) void eventClickRegister() {
 
         UserAuth userauth = new UserAuth(firstname.getText().toString(),
-                                         lastname.getText().toString(),
-                                        email.getText().toString(),
-                                        username.getText().toString(),
-                                        password.getText().toString());
+                lastname.getText().toString(),
+                email.getText().toString(),
+                username.getText().toString(),
+                password.getText().toString());
 
-        UserController.getInstance().createUser(userauth).
-        addOnSuccessListener(response -> {
-            System.out.println("deu bom.");
-            System.out.println(response);
-        }).addOnFailureListener(response ->{
-            System.out.println("deu ruim");
-        });
+        UserController.getInstance()
+                .createUser(userauth)
+                .addOnSuccessListener(response -> {
 
-
+                })
+                .addOnFailureListener(response -> {
+                });
     }
 
     @Override protected int getLayout() {

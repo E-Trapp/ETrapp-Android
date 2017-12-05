@@ -11,6 +11,7 @@ import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.models.UserAuth;
 import cat.udl.eps.etrapp.android.models.realm.TokenPersistence;
 import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -102,9 +103,19 @@ public class UserController {
                 new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
-                        System.out.println("response");
-                        tcs.trySetResult(response.body());
+                        if (response.isSuccessful()) {
+
+                            final User user = response.body();
+                            Realm.getDefaultInstance().executeTransactionAsync(realm -> {
+                                RealmResults<User> results = realm.where(User.class).findAll();
+                                results.deleteAllFromRealm();
+                                realm.copyToRealmOrUpdate(user);
+                            });
+
+                            tcs.trySetResult(user);
+                        }
                     }
+
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
                         tcs.trySetException(new Exception(t.getCause()));

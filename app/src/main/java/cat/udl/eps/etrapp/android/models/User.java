@@ -1,42 +1,18 @@
 package cat.udl.eps.etrapp.android.models;
 
-public class User {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-    public long id;
-    public String username;
-    public String password;
-    public String imageUrl;
-    public String email;
-    public String firstName;
-    public String lastName;
+public class User extends RealmObject {
 
-    public User(String username, String password, String email, String firstName, String lastname) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastname;
-    }
+    @PrimaryKey
+    private long id;
 
-    public User(long id, String username, String password, String email, String firstName, String lastname) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastname;
-    }
-
-    @Override public String toString() {
-        return "User {" +
-                "id=" + id +
-                ", username=" + username +
-                ", password='" + password + '\'' +
-                ", email=" + email +
-                ", firstName=" + firstName +
-                ", lastName='" + lastName + '\'' +
-                '}';
-    }
+    private String username;
+    private String avatarUrl;
+    private String email;
+    private String firstName;
+    private String lastName;
 
     public long getId() {
         return id;
@@ -44,5 +20,21 @@ public class User {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }
