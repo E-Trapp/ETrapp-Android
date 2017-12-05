@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import cat.udl.eps.etrapp.android.api.requests.SignInRequest;
+import cat.udl.eps.etrapp.android.api.responses.ResponseUser;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.models.UserAuth;
@@ -22,7 +23,7 @@ public interface ApiService {
     Call<Event> getEvent(@Path("id") long eventKey);
 
     @POST("auth")
-    Call<Map<String, String>> authenticateWithCredentials(@Body SignInRequest signInRequest);
+    Call<ResponseUser> authenticateWithCredentials(@Body SignInRequest signInRequest);
 
     @GET("auth")
     Call<User> getCurrentUser();

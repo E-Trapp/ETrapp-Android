@@ -24,10 +24,8 @@ import cat.udl.eps.etrapp.android.controllers.EventController;
 import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.StreamMessage;
-import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.ui.adapters.EventStreamAdapter;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
-import cat.udl.eps.etrapp.android.utils.Mockups;
 import cat.udl.eps.etrapp.android.utils.Toaster;
 
 import static cat.udl.eps.etrapp.android.utils.Constants.EXTRA_EVENT_ID;
@@ -107,13 +105,12 @@ public class EventActivity extends BaseActivity {
         getCurrentActionBar().setTitle(event.getTitle());
 
         if (UserController.getInstance().isUserLoggedIn()) {
-            UserController.getInstance().getCurrentUser()
-            .addOnSuccessListener(user -> {
-                if (user.getId() == event.getOwner()) menu.getItem(0).setVisible(true);
-            });
+            if (UserController.getInstance().getCurrentUser().getId() == event.getOwner()) {
+                menu.getItem(0).setVisible(true);
+                sendContainer.setVisibility(View.VISIBLE);
+            }
         }
 
-        //userName.setText(Mockups.getUserById(event.getOwner()).getUsername());
         userName.setText(event.getTitle());
         created_date.setText(new Date(event.getStartsAt()).toString());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -121,10 +118,6 @@ public class EventActivity extends BaseActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
         eventStreamAdapter = new EventStreamAdapter();
         recyclerView.setAdapter(eventStreamAdapter);
-
-        if (Mockups.isUserLoggedIn() && Mockups.getCurrentUser().getId() == event.getOwner()) {
-            sendContainer.setVisibility(View.VISIBLE);
-        }
 
         new Thread(() -> {
             while (true) {

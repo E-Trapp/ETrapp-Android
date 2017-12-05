@@ -6,13 +6,12 @@ import io.realm.annotations.PrimaryKey;
 public class User extends RealmObject {
 
     @PrimaryKey
-    private long id;
-
-    private String username;
-    private String avatarUrl;
-    private String email;
-    private String firstName;
-    private String lastName;
+    protected long id;
+    protected String username;
+    protected String avatarUrl;
+    protected String email;
+    protected String firstName;
+    protected String lastName;
 
     public long getId() {
         return id;
