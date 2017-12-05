@@ -14,13 +14,13 @@ import java.util.List;
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.controllers.EventController;
+import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.ui.activities.CreateOrEditEvent;
 import cat.udl.eps.etrapp.android.ui.activities.EventActivity;
 import cat.udl.eps.etrapp.android.ui.adapters.HomeAdapter;
 import cat.udl.eps.etrapp.android.ui.base.ScrollableFragment;
 import cat.udl.eps.etrapp.android.ui.views.PaddingItemDecoration;
-import cat.udl.eps.etrapp.android.utils.Mockups;
 import cat.udl.eps.etrapp.android.utils.Toaster;
 import timber.log.Timber;
 
@@ -86,7 +86,7 @@ public class HomeFragment extends ScrollableFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        if (Mockups.isUserLoggedIn()) {
+        if (UserController.getInstance().isUserLoggedIn()) {
             menu.add(0, ID_MENU_ITEM_CREATE_EVENT, 50, R.string.add)
                     .setIcon(R.drawable.ic_plus_white_24dp)
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);

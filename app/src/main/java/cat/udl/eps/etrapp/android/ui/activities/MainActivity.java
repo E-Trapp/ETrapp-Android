@@ -15,7 +15,6 @@ import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
 import cat.udl.eps.etrapp.android.ui.fragments.HomeFragment;
 import cat.udl.eps.etrapp.android.ui.fragments.ProfileFragment;
 import cat.udl.eps.etrapp.android.ui.fragments.SearchFragment;
-import cat.udl.eps.etrapp.android.utils.Mockups;
 import cat.udl.eps.etrapp.android.utils.Toaster;
 import timber.log.Timber;
 
@@ -92,7 +91,6 @@ public class MainActivity extends BaseActivity {
         switch (requestCode) {
             case RC_SIGN_IN:
                 if (resultCode == RESULT_OK) {
-                    Mockups.changeLoginStatus();
                     Toaster.show(this, getString(R.string.success_sign_in));
                     bottomNavigationView.setSelectedItemId(R.id.navigation_profile);
                 }

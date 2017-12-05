@@ -12,9 +12,9 @@ import java.util.Random;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
-import cat.udl.eps.etrapp.android.utils.Mockups;
 
 public class UserProfileActivity extends BaseActivity {
 
@@ -60,8 +60,14 @@ public class UserProfileActivity extends BaseActivity {
     private void handleIntent(Intent intent) {
         if (intent != null) {
             if (intent.hasExtra("userKey")) {
-                user = Mockups.getUserById(intent.getLongExtra("userKey", -1));
-                getCurrentActionBar().setTitle(user.getUsername());
+                // user = Mockups.getUserById(intent.getLongExtra("userKey", -1));
+                UserController.getInstance()
+                        .getUserById(intent.getLongExtra("userKey", -1))
+                        .addOnSuccessListener(result -> {
+                            user = result;
+                            getCurrentActionBar().setTitle(user.getUsername());
+                        });
+
             }
         }
     }

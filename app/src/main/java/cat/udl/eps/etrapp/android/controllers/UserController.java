@@ -44,7 +44,7 @@ public class UserController {
     }
 
     public User getCurrentUser() {
-        return Realm.getDefaultInstance().where(CurrentUser.class).findFirst();
+        return User.current(Realm.getDefaultInstance().where(CurrentUser.class).findFirst());
     }
 
     public Task<String> authenticate(String username, String password) {
@@ -66,7 +66,7 @@ public class UserController {
 
                     Realm.getDefaultInstance().executeTransaction(realm -> {
                         realm.copyToRealmOrUpdate(tokenPersistence);
-                        realm.copyToRealmOrUpdate(CurrentUser.fromUser(response.body()));
+                        realm.copyToRealmOrUpdate(CurrentUser.fromResponse(response.body()));
                     });
 
                     tcs.setResult(token);
@@ -107,7 +107,7 @@ public class UserController {
                                 realm.copyToRealmOrUpdate(user);
                             });
 
-                            tcs.trySetResult(user);
+                            tcs.trySetResult(User.current(user));
                         }
                     }
 

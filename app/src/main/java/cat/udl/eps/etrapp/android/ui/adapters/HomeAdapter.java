@@ -18,7 +18,6 @@ import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.ui.viewHolders.HomeContentViewHolder;
 import cat.udl.eps.etrapp.android.ui.viewHolders.HomeHeaderViewHolder;
-import cat.udl.eps.etrapp.android.utils.Mockups;
 
 public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
