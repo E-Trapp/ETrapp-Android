@@ -3,14 +3,18 @@ package cat.udl.eps.etrapp.android.controllers;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 
+import java.util.Map;
+
 import cat.udl.eps.etrapp.android.api.ApiServiceManager;
 import cat.udl.eps.etrapp.android.api.requests.SignInRequest;
+import cat.udl.eps.etrapp.android.api.requests.TokenInfo;
 import cat.udl.eps.etrapp.android.api.responses.ResponseUser;
 import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.models.UserAuth;
 import cat.udl.eps.etrapp.android.models.realm.CurrentUser;
 import cat.udl.eps.etrapp.android.models.realm.TokenPersistence;
 import io.realm.Realm;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -132,6 +136,26 @@ public class UserController {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+                tcs.trySetException(new Exception(t.getMessage()));
+            }
+        });
+
+        return tcs.getTask();
+    }
+
+    public Task<Void> updateNotificationToken(String token) {
+        TaskCompletionSource<Void> tcs = new TaskCompletionSource<>();
+
+        ApiServiceManager.getService().updateToken(getCurrentUser().getId(), new TokenInfo(token)).enqueue(new Callback<ResponseBody>() {
+            @Override public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    tcs.setResult(null);
+                } else {
+                    tcs.trySetException(new Exception(response.message()));
+                }
+            }
+
+            @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
                 tcs.trySetException(new Exception(t.getMessage()));
             }
         });

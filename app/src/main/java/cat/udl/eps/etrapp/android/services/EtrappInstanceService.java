@@ -5,6 +5,10 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import cat.udl.eps.etrapp.android.controllers.UserController;
 import timber.log.Timber;
 
 public class EtrappInstanceService extends FirebaseInstanceIdService {
@@ -18,7 +22,13 @@ public class EtrappInstanceService extends FirebaseInstanceIdService {
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        // sendRegistrationToServer(refreshedToken);
+        sendRegistrationToServer(refreshedToken);
+    }
+
+    private void sendRegistrationToServer(String refreshedToken) {
+        if (UserController.getInstance().isUserLoggedIn()) {
+            UserController.getInstance().updateNotificationToken(refreshedToken);
+        }
     }
 
 }

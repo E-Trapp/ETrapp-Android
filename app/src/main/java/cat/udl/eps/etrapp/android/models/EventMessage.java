@@ -4,11 +4,17 @@ public class EventMessage {
 
     private long id;
     private String message;
+    private String key;
     private long userId;
     private long eventId;
+    private long timestamp;
 
-    public EventMessage(){
+    public EventMessage() {
 
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public long getId() {
@@ -43,5 +49,11 @@ public class EventMessage {
         this.eventId = eventId;
     }
 
+    public String getKey() {
+        return key;
+    }
 
+    public void setKey(String key) {
+        this.key = key;
+    }
 }

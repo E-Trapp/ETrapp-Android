@@ -11,24 +11,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.thedeanda.lorem.LoremIpsum;
-
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.controllers.EventController;
-import cat.udl.eps.etrapp.android.controllers.EventMessagesController;
+import cat.udl.eps.etrapp.android.controllers.FirebaseController;
 import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
-import cat.udl.eps.etrapp.android.models.EventMessage;
 import cat.udl.eps.etrapp.android.ui.adapters.EventStreamAdapter;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
+import cat.udl.eps.etrapp.android.ui.views.EndlessRecyclerOnScrollListener;
 import cat.udl.eps.etrapp.android.utils.Toaster;
 
 import static cat.udl.eps.etrapp.android.utils.Constants.EXTRA_EVENT_ID;
@@ -39,14 +36,16 @@ public class EventActivity extends BaseActivity {
     @BindView(R.id.event_stream_header) ViewGroup header;
     @BindView(R.id.event_stream_recycler) RecyclerView recyclerView;
     @BindView(R.id.event_stream_send_container) ViewGroup sendContainer;
-    Handler handler = new Handler(Looper.getMainLooper());
-    Menu menu;
+
+    private Menu menu;
     private Event event;
     private EventStreamAdapter eventStreamAdapter;
     private TextView userName;
     private TextView created_date;
     private ImageView rateUp;
     private ImageView rateDown;
+    private ImageView sendButton;
+    private EditText sendText;
 
     public static Intent start(Context context, long eventKey) {
         Intent i = new Intent(context, EventActivity.class);
@@ -59,10 +58,13 @@ public class EventActivity extends BaseActivity {
     }
 
     @Override protected void configView() {
+        eventStreamAdapter = new EventStreamAdapter();
         userName = header.findViewById(R.id.event_header_user_name);
         created_date = header.findViewById(R.id.event_header_created);
         rateUp = header.findViewById(R.id.event_header_rate_user_up);
         rateDown = header.findViewById(R.id.event_header_rate_user_down);
+        sendButton = sendContainer.findViewById(R.id.event_stream_send_button);
+        sendText = sendContainer.findViewById(R.id.event_stream_send_text);
 
         View.OnClickListener clickListener = view -> {
             switch (view.getId()) {
@@ -111,40 +113,41 @@ public class EventActivity extends BaseActivity {
             if (UserController.getInstance().getCurrentUser().getId() == event.getOwner()) {
                 menu.getItem(0).setVisible(true);
                 sendContainer.setVisibility(View.VISIBLE);
+                sendButton.setOnClickListener(view -> EventController.getInstance().writeMessage(event.getId(), sendText.getText().toString()));
             }
         }
 
         userName.setText(event.getTitle());
         created_date.setText(new Date(event.getStartsAt()).toString());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        eventStreamAdapter = new EventStreamAdapter();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(eventStreamAdapter);
 
-        new Thread(() -> {
-            while (true) {
-                EventMessagesController.getInstance().getEventMessagesById(event.getId()).addOnSuccessListener(eventMessages -> {
-                    List<EventMessage> tmpEventsMessages = new ArrayList<>();
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
-                    if(eventStreamAdapter.getItemCount() == 0){
-                        for (EventMessage e: eventMessages) {
-                            tmpEventsMessages.add(e);
-                            handler.post(() -> eventStreamAdapter.insertMessage(e));
-                        }
-                    }else{
-                        eventStreamAdapter.swap(eventMessages);
+        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
+
+            boolean loading = false;
+
+            @Override public void onScrolledToEnd() {
+                if (!loading) {
+                    if (eventStreamAdapter.getItemCount() >= 5) {
+                        recyclerView.post(() -> {
+                            loading = true;
+                            FirebaseController.getInstance().getMessages(eventStreamAdapter.getLastKey(),event.getId(), eventStreamAdapter);
+                        });
                     }
-
-                });
-
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
+                recyclerView.post(() -> loading = false);
             }
-        }).start();
+        });
+
+        FirebaseController.getInstance().getMessages(null, event.getId(), eventStreamAdapter);
+
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {

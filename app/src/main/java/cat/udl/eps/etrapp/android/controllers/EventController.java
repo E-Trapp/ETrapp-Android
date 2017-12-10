@@ -6,7 +6,9 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import java.util.List;
 
 import cat.udl.eps.etrapp.android.api.ApiServiceManager;
+import cat.udl.eps.etrapp.android.api.requests.SendMessage;
 import cat.udl.eps.etrapp.android.models.Event;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,4 +65,16 @@ public class EventController {
         return tcs.getTask();
     }
 
+    public void writeMessage(long eventKey, String s) {
+        ApiServiceManager.getService().writeMessage(eventKey, new SendMessage(s)).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+            }
+
+            @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
 }
