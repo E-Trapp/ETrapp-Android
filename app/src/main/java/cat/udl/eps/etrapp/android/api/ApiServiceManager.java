@@ -10,24 +10,21 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import timber.log.Timber;
 
 public class ApiServiceManager {
 
-    /*private static Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://172.16.100.20:8080/etrapp-server/v1/")
-            .client(getHttpClient())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();*/
+   private static String TOKEN_DATA = null;
 
-    private static Retrofit retrofit = new Retrofit.Builder()
+   private static Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("http://10.0.2.2:8080/etrapp-server/v1/")
             .client(getHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    private static ApiService service = retrofit.create(ApiService.class);
+   private static ApiService service = retrofit.create(ApiService.class);
 
-    private static OkHttpClient getHttpClient() {
+   private static OkHttpClient getHttpClient() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -47,6 +44,16 @@ public class ApiServiceManager {
     }
 
     public static ApiService getService() {
+        final String token;
+        if((token = UserController.getInstance().getCurrentToken()) != null && !token.equals(TOKEN_DATA)) {
+            // Recreate Client in order to reload token data.
+            retrofit = new Retrofit.Builder()
+                    .baseUrl("http://10.0.2.2:8080/etrapp-server/v1/")
+                    .client(getHttpClient())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            service = retrofit.create(ApiService.class);
+        }
         return service;
     }
 

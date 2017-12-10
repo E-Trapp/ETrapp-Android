@@ -1,12 +1,7 @@
 package cat.udl.eps.etrapp.android.services;
 
-import android.util.Log;
-
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import cat.udl.eps.etrapp.android.controllers.UserController;
 import timber.log.Timber;
@@ -27,7 +22,7 @@ public class EtrappInstanceService extends FirebaseInstanceIdService {
 
     private void sendRegistrationToServer(String refreshedToken) {
         if (UserController.getInstance().isUserLoggedIn()) {
-            UserController.getInstance().updateNotificationToken(refreshedToken);
+            UserController.getInstance().updateNotificationToken();
         }
     }
 

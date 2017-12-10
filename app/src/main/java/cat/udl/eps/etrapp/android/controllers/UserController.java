@@ -2,8 +2,7 @@ package cat.udl.eps.etrapp.android.controllers;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
-
-import java.util.Map;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import cat.udl.eps.etrapp.android.api.ApiServiceManager;
 import cat.udl.eps.etrapp.android.api.requests.SignInRequest;
@@ -73,6 +72,8 @@ public class UserController {
                         realm.copyToRealmOrUpdate(CurrentUser.fromResponse(response.body()));
                     });
 
+                    UserController.getInstance().updateNotificationToken();
+
                     tcs.setResult(token);
                 } else {
                     tcs.trySetException(new Exception("error"));
@@ -107,9 +108,11 @@ public class UserController {
                         if (response.isSuccessful()) {
 
                             final CurrentUser user = CurrentUser.fromUser(response.body());
-                            Realm.getDefaultInstance().executeTransactionAsync(realm -> {
+                            Realm.getDefaultInstance().executeTransaction(realm -> {
                                 realm.copyToRealmOrUpdate(user);
                             });
+
+                            UserController.getInstance().updateNotificationToken();
 
                             tcs.trySetResult(User.current(user));
                         }
@@ -143,11 +146,14 @@ public class UserController {
         return tcs.getTask();
     }
 
-    public Task<Void> updateNotificationToken(String token) {
+    public Task<Void> updateNotificationToken() {
         TaskCompletionSource<Void> tcs = new TaskCompletionSource<>();
 
+        final String token = FirebaseInstanceId.getInstance().getToken();
+
         ApiServiceManager.getService().updateToken(getCurrentUser().getId(), new TokenInfo(token)).enqueue(new Callback<ResponseBody>() {
-            @Override public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     tcs.setResult(null);
                 } else {

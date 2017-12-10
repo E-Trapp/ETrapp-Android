@@ -40,7 +40,7 @@ public class RegisterActivity extends BaseActivity {
         UserController.getInstance()
                 .createUser(userauth)
                 .addOnSuccessListener(response -> {
-
+                    finish();
                 })
                 .addOnFailureListener(response -> {
                 });

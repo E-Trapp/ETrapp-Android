@@ -17,6 +17,7 @@ import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ApiService {
@@ -42,6 +43,6 @@ public interface ApiService {
     @GET("users/{id}")
     Call<User> getUserById(@Path("id") long ownerKey);
 
-    @POST("users/{id}/token")
+    @PUT("users/{id}/token")
     Call<ResponseBody> updateToken(@Path("id") long userKey, @Body TokenInfo tokenInfo);
 }

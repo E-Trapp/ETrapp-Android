@@ -41,7 +41,6 @@ public class LoginActivity extends BaseActivity {
             UserController.getInstance()
                     .authenticate(username.getText().toString(), password.getText().toString())
                     .addOnSuccessListener(s -> {
-                        Timber.d("Signed in successfully, new Token: %s", s);
                         setResult(RESULT_OK);
                         finish();
                     })
