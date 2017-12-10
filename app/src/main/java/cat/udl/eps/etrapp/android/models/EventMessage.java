@@ -1,20 +1,47 @@
 package cat.udl.eps.etrapp.android.models;
 
-public class StreamMessage {
+public class EventMessage {
 
-    private long timestamp;
+    private long id;
     private String message;
+    private long userId;
+    private long eventId;
 
-    public StreamMessage(long timestamp, String message) {
-        this.timestamp = timestamp;
-        this.message = message;
+    public EventMessage(){
+
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getMessage() {
         return message;
     }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(long eventId) {
+        this.eventId = eventId;
+    }
+
+
 }

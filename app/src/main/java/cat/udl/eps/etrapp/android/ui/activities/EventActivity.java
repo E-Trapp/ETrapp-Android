@@ -17,13 +17,16 @@ import android.widget.TextView;
 import com.thedeanda.lorem.LoremIpsum;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.controllers.EventController;
+import cat.udl.eps.etrapp.android.controllers.EventMessagesController;
 import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
-import cat.udl.eps.etrapp.android.models.StreamMessage;
+import cat.udl.eps.etrapp.android.models.EventMessage;
 import cat.udl.eps.etrapp.android.ui.adapters.EventStreamAdapter;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
 import cat.udl.eps.etrapp.android.utils.Toaster;
@@ -121,7 +124,20 @@ public class EventActivity extends BaseActivity {
 
         new Thread(() -> {
             while (true) {
-                handler.post(() -> eventStreamAdapter.insertMessage(new StreamMessage(System.currentTimeMillis(), LoremIpsum.getInstance().getWords(5, 30))));
+                EventMessagesController.getInstance().getEventMessagesById(event.getId()).addOnSuccessListener(eventMessages -> {
+                    List<EventMessage> tmpEventsMessages = new ArrayList<>();
+
+                    if(eventStreamAdapter.getItemCount() == 0){
+                        for (EventMessage e: eventMessages) {
+                            tmpEventsMessages.add(e);
+                            handler.post(() -> eventStreamAdapter.insertMessage(e));
+                        }
+                    }else{
+                        eventStreamAdapter.swap(eventMessages);
+                    }
+
+                });
+
                 try {
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {

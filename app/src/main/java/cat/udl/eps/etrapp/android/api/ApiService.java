@@ -6,6 +6,7 @@ import java.util.Map;
 import cat.udl.eps.etrapp.android.api.requests.SignInRequest;
 import cat.udl.eps.etrapp.android.api.responses.ResponseUser;
 import cat.udl.eps.etrapp.android.models.Event;
+import cat.udl.eps.etrapp.android.models.EventMessage;
 import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.models.UserAuth;
 import retrofit2.Call;
@@ -34,4 +35,6 @@ public interface ApiService {
     @GET("users/{id}")
     Call<User> getUserById(@Path("id") long ownerKey);
 
+    @GET("events/{id}/messages")
+    Call<List<EventMessage>> getEventMessagesByEventId(@Path("id") long eventKey);
 }

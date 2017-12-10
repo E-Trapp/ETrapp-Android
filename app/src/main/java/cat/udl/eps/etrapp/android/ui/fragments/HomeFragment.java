@@ -57,6 +57,7 @@ public class HomeFragment extends ScrollableFragment {
                     List<Event> tmpEvents = new ArrayList<>();
                     List<Event> tmpFeatured = new ArrayList<>();
 
+
                     for (Event e: events) {
                         if(e.isFeatured()) tmpFeatured.add(e); else tmpEvents.add(e);
                     }
