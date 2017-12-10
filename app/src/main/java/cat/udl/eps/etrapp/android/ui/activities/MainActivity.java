@@ -25,7 +25,7 @@ import static cat.udl.eps.etrapp.android.utils.Constants.TAG_SEARCH_FRAGMENT;
 
 public class MainActivity extends BaseActivity {
 
-    @BindView(R.id.navigation) BottomNavigationView bottomNavigationView;
+    @BindView(R.id.navigation) public BottomNavigationView bottomNavigationView;
 
     @Override
     protected int getLayout() {

@@ -47,14 +47,22 @@ public class ApiServiceManager {
         final String token;
         if((token = UserController.getInstance().getCurrentToken()) != null && !token.equals(TOKEN_DATA)) {
             // Recreate Client in order to reload token data.
-            retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:8080/etrapp-server/v1/")
-                    .client(getHttpClient())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            service = retrofit.create(ApiService.class);
+            TOKEN_DATA = token;
+            reset();
+        } else if (token == null && TOKEN_DATA != null) {
+            TOKEN_DATA = null;
+            reset();
         }
         return service;
+    }
+
+    private static void reset() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080/etrapp-server/v1/")
+                .client(getHttpClient())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        service = retrofit.create(ApiService.class);
     }
 
 }

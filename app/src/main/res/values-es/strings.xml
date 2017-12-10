@@ -27,4 +27,6 @@
     <string name="username">Nombre de usuario</string>
     <string name="new_password">Contraseña</string>
     <string name="password_confirm">Confirmar contraseña</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="sign_out_successful">You are now signed out</string>
 </resources>

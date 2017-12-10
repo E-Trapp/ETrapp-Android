@@ -105,4 +105,6 @@
     <string name="firstname">First name</string>
     <string name="lastname">Last name</string>
     <string name="register">Register</string>
+    <string name="sign_out">Cerrar sesión</string>
+    <string name="sign_out_successful">Has cerrado sesión</string>
 </resources>

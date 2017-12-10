@@ -17,6 +17,7 @@ public class Constants {
     // MENU Custom items
     public static final int ID_MENU_ITEM_EDIT_EVENT = 0xA;
     public static final int ID_MENU_ITEM_CREATE_EVENT = 0xB;
+    public static final int ID_MENU_ITEM_SIGN_OUT = 0xC;
 
 
 }

@@ -91,8 +91,23 @@ public class UserController {
     public Task<Void> deauthenticate() {
         final TaskCompletionSource<Void> tcs = new TaskCompletionSource<>();
 
-        Realm.getDefaultInstance().executeTransactionAsync(realm -> {
-            realm.delete(CurrentUser.class);
+        ApiServiceManager.getService().signOut().enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Realm.getDefaultInstance().executeTransaction(realm -> {
+                        realm.delete(CurrentUser.class);
+                        realm.delete(TokenPersistence.class);
+                    });
+                    tcs.trySetResult(null);
+                } else {
+                    tcs.trySetException(null);
+                }
+            }
+
+            @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
+                tcs.trySetException(null);
+            }
         });
 
         return tcs.getTask();
