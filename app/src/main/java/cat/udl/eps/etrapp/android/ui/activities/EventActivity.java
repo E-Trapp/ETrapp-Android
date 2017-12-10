@@ -132,12 +132,17 @@ public class EventActivity extends BaseActivity {
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
 
             boolean loading = false;
+            String lastKeyUsed = null;
 
             @Override public void onScrolledToEnd() {
                 if (!loading) {
                     if (eventStreamAdapter.getItemCount() >= 5) {
                         recyclerView.post(() -> {
                             loading = true;
+                            if (lastKeyUsed != null) {
+                                if (lastKeyUsed.equals(eventStreamAdapter.getLastKey())) return;
+                            }
+                            lastKeyUsed = eventStreamAdapter.getLastKey();
                             FirebaseController.getInstance().getMessages(eventStreamAdapter.getLastKey(),event.getId(), eventStreamAdapter);
                         });
                     }
