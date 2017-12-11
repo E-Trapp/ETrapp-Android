@@ -3,7 +3,7 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_filter"
-        android:icon="@drawable/ic_account_black_24dp"
-        android:title="AAA"
+        android:icon="@drawable/ic_filter_outline_white_24dp"
+        android:title="@string/filters"
         app:showAsAction="ifRoom"/>
 </menu>
