@@ -77,4 +77,25 @@ public class EventController {
             }
         });
     }
+
+    public Task<List<Event>> getUserEvents(long id) {
+        final TaskCompletionSource<List<Event>> tcs = new TaskCompletionSource<>();
+
+        ApiServiceManager.getService().listUserEvents(id).enqueue(new Callback<List<Event>>() {
+            @Override
+            public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
+                if (response.isSuccessful()) {
+                    tcs.setResult(response.body());
+                } else {
+                    tcs.trySetException(new Exception("Error"));
+                }
+            }
+
+            @Override public void onFailure(Call<List<Event>> call, Throwable t) {
+                tcs.trySetException(new Exception(t.getCause()));
+            }
+        });
+
+        return tcs.getTask();
+    }
 }

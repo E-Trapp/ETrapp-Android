@@ -1,5 +1,7 @@
 package cat.udl.eps.etrapp.android.ui.fragments;
 
+import android.app.Activity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,10 +12,12 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.lang.ref.WeakReference;
 import java.util.Random;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.ProfileController;
 import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.ui.activities.MainActivity;
 import cat.udl.eps.etrapp.android.ui.base.BaseFragment;
@@ -27,12 +31,8 @@ public class ProfileFragment extends ScrollableFragment {
     @BindView(R.id.profile_followers_container) ViewGroup followers;
     @BindView(R.id.profile_following_container) ViewGroup following;
     @BindView(R.id.profile_user_image) SimpleDraweeView profilePicture;
-    @BindView(R.id.userEventsText) TextView userEventsText;
-
-    private TextView user_followers_count;
-    private TextView user_followers_text;
-    private TextView user_following_count;
-    private TextView user_following_text;
+    @BindView(R.id.userEventsText) TextView user_events_title;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -46,18 +46,19 @@ public class ProfileFragment extends ScrollableFragment {
     @Override
     protected void configView(View fragmentView) {
         setHasOptionsMenu(true);
-        user_followers_text = followers.findViewById(R.id.layout_follow_text);
-        user_followers_count = followers.findViewById(R.id.layout_follow_count);
-        user_following_text = following.findViewById(R.id.layout_follow_text);
-        user_following_count = following.findViewById(R.id.layout_follow_count);
 
-        user_following_text.setText(getString(R.string.following));
-        user_followers_text.setText(getString(R.string.followers));
-
-        user_following_count.setText("" + (Math.abs(new Random().nextInt() % 14522)));
-        user_followers_count.setText("" + (Math.abs(new Random().nextInt() % 14522)));
-
-        userEventsText.setText(R.string.my_events);
+        ProfileController.newBuilder(new WeakReference<Activity>(getActivity()), getContext())
+                .setFollowers(followers)
+                .setFollowing(following)
+                .setProfilePicture(profilePicture)
+                .setUser_events_title(user_events_title)
+                .setUser_followers_count(followers.findViewById(R.id.layout_follow_count))
+                .setUser_followers_text(followers.findViewById(R.id.layout_follow_text))
+                .setUser_following_count(following.findViewById(R.id.layout_follow_count))
+                .setUser_following_text(following.findViewById(R.id.layout_follow_text))
+                .setTheUser(UserController.getInstance().getCurrentUser())
+                .setRecyclerView(recyclerView)
+                .build().load();
     }
 
     @Override

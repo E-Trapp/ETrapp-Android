@@ -183,4 +183,13 @@ public class UserController {
 
         return tcs.getTask();
     }
+
+    public boolean isCurrentUser(User theUser) {
+        if (isUserLoggedIn()) {
+            if (getCurrentUser() != null) {
+                if (getCurrentUser().getId() == theUser.getId()) return true;
+            }
+        }
+        return false;
+    }
 }
