@@ -49,4 +49,7 @@ public interface ApiService {
 
     @PUT("users/{id}/token")
     Call<ResponseBody> updateToken(@Path("id") long userKey, @Body TokenInfo tokenInfo);
+
+    @GET("users/{id}/events")
+    Call<List<Event>> listUserEvents(@Path("id") long userKey);
 }

@@ -1,17 +1,20 @@
 package cat.udl.eps.etrapp.android.ui.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.Random;
+import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.ProfileController;
 import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
@@ -21,12 +24,8 @@ public class UserProfileActivity extends BaseActivity {
     @BindView(R.id.profile_followers_container) ViewGroup followers;
     @BindView(R.id.profile_following_container) ViewGroup following;
     @BindView(R.id.profile_user_image) SimpleDraweeView profilePicture;
-    @BindView(R.id.userEventsText) TextView userEventsText;
-
-    private TextView user_followers_count;
-    private TextView user_followers_text;
-    private TextView user_following_count;
-    private TextView user_following_text;
+    @BindView(R.id.userEventsText) TextView user_events_title;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
 
     private User user;
 
@@ -42,30 +41,32 @@ public class UserProfileActivity extends BaseActivity {
     @Override protected void configView() {
         handleIntent(getIntent());
         getCurrentActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
-        user_followers_text = followers.findViewById(R.id.layout_follow_text);
-        user_followers_count = followers.findViewById(R.id.layout_follow_count);
-        user_following_text = following.findViewById(R.id.layout_follow_text);
-        user_following_count = following.findViewById(R.id.layout_follow_count);
-
-        user_following_text.setText(getString(R.string.following));
-        user_followers_text.setText(getString(R.string.followers));
-
-        user_following_count.setText("" + (Math.abs(new Random().nextInt() % 14522)));
-        user_followers_count.setText("" + (Math.abs(new Random().nextInt() % 14522)));
-
-        userEventsText.setText(String.format(getString(R.string.user_events), user.getUsername()));
+    private void setupUI() {
+        getCurrentActionBar().setTitle(user.getUsername());
+        ProfileController.newBuilder(new WeakReference<Activity>(this), this)
+                .setFollowers(followers)
+                .setFollowing(following)
+                .setProfilePicture(profilePicture)
+                .setUser_events_title(user_events_title)
+                .setUser_followers_count(followers.findViewById(R.id.layout_follow_count))
+                .setUser_followers_text(followers.findViewById(R.id.layout_follow_text))
+                .setUser_following_count(following.findViewById(R.id.layout_follow_count))
+                .setUser_following_text(following.findViewById(R.id.layout_follow_text))
+                .setTheUser(user)
+                .setRecyclerView(recyclerView)
+                .build().load();
     }
 
     private void handleIntent(Intent intent) {
         if (intent != null) {
             if (intent.hasExtra("userKey")) {
-                // user = Mockups.getUserById(intent.getLongExtra("userKey", -1));
                 UserController.getInstance()
                         .getUserById(intent.getLongExtra("userKey", -1))
                         .addOnSuccessListener(result -> {
                             user = result;
-                            getCurrentActionBar().setTitle(user.getUsername());
+                            setupUI();
                         });
 
             }
