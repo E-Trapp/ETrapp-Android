@@ -104,6 +104,11 @@ public class SearchFragment extends ScrollableFragment implements SearchView.OnQ
 
     @Override public boolean onQueryTextChange(String newText) {
         if (!newText.isEmpty()) {
+            if (newText.contains("*") || newText.startsWith(" ")) {
+                searchResultsAdapter.setItems(null);
+                return false;
+            }
+            searchResultsAdapter.setItems(null);
             List<IndexQuery> queries = new ArrayList<>();
             queries.add(new IndexQuery("users", new Query(newText).setHitsPerPage(3)));
             queries.add(new IndexQuery("events", new Query(newText).setHitsPerPage(10)));
