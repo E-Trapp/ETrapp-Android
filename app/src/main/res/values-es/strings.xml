@@ -30,4 +30,6 @@
     <string name="sign_out">Sign Out</string>
     <string name="sign_out_successful">You are now signed out</string>
     <string name="filters">Filters</string>
+    <string name="event_start_time">Start time</string>
+    <string name="save_changes">Save changes</string>
 </resources>

@@ -56,4 +56,24 @@ public class EventMessage {
     public void setKey(String key) {
         this.key = key;
     }
+
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EventMessage that = (EventMessage) o;
+
+        if (getEventId() != that.getEventId()) return false;
+        if (getTimestamp() != that.getTimestamp()) return false;
+        if (getMessage() != null ? !getMessage().equals(that.getMessage()) : that.getMessage() != null)
+            return false;
+        return getKey().equals(that.getKey());
+    }
+
+    @Override public int hashCode() {
+        int result = getMessage() != null ? getMessage().hashCode() : 0;
+        result = 31 * result + (int) (getEventId() ^ (getEventId() >>> 32));
+        result = 31 * result + (int) (getTimestamp() ^ (getTimestamp() >>> 32));
+        return result;
+    }
 }

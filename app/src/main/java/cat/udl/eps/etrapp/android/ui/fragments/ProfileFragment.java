@@ -1,6 +1,7 @@
 package cat.udl.eps.etrapp.android.ui.fragments;
 
 import android.app.Activity;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +34,7 @@ public class ProfileFragment extends ScrollableFragment {
     @BindView(R.id.profile_user_image) SimpleDraweeView profilePicture;
     @BindView(R.id.userEventsText) TextView user_events_title;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.profile_floating_button) FloatingActionButton floatingActionButton;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -48,6 +50,7 @@ public class ProfileFragment extends ScrollableFragment {
         setHasOptionsMenu(true);
 
         ProfileController.newBuilder(new WeakReference<Activity>(getActivity()), getContext())
+                .setFloatingActionButton(floatingActionButton)
                 .setFollowers(followers)
                 .setFollowing(following)
                 .setProfilePicture(profilePicture)

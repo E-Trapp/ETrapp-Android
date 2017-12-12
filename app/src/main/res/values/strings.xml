@@ -108,4 +108,6 @@
     <string name="sign_out">Cerrar sesión</string>
     <string name="sign_out_successful">Has cerrado sesión</string>
     <string name="filters">Filters</string>
+    <string name="event_start_time">Start time</string>
+    <string name="save_changes">Save changes</string>
 </resources>

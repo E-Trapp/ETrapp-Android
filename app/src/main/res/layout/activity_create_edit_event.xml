@@ -25,13 +25,29 @@
             android:hint="@string/event_description"
             android:inputType="text" />
 
-        <EditText
-            android:id="@+id/create_event_datetime"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/event_start_date"
-            android:inputType="datetime"
-            android:maxLines="1" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/create_event_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:hint="@string/event_start_date"
+                android:inputType="date"
+                android:maxLines="1" />
+
+            <EditText
+                android:id="@+id/create_event_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:hint="@string/event_start_time"
+                android:inputType="time"
+                android:maxLines="1" />
+
+        </LinearLayout>
 
         <EditText
             android:id="@+id/create_event_image"
@@ -44,7 +60,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/new_user_sign_up_button"
+        android:id="@+id/event_create_button"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="72dp"

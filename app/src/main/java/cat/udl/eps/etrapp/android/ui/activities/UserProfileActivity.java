@@ -3,6 +3,7 @@ package cat.udl.eps.etrapp.android.ui.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ public class UserProfileActivity extends BaseActivity {
     @BindView(R.id.profile_user_image) SimpleDraweeView profilePicture;
     @BindView(R.id.userEventsText) TextView user_events_title;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.profile_floating_button) FloatingActionButton floatingActionButton;
+
 
     private User user;
 
@@ -46,6 +49,7 @@ public class UserProfileActivity extends BaseActivity {
     private void setupUI() {
         getCurrentActionBar().setTitle(user.getUsername());
         ProfileController.newBuilder(new WeakReference<Activity>(this), this)
+                .setFloatingActionButton(floatingActionButton)
                 .setFollowers(followers)
                 .setFollowing(following)
                 .setProfilePicture(profilePicture)

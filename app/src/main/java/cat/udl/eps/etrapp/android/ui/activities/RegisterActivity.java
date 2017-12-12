@@ -12,6 +12,7 @@ import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.UserAuth;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
+import cat.udl.eps.etrapp.android.utils.Toaster;
 
 
 public class RegisterActivity extends BaseActivity {
@@ -31,18 +32,24 @@ public class RegisterActivity extends BaseActivity {
 
     @OnClick(R.id.new_user_button) void eventClickRegister() {
 
-        UserAuth userauth = new UserAuth(firstname.getText().toString(),
+        getApp().showDialog(this, "Creating new user...");
+
+        UserAuth userAuth = new UserAuth(firstname.getText().toString(),
                 lastname.getText().toString(),
                 email.getText().toString(),
                 username.getText().toString(),
                 password.getText().toString());
 
         UserController.getInstance()
-                .createUser(userauth)
+                .createUser(userAuth)
+                .addOnCompleteListener(task -> {
+                    getApp().dismissDialog();
+                })
                 .addOnSuccessListener(response -> {
                     finish();
                 })
                 .addOnFailureListener(response -> {
+                    Toaster.show(this, "Error while registering, please try again.");
                 });
     }
 

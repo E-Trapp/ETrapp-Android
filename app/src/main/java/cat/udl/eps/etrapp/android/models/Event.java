@@ -9,6 +9,11 @@ public class Event {
     private String imageUrl;
     private long startsAt;
     private boolean isFeatured;
+    private String location;
+
+    public String getLocation() {
+        return location;
+    }
 
     public long getId() {
         return id;

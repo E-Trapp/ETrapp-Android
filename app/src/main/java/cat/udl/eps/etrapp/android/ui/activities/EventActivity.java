@@ -2,8 +2,6 @@ package cat.udl.eps.etrapp.android.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.sql.Date;
 
@@ -27,9 +27,11 @@ import cat.udl.eps.etrapp.android.ui.adapters.EventStreamAdapter;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
 import cat.udl.eps.etrapp.android.ui.views.EndlessRecyclerOnScrollListener;
 import cat.udl.eps.etrapp.android.utils.Toaster;
+import cat.udl.eps.etrapp.android.utils.Utils;
 
 import static cat.udl.eps.etrapp.android.utils.Constants.EXTRA_EVENT_ID;
 import static cat.udl.eps.etrapp.android.utils.Constants.ID_MENU_ITEM_EDIT_EVENT;
+import static cat.udl.eps.etrapp.android.utils.Constants.RC_EDIT_EVENT;
 
 public class EventActivity extends BaseActivity {
 
@@ -42,6 +44,8 @@ public class EventActivity extends BaseActivity {
     private EventStreamAdapter eventStreamAdapter;
     private TextView userName;
     private TextView created_date;
+    private TextView location;
+    private TextView description;
     private ImageView rateUp;
     private ImageView rateDown;
     private ImageView sendButton;
@@ -63,6 +67,9 @@ public class EventActivity extends BaseActivity {
         created_date = header.findViewById(R.id.event_header_created);
         rateUp = header.findViewById(R.id.event_header_rate_user_up);
         rateDown = header.findViewById(R.id.event_header_rate_user_down);
+        location = header.findViewById(R.id.event_header_location);
+        description = header.findViewById(R.id.event_header_description);
+
         sendButton = sendContainer.findViewById(R.id.event_stream_send_button);
         sendText = sendContainer.findViewById(R.id.event_stream_send_text);
 
@@ -113,12 +120,26 @@ public class EventActivity extends BaseActivity {
             if (UserController.getInstance().getCurrentUser().getId() == event.getOwner()) {
                 menu.getItem(0).setVisible(true);
                 sendContainer.setVisibility(View.VISIBLE);
-                sendButton.setOnClickListener(view -> EventController.getInstance().writeMessage(event.getId(), sendText.getText().toString()));
+                sendButton.setOnClickListener(view -> {
+                    EventController.getInstance()
+                            .writeMessage(event.getId(), sendText.getText().toString())
+                            .addOnSuccessListener(aVoid -> {
+                                sendText.setText("");
+                                Utils.hideIME(this, sendText);
+                            });
+                });
             }
         }
 
-        userName.setText(event.getTitle());
+        UserController.getInstance()
+                .getUserById(event.getOwner())
+                .addOnSuccessListener(user -> {
+                    userName.setText(user.getUsername());
+                });
         created_date.setText(new Date(event.getStartsAt()).toString());
+        description.setText(event.getDescription());
+        location.setText(event.getLocation());
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -132,18 +153,13 @@ public class EventActivity extends BaseActivity {
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
 
             boolean loading = false;
-            String lastKeyUsed = null;
 
             @Override public void onScrolledToEnd() {
                 if (!loading) {
                     if (eventStreamAdapter.getItemCount() >= 5) {
                         recyclerView.post(() -> {
                             loading = true;
-                            if (lastKeyUsed != null) {
-                                if (lastKeyUsed.equals(eventStreamAdapter.getLastKey())) return;
-                            }
-                            lastKeyUsed = eventStreamAdapter.getLastKey();
-                            FirebaseController.getInstance().getMessages(eventStreamAdapter.getLastKey(),event.getId(), eventStreamAdapter);
+                            FirebaseController.getInstance().getMessages(eventStreamAdapter.getLastKey(), event.getId(), eventStreamAdapter);
                         });
                     }
                 }
@@ -152,7 +168,16 @@ public class EventActivity extends BaseActivity {
         });
 
         FirebaseController.getInstance().getMessages(null, event.getId(), eventStreamAdapter);
+    }
 
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case RC_EDIT_EVENT:
+                if (resultCode == RESULT_OK) {
+                    recreate();
+                }
+        }
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -171,7 +196,7 @@ public class EventActivity extends BaseActivity {
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case ID_MENU_ITEM_EDIT_EVENT:
-                startActivity(CreateOrEditEvent.startEditMode(this, event.getId()));
+                startActivityForResult(CreateOrEditEvent.startEditMode(this, event.getId()), RC_EDIT_EVENT);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

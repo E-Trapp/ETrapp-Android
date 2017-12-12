@@ -2,8 +2,10 @@ package cat.udl.eps.etrapp.android.controllers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -38,11 +40,14 @@ public class ProfileController {
     private final TextView user_following_count;
     private final TextView user_following_text;
 
+    private final FloatingActionButton floatingActionButton;
+
     private final User theUser;
 
     private ProfileController(Builder builder) {
         context = builder.context;
         activity = builder.activity;
+        floatingActionButton = builder.floatingActionButton;
         followers = builder.followers;
         following = builder.following;
         profilePicture = builder.profilePicture;
@@ -69,6 +74,7 @@ public class ProfileController {
 
         if (UserController.getInstance().isCurrentUser(theUser)) {
             user_events_title.setText(R.string.my_events);
+            floatingActionButton.setVisibility(View.VISIBLE);
         } else {
             user_events_title.setText(String.format(context.getString(R.string.user_events), theUser.getUsername()));
         }
@@ -92,6 +98,7 @@ public class ProfileController {
     public static final class Builder {
         private final Context context;
         private final WeakReference<? extends Activity> activity;
+        private FloatingActionButton floatingActionButton;
         private ViewGroup followers;
         private ViewGroup following;
         private SimpleDraweeView profilePicture;
@@ -106,6 +113,11 @@ public class ProfileController {
         private Builder(WeakReference<? extends Activity> activity, Context context) {
             this.activity = activity;
             this.context = context;
+        }
+
+        public Builder setFloatingActionButton(FloatingActionButton floatingActionButton) {
+            this.floatingActionButton = floatingActionButton;
+            return this;
         }
 
         public Builder setFollowers(ViewGroup followers) {

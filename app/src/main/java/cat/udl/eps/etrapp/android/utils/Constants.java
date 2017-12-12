@@ -13,6 +13,7 @@ public class Constants {
     // Request codes
     public static final int RC_SIGN_IN = 0x0A;
     public static final int RC_SIGN_UP = 0x0B;
+    public static final int RC_EDIT_EVENT = 0x0C;
 
     // MENU Custom items
     public static final int ID_MENU_ITEM_EDIT_EVENT = 0xA;

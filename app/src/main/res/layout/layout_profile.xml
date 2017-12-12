@@ -5,48 +5,69 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:background="@color/md_indigo200">
+        android:layout_height="220dp">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/profile_user_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
-            app:placeholderImage="@drawable/profile_placeholder"
-            app:roundAsCircle="true"
-            app:roundingBorderColor="@color/material_black"
-            app:roundingBorderWidth="2dp" />
+        <RelativeLayout
+            android:id="@+id/profile_header"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="@color/md_indigo200">
 
-        <include
-            android:id="@+id/profile_followers_container"
-            layout="@layout/layout_follow_counters"
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/profile_user_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                app:placeholderImage="@drawable/profile_placeholder"
+                app:roundAsCircle="true"
+                app:roundingBorderColor="@color/material_black"
+                app:roundingBorderWidth="2dp" />
+
+            <include
+                android:id="@+id/profile_followers_container"
+                layout="@layout/layout_follow_counters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="16dp"
+                android:layout_toStartOf="@+id/profile_user_image" />
+
+            <include
+                android:id="@+id/profile_following_container"
+                layout="@layout/layout_follow_counters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="16dp"
+                android:layout_toEndOf="@+id/profile_user_image" />
+
+        </RelativeLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:visibility="gone"
+            android:id="@+id/profile_floating_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginEnd="16dp"
-            android:layout_toStartOf="@+id/profile_user_image" />
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_pencil_white_24dp"
+            app:elevation="4dp"
+            app:layout_anchor="@+id/profile_header"
+            app:layout_anchorGravity="bottom|right|end" />
 
-        <include
-            android:id="@+id/profile_following_container"
-            layout="@layout/layout_follow_counters"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@+id/profile_user_image" />
-
-    </RelativeLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
     <TextView
         android:id="@+id/userEventsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textSize="24sp" />
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:textColor="@color/textBlack"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <include layout="@layout/recycler" />
 

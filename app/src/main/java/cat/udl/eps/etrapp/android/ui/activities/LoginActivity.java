@@ -38,13 +38,18 @@ public class LoginActivity extends BaseActivity {
 
     @Override protected void configView() {
         button.setOnClickListener(v -> {
+            getApp().showDialog(this, "Logging in...");
             UserController.getInstance()
                     .authenticate(username.getText().toString(), password.getText().toString())
                     .addOnSuccessListener(s -> {
+                        getApp().dismissDialog();
                         setResult(RESULT_OK);
                         finish();
                     })
-                    .addOnFailureListener(Timber::d)
+                    .addOnFailureListener(t -> {
+                        Timber.d(t);
+                        getApp().dismissDialog();
+                    })
             ;
         });
     }

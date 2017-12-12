@@ -4,7 +4,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 
 import java.util.List;
+import java.util.Map;
 
+import cat.udl.eps.etrapp.android.api.ApiService;
 import cat.udl.eps.etrapp.android.api.ApiServiceManager;
 import cat.udl.eps.etrapp.android.api.requests.SendMessage;
 import cat.udl.eps.etrapp.android.models.Event;
@@ -65,17 +67,23 @@ public class EventController {
         return tcs.getTask();
     }
 
-    public void writeMessage(long eventKey, String s) {
+    public Task<Void> writeMessage(long eventKey, String s) {
+        final TaskCompletionSource<Void> tcs = new TaskCompletionSource<>();
         ApiServiceManager.getService().writeMessage(eventKey, new SendMessage(s)).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
+                if (response.isSuccessful()) {
+                    tcs.setResult(null);
+                } else {
+                    tcs.setException(new Exception("Error"));
+                }
             }
 
             @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                tcs.setException(new Exception(t.getCause()));
             }
         });
+        return tcs.getTask();
     }
 
     public Task<List<Event>> getUserEvents(long id) {
@@ -98,4 +106,23 @@ public class EventController {
 
         return tcs.getTask();
     }
+
+    public Task<Void> editEvent(long id, Map<String, Object> updates) {
+        final TaskCompletionSource<Void> tcs = new TaskCompletionSource<>();
+
+        ApiServiceManager.getService().editEvent(id, updates).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                tcs.setResult(null);
+            }
+
+            @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
+                tcs.setException(new Exception(t.getCause()));
+            }
+        });
+
+
+        return tcs.getTask();
+    }
+
 }

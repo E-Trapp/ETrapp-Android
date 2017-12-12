@@ -17,6 +17,7 @@ import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -28,6 +29,9 @@ public interface ApiService {
 
     @GET("events/{id}")
     Call<Event> getEvent(@Path("id") long eventKey);
+
+    @PATCH("events/{id}")
+    Call<ResponseBody> editEvent(@Path("id") long eventKey, @Body Map<String, Object> updates);
 
     @POST("events/{id}/messages")
     Call<ResponseBody> writeMessage(@Path("id") long eventKey, @Body SendMessage eventMessage);
@@ -52,4 +56,6 @@ public interface ApiService {
 
     @GET("users/{id}/events")
     Call<List<Event>> listUserEvents(@Path("id") long userKey);
+
+
 }
