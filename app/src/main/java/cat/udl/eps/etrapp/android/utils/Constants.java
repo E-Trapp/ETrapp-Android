@@ -15,6 +15,9 @@ public class Constants {
     public static final int RC_SIGN_UP = 0x0B;
     public static final int RC_EDIT_EVENT = 0x0C;
 
+    public static final int PERMISSION_ACESS_FINE_LOCATION_REQUEST = 19;
+    public static final int PLACE_PICKER_REQUEST = 20;
+
     // MENU Custom items
     public static final int ID_MENU_ITEM_EDIT_EVENT = 0xA;
     public static final int ID_MENU_ITEM_CREATE_EVENT = 0xB;

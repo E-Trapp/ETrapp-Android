@@ -1,12 +1,16 @@
 package cat.udl.eps.etrapp.android.ui.activities;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +19,13 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.text.ParseException;
@@ -38,6 +49,8 @@ import cat.udl.eps.etrapp.android.utils.Toaster;
 import timber.log.Timber;
 
 import static cat.udl.eps.etrapp.android.utils.Constants.EXTRA_EVENT_ID;
+import static cat.udl.eps.etrapp.android.utils.Constants.PERMISSION_ACESS_FINE_LOCATION_REQUEST;
+import static cat.udl.eps.etrapp.android.utils.Constants.PLACE_PICKER_REQUEST;
 
 public class CreateOrEditEvent extends BaseActivity
         implements TimePickerDialog.OnTimeSetListener,
@@ -55,6 +68,9 @@ public class CreateOrEditEvent extends BaseActivity
     @BindView(R.id.create_event_image) EditText eventImage;
     @BindView(R.id.event_create_button) Button event_create_button;
     private Event event;
+
+    protected GeoDataClient mGeoDataClient;
+    protected PlaceDetectionClient mPlaceDetectionClient;
 
     public static Intent startEditMode(Context context, long eventKey) {
         Intent i = new Intent(context, CreateOrEditEvent.class);
@@ -76,7 +92,10 @@ public class CreateOrEditEvent extends BaseActivity
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        eventLocation.setOnClickListener(view -> Timber.d("HUE"));
+        mGeoDataClient = Places.getGeoDataClient(this, null);
+        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
+
+        eventLocation.setOnClickListener(view -> placePicker());
         eventTime.setOnClickListener(view -> {
             DialogFragment newFragment = TimePickerFragment.newInstance(this);
             newFragment.show(getSupportFragmentManager(), "timePicker");
@@ -147,6 +166,22 @@ public class CreateOrEditEvent extends BaseActivity
         }
     }
 
+    private void placePicker() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ACESS_FINE_LOCATION_REQUEST);
+            return;
+        }
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
@@ -160,6 +195,30 @@ public class CreateOrEditEvent extends BaseActivity
         Timber.d("Selected time: %d:%d", hour, minute);
         eventTime.setText(String.format(" %d:%02d", hour, minute));
     }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(this, data);
+                String toastMsg = String.format("Place: %s", place.getName());
+                Toaster.show(this, toastMsg);
+            }
+        }
+    }
+
+    @Override public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_ACESS_FINE_LOCATION_REQUEST:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    placePicker();
+                }
+                break;
+        }
+    }
+
 
     public static class TimePickerFragment extends DialogFragment {
 
