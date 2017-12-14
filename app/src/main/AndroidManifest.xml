@@ -32,7 +32,8 @@
         <activity
             android:name=".ui.activities.EventActivity"
             android:parentActivityName=".ui.activities.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activities.CreateOrEditEvent"
             android:screenOrientation="portrait" />

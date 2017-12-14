@@ -2,32 +2,25 @@ package cat.udl.eps.etrapp.android.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-
-import java.sql.Date;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.controllers.EventController;
-import cat.udl.eps.etrapp.android.controllers.FirebaseController;
 import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
-import cat.udl.eps.etrapp.android.ui.adapters.EventStreamAdapter;
+import cat.udl.eps.etrapp.android.ui.adapters.EventPagerAdapter;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
-import cat.udl.eps.etrapp.android.ui.views.EndlessRecyclerOnScrollListener;
+import cat.udl.eps.etrapp.android.ui.fragments.event.EventFragment;
 import cat.udl.eps.etrapp.android.utils.Toaster;
-import cat.udl.eps.etrapp.android.utils.Utils;
 
 import static cat.udl.eps.etrapp.android.utils.Constants.EXTRA_EVENT_ID;
 import static cat.udl.eps.etrapp.android.utils.Constants.ID_MENU_ITEM_EDIT_EVENT;
@@ -35,21 +28,11 @@ import static cat.udl.eps.etrapp.android.utils.Constants.RC_EDIT_EVENT;
 
 public class EventActivity extends BaseActivity {
 
-    @BindView(R.id.event_stream_header) ViewGroup header;
-    @BindView(R.id.event_stream_recycler) RecyclerView recyclerView;
-    @BindView(R.id.event_stream_send_container) ViewGroup sendContainer;
+    @BindView(R.id.eventPager) ViewPager pager;
+    @BindView(R.id.tabs) TabLayout tabLayout;
 
     private Menu menu;
     private Event event;
-    private EventStreamAdapter eventStreamAdapter;
-    private TextView userName;
-    private TextView created_date;
-    private TextView location;
-    private TextView description;
-    private ImageView rateUp;
-    private ImageView rateDown;
-    private ImageView sendButton;
-    private EditText sendText;
 
     public static Intent start(Context context, long eventKey) {
         Intent i = new Intent(context, EventActivity.class);
@@ -62,35 +45,11 @@ public class EventActivity extends BaseActivity {
     }
 
     @Override protected void configView() {
-        eventStreamAdapter = new EventStreamAdapter();
-        userName = header.findViewById(R.id.event_header_user_name);
-        created_date = header.findViewById(R.id.event_header_created);
-        rateUp = header.findViewById(R.id.event_header_rate_user_up);
-        rateDown = header.findViewById(R.id.event_header_rate_user_down);
-        location = header.findViewById(R.id.event_header_location);
-        description = header.findViewById(R.id.event_header_description);
-
-        sendButton = sendContainer.findViewById(R.id.event_stream_send_button);
-        sendText = sendContainer.findViewById(R.id.event_stream_send_text);
-
-        View.OnClickListener clickListener = view -> {
-            switch (view.getId()) {
-                case R.id.event_stream_header:
-                    startActivity(UserProfileActivity.start(this, event.getOwner()));
-                    break;
-                case R.id.event_header_rate_user_up:
-                    Toaster.show(this, "ETrapper Upvoted!");
-                    break;
-                case R.id.event_header_rate_user_down:
-                    Toaster.show(this, "ETrapper Downvoted!");
-                    break;
-            }
-        };
-
-
-        header.setOnClickListener(clickListener);
-        rateUp.setOnClickListener(clickListener);
-        rateDown.setOnClickListener(clickListener);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         handleIntent(getIntent());
     }
@@ -115,60 +74,16 @@ public class EventActivity extends BaseActivity {
 
     private void setupUI() {
         getCurrentActionBar().setTitle(event.getTitle());
-
         if (UserController.getInstance().isUserLoggedIn()) {
             if (UserController.getInstance().getCurrentUser().getId() == event.getOwner()) {
                 menu.getItem(0).setVisible(true);
-                sendContainer.setVisibility(View.VISIBLE);
-                sendButton.setOnClickListener(view -> {
-                    EventController.getInstance()
-                            .writeMessage(event.getId(), sendText.getText().toString())
-                            .addOnSuccessListener(aVoid -> {
-                                sendText.setText("");
-                                Utils.hideIME(this, sendText);
-                            });
-                });
             }
         }
 
-        UserController.getInstance()
-                .getUserById(event.getOwner())
-                .addOnSuccessListener(user -> {
-                    userName.setText(user.getUsername());
-                });
-        created_date.setText(new Date(event.getStartsAt()).toString());
-        description.setText(event.getDescription());
-        location.setText(event.getLocation());
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(eventStreamAdapter);
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
-        recyclerView.setDrawingCacheEnabled(true);
-        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-
-        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
-
-            boolean loading = false;
-
-            @Override public void onScrolledToEnd() {
-                if (!loading) {
-                    if (eventStreamAdapter.getItemCount() >= 5) {
-                        recyclerView.post(() -> {
-                            loading = true;
-                            FirebaseController.getInstance().getMessages(eventStreamAdapter.getLastKey(), event.getId(), eventStreamAdapter);
-                        });
-                    }
-                }
-                recyclerView.post(() -> loading = false);
-            }
-        });
-
-        FirebaseController.getInstance().getMessages(null, event.getId(), eventStreamAdapter);
+        pager.setAdapter(new EventPagerAdapter(getSupportFragmentManager(), event));
+        tabLayout.setupWithViewPager(pager);
     }
+
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -204,15 +119,5 @@ public class EventActivity extends BaseActivity {
         }
     }
 
-    static class IncludedLayout1 {
-        @BindView(R.id.event_header_user_name) TextView userName;
-        @BindView(R.id.event_header_created) TextView created_date;
-        @BindView(R.id.event_header_rate_user_up) ImageView rateUp;
-        @BindView(R.id.event_header_rate_user_down) ImageView rateDown;
-        @BindView(R.id.event_header_container) ViewGroup headerContainer;
-    }
 
-    static class IncludedLayout2 {
-        @BindView(R.id.recyclerView) RecyclerView recyclerView;
-    }
 }

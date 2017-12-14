@@ -1,46 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/md_white"
+    tools:context="cat.udl.eps.etrapp.android.ui.activities.EventActivity">
 
-    <include
-        android:id="@+id/event_stream_header"
-        layout="@layout/event_header_user_data" />
-
-    <include
-        android:id="@+id/event_stream_recycler"
-        layout="@layout/recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/event_stream_send_container"
-        android:layout_below="@+id/event_stream_header" />
-
-    <RelativeLayout
-        android:id="@+id/event_stream_send_container"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <EditText
-            android:id="@+id/event_stream_send_text"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/event_stream_send_button"
-            android:hint="@string/write_a_message"
-            android:padding="16dp" />
+            app:tabMode="fixed"
+            app:tabGravity="fill"/>
 
-        <ImageView
-            android:id="@+id/event_stream_send_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="@color/material_teal300"
-            android:paddingEnd="8dp"
-            android:paddingStart="10dp"
-            android:src="@drawable/ic_send_white_24dp" />
+    </android.support.design.widget.AppBarLayout>
 
-    </RelativeLayout>
+    <include layout="@layout/content_event" />
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

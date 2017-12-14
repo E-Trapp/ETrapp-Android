@@ -50,6 +50,7 @@ public class CreateOrEditEvent extends BaseActivity
     @BindView(R.id.create_event_title) EditText eventTitle;
     @BindView(R.id.create_event_description) EditText eventDescription;
     @BindView(R.id.create_event_date) EditText eventDate;
+    @BindView(R.id.create_event_location) EditText eventLocation;
     @BindView(R.id.create_event_time) EditText eventTime;
     @BindView(R.id.create_event_image) EditText eventImage;
     @BindView(R.id.event_create_button) Button event_create_button;
@@ -74,6 +75,16 @@ public class CreateOrEditEvent extends BaseActivity
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        eventLocation.setOnClickListener(view -> Timber.d("HUE"));
+        eventTime.setOnClickListener(view -> {
+            DialogFragment newFragment = TimePickerFragment.newInstance(this);
+            newFragment.show(getSupportFragmentManager(), "timePicker");
+        });
+        eventDate.setOnClickListener(view -> {
+            DialogFragment newFragment = DatePickerFragment.newInstance(this);
+            newFragment.show(getSupportFragmentManager(), "datePicker");
+        });
     }
 
     private void setupUI() {
@@ -83,14 +94,7 @@ public class CreateOrEditEvent extends BaseActivity
         Date d = new Date(event.getStartsAt());
         eventDate.setText(dateFormat.format(d));
         eventTime.setText(timeFormat.format(d));
-        eventTime.setOnClickListener(view -> {
-            DialogFragment newFragment = TimePickerFragment.newInstance(this);
-            newFragment.show(getSupportFragmentManager(), "timePicker");
-        });
-        eventDate.setOnClickListener(view -> {
-            DialogFragment newFragment = DatePickerFragment.newInstance(this);
-            newFragment.show(getSupportFragmentManager(), "datePicker");
-        });
+
         event_create_button.setText(getString(R.string.save_changes));
         event_create_button.setOnClickListener(view -> {
             Map<String, Object> updates = new HashMap<>();
@@ -154,7 +158,7 @@ public class CreateOrEditEvent extends BaseActivity
 
     @Override public void onTimeSet(TimePicker timePicker, int hour, int minute) {
         Timber.d("Selected time: %d:%d", hour, minute);
-        eventTime.setText(String.format(" %d:%d", hour, minute));
+        eventTime.setText(String.format(" %d:%02d", hour, minute));
     }
 
     public static class TimePickerFragment extends DialogFragment {
