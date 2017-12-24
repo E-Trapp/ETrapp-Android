@@ -3,6 +3,7 @@ package cat.udl.eps.etrapp.android.api;
 import java.util.List;
 import java.util.Map;
 
+import cat.udl.eps.etrapp.android.api.requests.EventRequest;
 import cat.udl.eps.etrapp.android.api.requests.SendMessage;
 import cat.udl.eps.etrapp.android.api.requests.SignInRequest;
 import cat.udl.eps.etrapp.android.api.requests.TokenInfo;
@@ -26,6 +27,9 @@ public interface ApiService {
 
     @GET("events")
     Call<List<Event>> listEvents();
+
+    @POST("events")
+    Call<ResponseBody> createEvent(@Body EventRequest event);
 
     @GET("events/{id}")
     Call<Event> getEvent(@Path("id") long eventKey);

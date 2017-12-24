@@ -8,6 +8,7 @@ import java.util.Map;
 
 import cat.udl.eps.etrapp.android.api.ApiService;
 import cat.udl.eps.etrapp.android.api.ApiServiceManager;
+import cat.udl.eps.etrapp.android.api.requests.EventRequest;
 import cat.udl.eps.etrapp.android.api.requests.SendMessage;
 import cat.udl.eps.etrapp.android.models.Event;
 import okhttp3.ResponseBody;
@@ -36,7 +37,8 @@ public class EventController {
         ApiServiceManager.getService().listEvents().enqueue(new Callback<List<Event>>() {
             @Override
             public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
-                tcs.trySetResult(response.body());
+                if (response.isSuccessful()) tcs.trySetResult(response.body());
+                else tcs.trySetException(new Exception());
             }
 
             @Override
@@ -125,4 +127,24 @@ public class EventController {
         return tcs.getTask();
     }
 
+    public Task<Void> createEvent(Event event) {
+        final TaskCompletionSource<Void> tcs = new TaskCompletionSource<>();
+
+        ApiServiceManager.getService().createEvent(EventRequest.fromEvent(event)).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    tcs.setResult(null);
+                } else {
+                    tcs.setException(new Exception("Error: " + response.message()));
+                }
+            }
+
+            @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
+                tcs.setException(new Exception(t.getCause()));
+            }
+        });
+
+        return tcs.getTask();
+    }
 }

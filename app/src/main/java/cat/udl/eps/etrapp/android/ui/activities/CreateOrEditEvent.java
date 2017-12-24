@@ -41,8 +41,8 @@ import java.util.Map;
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.controllers.EventController;
+import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
-import cat.udl.eps.etrapp.android.ui.activities.settings.SettingsActivity;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
 import cat.udl.eps.etrapp.android.utils.Toaster;
 import timber.log.Timber;
@@ -59,7 +59,6 @@ public class CreateOrEditEvent extends BaseActivity
     private static final SimpleDateFormat fullFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-    private GoogleApiClient mGoogleApiClient;
     protected GeoDataClient mGeoDataClient;
     protected PlaceDetectionClient mPlaceDetectionClient;
     @BindView(R.id.create_event_title) EditText eventTitle;
@@ -69,6 +68,7 @@ public class CreateOrEditEvent extends BaseActivity
     @BindView(R.id.create_event_time) EditText eventTime;
     @BindView(R.id.create_event_image) EditText eventImage;
     @BindView(R.id.event_create_button) Button event_create_button;
+    private GoogleApiClient mGoogleApiClient;
     private Event event;
     private boolean playServicesAvailable = false;
 
@@ -107,14 +107,19 @@ public class CreateOrEditEvent extends BaseActivity
         }
 
         eventLocation.setOnClickListener(view -> {
-                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                try {
-                    startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesRepairableException e) {
-                    e.printStackTrace();
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
-                }
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ACESS_FINE_LOCATION_REQUEST);
+                return;
+            }
+            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+            try {
+                startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+            } catch (GooglePlayServicesRepairableException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            }
         });
         eventTime.setOnClickListener(view -> {
             DialogFragment newFragment = TimePickerFragment.newInstance(this);
@@ -124,6 +129,7 @@ public class CreateOrEditEvent extends BaseActivity
             DialogFragment newFragment = DatePickerFragment.newInstance(this);
             newFragment.show(getSupportFragmentManager(), "datePicker");
         });
+        event_create_button.setOnClickListener(view -> createEvent());
     }
 
     private void setupUI() {
@@ -186,20 +192,32 @@ public class CreateOrEditEvent extends BaseActivity
         }
     }
 
-    private boolean placePicker() {
-        if (playServicesAvailable) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ACESS_FINE_LOCATION_REQUEST);
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            final int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
-            GoogleApiAvailability.getInstance().getErrorDialog(this, code, 1).show();
+    private void createEvent() {
+
+        // TODO: Handle empty required fields, errors and date.
+
+        event = new Event();
+        event.setTitle(eventTitle.getText().toString());
+        event.setDescription(eventDescription.getText().toString());
+        event.setImageUrl(eventImage.getText().toString());
+        event.setLocation(eventLocation.getText().toString());
+        event.setOwner(UserController.getInstance().getCurrentUser().getId());
+        try {
+            long newTime = 0;
+            String dateString = eventDate.getText().toString() + " " + eventTime.getText().toString();
+            newTime = fullFormat.parse(dateString).getTime();
+            event.setStartsAt(newTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        return playServicesAvailable;
+
+        EventController.getInstance()
+                .createEvent(event)
+                .addOnSuccessListener(aVoid -> {
+                    Toaster.show(this, "Event created");
+                    setResult(RESULT_OK);
+                    finish();
+                });
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -233,7 +251,14 @@ public class CreateOrEditEvent extends BaseActivity
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    placePicker();
+                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                    try {
+                        startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+                    } catch (GooglePlayServicesRepairableException e) {
+                        e.printStackTrace();
+                    } catch (GooglePlayServicesNotAvailableException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
         }

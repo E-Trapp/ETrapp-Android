@@ -101,12 +101,12 @@ public class UserController {
                     });
                     tcs.trySetResult(null);
                 } else {
-                    tcs.trySetException(null);
+                    tcs.trySetException(new Exception("Realm exception"));
                 }
             }
 
             @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
-                tcs.trySetException(null);
+                tcs.trySetException(new Exception("Network exception"));
             }
         });
 

@@ -1,14 +1,32 @@
-package cat.udl.eps.etrapp.android.models;
+package cat.udl.eps.etrapp.android.api.requests;
 
-public class Event {
+import cat.udl.eps.etrapp.android.models.Event;
 
-    private long id;
+/**
+ * Created by ry on 24/12/2017.
+ */
+
+public class EventRequest {
+
+    public static EventRequest fromEvent(Event event) {
+        EventRequest eventRequest = new EventRequest();
+
+        eventRequest.owner = event.getOwner();
+        eventRequest.title = event.getTitle();
+        eventRequest.description = event.getDescription();
+        eventRequest.imageUrl = event.getImageUrl();
+        eventRequest.startsAt = event.getStartsAt();
+        eventRequest.location = event.getLocation();
+
+        return eventRequest;
+    }
+
+
     private long owner;
     private String title;
     private String description;
     private String imageUrl;
     private long startsAt;
-    private boolean isFeatured;
     private String location;
 
     public void setOwner(long owner) {
@@ -39,10 +57,6 @@ public class Event {
         return location;
     }
 
-    public long getId() {
-        return id;
-    }
-
     public long getOwner() {
         return owner;
     }
@@ -63,7 +77,4 @@ public class Event {
         return startsAt;
     }
 
-    public boolean isFeatured() {
-        return isFeatured;
-    }
 }
