@@ -8,42 +8,41 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.controllers.EventController;
 import cat.udl.eps.etrapp.android.models.Event;
+import cat.udl.eps.etrapp.android.ui.activities.settings.SettingsActivity;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
 import cat.udl.eps.etrapp.android.utils.Toaster;
 import timber.log.Timber;
@@ -54,12 +53,15 @@ import static cat.udl.eps.etrapp.android.utils.Constants.PLACE_PICKER_REQUEST;
 
 public class CreateOrEditEvent extends BaseActivity
         implements TimePickerDialog.OnTimeSetListener,
-        DatePickerDialog.OnDateSetListener {
+        DatePickerDialog.OnDateSetListener,
+        GoogleApiClient.OnConnectionFailedListener {
 
-    private static final SimpleDateFormat fullFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-
+    private static final SimpleDateFormat fullFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    private GoogleApiClient mGoogleApiClient;
+    protected GeoDataClient mGeoDataClient;
+    protected PlaceDetectionClient mPlaceDetectionClient;
     @BindView(R.id.create_event_title) EditText eventTitle;
     @BindView(R.id.create_event_description) EditText eventDescription;
     @BindView(R.id.create_event_date) EditText eventDate;
@@ -68,9 +70,7 @@ public class CreateOrEditEvent extends BaseActivity
     @BindView(R.id.create_event_image) EditText eventImage;
     @BindView(R.id.event_create_button) Button event_create_button;
     private Event event;
-
-    protected GeoDataClient mGeoDataClient;
-    protected PlaceDetectionClient mPlaceDetectionClient;
+    private boolean playServicesAvailable = false;
 
     public static Intent startEditMode(Context context, long eventKey) {
         Intent i = new Intent(context, CreateOrEditEvent.class);
@@ -91,11 +91,31 @@ public class CreateOrEditEvent extends BaseActivity
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        final int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+        if (code != ConnectionResult.SUCCESS) {
+            GoogleApiAvailability.getInstance().getErrorDialog(this, code, 1).show();
+        } else {
+            mGoogleApiClient = new GoogleApiClient
+                    .Builder(this)
+                    .addApi(Places.GEO_DATA_API)
+                    .addApi(Places.PLACE_DETECTION_API)
+                    .enableAutoManage(this, this)
+                    .build();
+            playServicesAvailable = true;
+            mGeoDataClient = Places.getGeoDataClient(this, null);
+            mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
+        }
 
-        mGeoDataClient = Places.getGeoDataClient(this, null);
-        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
-
-        eventLocation.setOnClickListener(view -> placePicker());
+        eventLocation.setOnClickListener(view -> {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+        });
         eventTime.setOnClickListener(view -> {
             DialogFragment newFragment = TimePickerFragment.newInstance(this);
             newFragment.show(getSupportFragmentManager(), "timePicker");
@@ -119,7 +139,7 @@ public class CreateOrEditEvent extends BaseActivity
             Map<String, Object> updates = new HashMap<>();
             long newTime = 0;
             try {
-                String dateString = eventDate.getText().toString()+ " " + eventTime.getText().toString();
+                String dateString = eventDate.getText().toString() + " " + eventTime.getText().toString();
                 newTime = fullFormat.parse(dateString).getTime();
                 updates.put("startsAt", newTime);
             } catch (ParseException e) {
@@ -166,20 +186,20 @@ public class CreateOrEditEvent extends BaseActivity
         }
     }
 
-    private void placePicker() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ACESS_FINE_LOCATION_REQUEST);
-            return;
+    private boolean placePicker() {
+        if (playServicesAvailable) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ACESS_FINE_LOCATION_REQUEST);
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            final int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+            GoogleApiAvailability.getInstance().getErrorDialog(this, code, 1).show();
         }
-        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-        try {
-            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        }
+        return playServicesAvailable;
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -188,12 +208,12 @@ public class CreateOrEditEvent extends BaseActivity
 
     @Override public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
         Timber.d("Selected date: %d-%d-%d", year, month, dayOfMonth);
-        eventDate.setText(String.format("%d-%d-%d", year, (month+1), dayOfMonth));
+        eventDate.setText(String.format(Locale.getDefault(), "%d-%d-%d", year, (month + 1), dayOfMonth));
     }
 
     @Override public void onTimeSet(TimePicker timePicker, int hour, int minute) {
         Timber.d("Selected time: %d:%d", hour, minute);
-        eventTime.setText(String.format(" %d:%02d", hour, minute));
+        eventTime.setText(String.format(Locale.getDefault(), " %d:%02d", hour, minute));
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -207,7 +227,7 @@ public class CreateOrEditEvent extends BaseActivity
     }
 
     @Override public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                                     @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_ACESS_FINE_LOCATION_REQUEST:
                 // If request is cancelled, the result arrays are empty.
@@ -217,6 +237,10 @@ public class CreateOrEditEvent extends BaseActivity
                 }
                 break;
         }
+    }
+
+    @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
 
@@ -230,7 +254,7 @@ public class CreateOrEditEvent extends BaseActivity
             return fragment;
         }
 
-        @Override
+        @NonNull @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();
@@ -253,7 +277,7 @@ public class CreateOrEditEvent extends BaseActivity
             return fragment;
         }
 
-        @Override
+        @NonNull @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();
