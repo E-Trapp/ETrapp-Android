@@ -26,6 +26,7 @@ public class UserProfileActivity extends BaseActivity {
     @BindView(R.id.profile_following_container) ViewGroup following;
     @BindView(R.id.profile_user_image) SimpleDraweeView profilePicture;
     @BindView(R.id.userEventsText) TextView user_events_title;
+    @BindView(R.id.profile_name) TextView user_name;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     @BindView(R.id.profile_floating_button) FloatingActionButton floatingActionButton;
 
@@ -58,6 +59,7 @@ public class UserProfileActivity extends BaseActivity {
                 .setUser_followers_text(followers.findViewById(R.id.layout_follow_text))
                 .setUser_following_count(following.findViewById(R.id.layout_follow_count))
                 .setUser_following_text(following.findViewById(R.id.layout_follow_text))
+                .setUser_name(user_name)
                 .setTheUser(user)
                 .setRecyclerView(recyclerView)
                 .build().load();

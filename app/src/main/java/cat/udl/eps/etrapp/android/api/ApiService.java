@@ -4,17 +4,16 @@ import java.util.List;
 import java.util.Map;
 
 import cat.udl.eps.etrapp.android.api.requests.EventRequest;
+import cat.udl.eps.etrapp.android.api.requests.SendComment;
 import cat.udl.eps.etrapp.android.api.requests.SendMessage;
 import cat.udl.eps.etrapp.android.api.requests.SignInRequest;
 import cat.udl.eps.etrapp.android.api.requests.TokenInfo;
 import cat.udl.eps.etrapp.android.api.responses.ResponseUser;
 import cat.udl.eps.etrapp.android.models.Event;
-import cat.udl.eps.etrapp.android.models.EventMessage;
 import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.models.UserAuth;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -39,6 +38,9 @@ public interface ApiService {
 
     @POST("events/{id}/messages")
     Call<ResponseBody> writeMessage(@Path("id") long eventKey, @Body SendMessage eventMessage);
+
+    @POST("events/{id}/comments")
+    Call<ResponseBody> writeComment(@Path("id") long eventKey, @Body SendComment eventComment);
 
     @POST("auth")
     Call<ResponseUser> authenticateWithCredentials(@Body SignInRequest signInRequest);

@@ -10,14 +10,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 import java.util.Random;
 
 import cat.udl.eps.etrapp.android.R;
-import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.ui.activities.EventActivity;
 import cat.udl.eps.etrapp.android.ui.adapters.ProfileEventsAdapter;
@@ -39,6 +36,7 @@ public class ProfileController {
     private final TextView user_followers_text;
     private final TextView user_following_count;
     private final TextView user_following_text;
+    private final TextView user_name;
 
     private final FloatingActionButton floatingActionButton;
 
@@ -57,6 +55,7 @@ public class ProfileController {
         user_followers_text = builder.user_followers_text;
         user_following_count = builder.user_following_count;
         user_following_text = builder.user_following_text;
+        user_name = builder.user_name;
         theUser = builder.theUser;
     }
 
@@ -71,6 +70,14 @@ public class ProfileController {
 
         user_following_count.setText("" + (Math.abs(new Random().nextInt() % 14522)));
         user_followers_count.setText("" + (Math.abs(new Random().nextInt() % 14522)));
+
+        if (theUser.getFirstName() == null && theUser.getLastName() == null) {
+            user_name.setText(theUser.getUsername());
+        } else {
+            user_name.setText(String.format("%s %s",
+                    theUser.getFirstName() != null ? theUser.getFirstName() : "",
+                    theUser.getLastName() != null ? theUser.getLastName() : ""));
+        }
 
         if (UserController.getInstance().isCurrentUser(theUser)) {
             user_events_title.setText(R.string.my_events);
@@ -108,6 +115,7 @@ public class ProfileController {
         private TextView user_followers_text;
         private TextView user_following_count;
         private TextView user_following_text;
+        private TextView user_name;
         private User theUser;
 
         private Builder(WeakReference<? extends Activity> activity, Context context) {
@@ -162,6 +170,11 @@ public class ProfileController {
 
         public Builder setUser_following_text(TextView user_following_text) {
             this.user_following_text = user_following_text;
+            return this;
+        }
+
+        public Builder setUser_name(TextView user_name) {
+            this.user_name = user_name;
             return this;
         }
 

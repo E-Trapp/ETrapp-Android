@@ -21,7 +21,7 @@ public class EventPagerAdapter extends FragmentStatePagerAdapter {
     @Override public Fragment getItem(int position) {
         switch (position) {
             case 0: return EventFragment.newInstance(e);
-            case 1: return CommentsFragment.newInstance();
+            case 1: return CommentsFragment.newInstance(e);
             default: return null;
         }
     }

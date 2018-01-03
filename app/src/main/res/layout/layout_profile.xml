@@ -19,40 +19,64 @@
                 android:id="@+id/profile_user_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
+                android:layout_marginEnd="24dp"
+                android:layout_marginStart="24dp"
                 app:placeholderImage="@drawable/profile_placeholder"
                 app:roundAsCircle="true"
                 app:roundingBorderColor="@color/material_black"
                 app:roundingBorderWidth="2dp" />
 
-            <include
-                android:id="@+id/profile_followers_container"
-                layout="@layout/layout_follow_counters"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="16dp"
-                android:layout_toStartOf="@+id/profile_user_image" />
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/profile_user_image"
+                android:orientation="vertical">
 
-            <include
-                android:id="@+id/profile_following_container"
-                layout="@layout/layout_follow_counters"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="16dp"
-                android:layout_toEndOf="@+id/profile_user_image" />
+                <LinearLayout
+                    android:weightSum="10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <include
+                        android:id="@+id/profile_followers_container"
+                        layout="@layout/layout_follow_counters"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:layout_weight="5" />
+
+                    <include
+                        android:id="@+id/profile_following_container"
+                        layout="@layout/layout_follow_counters"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="5" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/profile_name"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="18sp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 
         <android.support.design.widget.FloatingActionButton
-            android:visibility="gone"
             android:id="@+id/profile_floating_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:src="@drawable/ic_pencil_white_24dp"
+            android:visibility="gone"
             app:elevation="4dp"
             app:layout_anchor="@+id/profile_header"
             app:layout_anchorGravity="bottom|right|end" />

@@ -9,12 +9,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import cat.udl.eps.etrapp.android.models.EventComment;
 import cat.udl.eps.etrapp.android.models.EventMessage;
+import cat.udl.eps.etrapp.android.ui.adapters.EventCommentsAdapter;
 import cat.udl.eps.etrapp.android.ui.adapters.EventStreamAdapter;
 
 public class FirebaseController {
 
     private static final String EVENT_MESSAGES_REF = "eventMessages";
+    private static final String EVENT_COMMENTS_REF = "eventComments";
     private static final String EVENT_REF = "event%d";
     private static final int MESSAGE_LOAD_LIMIT = 30;
 
@@ -98,23 +101,54 @@ public class FirebaseController {
     }
 
 
-//    public Task<List<EventMessage>> getEventMessagesById(long eventKey) {
-//        final TaskCompletionSource<List<EventMessage>> tcs = new TaskCompletionSource<>();
-//
-//        ApiServiceManager.getService().getEventMessagesByEventId(eventKey).enqueue(new Callback<List<EventMessage>>() {
-//            @Override
-//            public void onResponse(Call<List<EventMessage>> call, Response<List<EventMessage>> response) {
-//                if (response.code() == 200) tcs.trySetResult(response.body());
-//                else tcs.trySetException(new Exception(response.message()));
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<EventMessage>> call, Throwable t) {
-//                tcs.trySetException(new Exception(t.getCause()));
-//            }
-//        });
-//
-//        return tcs.getTask();
-//    }
+
+
+    public Task<Void> getComments(String lastKey, long eventKey, EventCommentsAdapter eventCommentsAdapter) {
+        final TaskCompletionSource<Void> tcs = new TaskCompletionSource<>();
+
+        Query query;
+        String refPath = uriGenerator(EVENT_COMMENTS_REF, String.format(EVENT_REF, eventKey));
+
+        if (lastKey == null) {
+            query = getDatabaseReference(refPath)
+                    .orderByKey()
+                    .limitToLast(MESSAGE_LOAD_LIMIT);
+        } else {
+            query = getDatabaseReference(refPath)
+                    .orderByKey()
+                    .limitToLast(MESSAGE_LOAD_LIMIT)
+                    .endAt(lastKey);
+        }
+
+
+        ChildEventListener eventListener = new ChildEventListener() {
+
+            @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                EventComment eventMessage = dataSnapshot.getValue(EventComment.class);
+                eventMessage.setKey(dataSnapshot.getKey());
+                eventCommentsAdapter.addItem(eventMessage);
+            }
+
+            @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        query.addChildEventListener(eventListener);
+
+        return tcs.getTask();
+    }
 
 }

@@ -1,6 +1,5 @@
 package cat.udl.eps.etrapp.android.ui.fragments.event;
 
-import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,18 +27,10 @@ import cat.udl.eps.etrapp.android.utils.Utils;
 
 public class EventFragment extends BaseFragment {
 
-    public static EventFragment newInstance(Event e) {
-        EventFragment fragment = new EventFragment();
-        fragment.event = e;
-        return fragment;
-    }
-
     @BindView(R.id.event_stream_header) ViewGroup header;
     @BindView(R.id.event_stream_recycler) RecyclerView recyclerView;
     @BindView(R.id.event_stream_send_container) ViewGroup sendContainer;
-
     private Event event;
-
     private EventStreamAdapter eventStreamAdapter;
     private TextView userName;
     private TextView created_date;
@@ -49,6 +40,12 @@ public class EventFragment extends BaseFragment {
     private ImageView rateDown;
     private ImageView sendButton;
     private EditText sendText;
+
+    public static EventFragment newInstance(Event e) {
+        EventFragment fragment = new EventFragment();
+        fragment.event = e;
+        return fragment;
+    }
 
     @Override protected int getLayout() {
         return R.layout.fragment_event;

@@ -2,10 +2,6 @@ package cat.udl.eps.etrapp.android.api.requests;
 
 import cat.udl.eps.etrapp.android.models.Event;
 
-/**
- * Created by ry on 24/12/2017.
- */
-
 public class EventRequest {
 
     public static EventRequest fromEvent(Event event) {
