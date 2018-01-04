@@ -30,7 +30,8 @@ public class EventFragment extends BaseFragment {
     @BindView(R.id.event_stream_header) ViewGroup header;
     @BindView(R.id.event_stream_recycler) RecyclerView recyclerView;
     @BindView(R.id.event_stream_send_container) ViewGroup sendContainer;
-    private Event event;
+
+    private static Event event;
     private EventStreamAdapter eventStreamAdapter;
     private TextView userName;
     private TextView created_date;
@@ -43,7 +44,7 @@ public class EventFragment extends BaseFragment {
 
     public static EventFragment newInstance(Event e) {
         EventFragment fragment = new EventFragment();
-        fragment.event = e;
+        event = e;
         return fragment;
     }
 

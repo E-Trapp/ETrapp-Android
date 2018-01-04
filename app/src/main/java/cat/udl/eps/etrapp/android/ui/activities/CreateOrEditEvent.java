@@ -161,6 +161,14 @@ public class CreateOrEditEvent extends BaseActivity
                 updates.put("description", eventDescription.getText().toString());
             }
 
+            if (!eventLocation.getText().toString().equals(event.getLocation())) {
+                updates.put("location", eventLocation.getText().toString());
+            }
+
+            if (!eventImage.getText().toString().equals(event.getImageUrl())) {
+                updates.put("imageUrl", eventImage.getText().toString());
+            }
+
             EventController.getInstance()
                     .editEvent(event.getId(), updates)
                     .addOnSuccessListener(aVoid -> {
@@ -238,8 +246,7 @@ public class CreateOrEditEvent extends BaseActivity
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(this, data);
-                String toastMsg = String.format("Place: %s", place.getName());
-                Toaster.show(this, toastMsg);
+                eventLocation.setText(place.getAddress());
             }
         }
     }

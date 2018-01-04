@@ -1,6 +1,5 @@
 package cat.udl.eps.etrapp.android.ui.fragments.event;
 
-import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,21 +22,18 @@ import cat.udl.eps.etrapp.android.utils.Utils;
 
 public class CommentsFragment extends BaseFragment {
 
-    public static CommentsFragment newInstance(Event e) {
-        CommentsFragment fragment = new CommentsFragment();
-        fragment.event = e;
-        return fragment;
-    }
-
+    private static Event event;
     @BindView(R.id.event_comment_recycler) RecyclerView recyclerView;
     @BindView(R.id.event_comment_send_container) ViewGroup sendContainer;
-
-    private Event event;
-
     private EventCommentsAdapter eventCommentsAdapter;
-
     private ImageView sendButton;
     private EditText sendText;
+
+    public static CommentsFragment newInstance(Event e) {
+        CommentsFragment fragment = new CommentsFragment();
+        event = e;
+        return fragment;
+    }
 
     @Override protected int getLayout() {
         return R.layout.fragment_comments;
