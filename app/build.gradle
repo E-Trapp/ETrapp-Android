@@ -41,7 +41,7 @@ android {
 ext {
     supportLibraryVersion = '27.0.2'
     butterknife = '8.8.1'
-    playServicesVersion = '11.6.2'
+    playServicesVersion = '11.8.0'
     retrofitVersion = '2.3.0'
 }
 

@@ -57,11 +57,17 @@ public interface ApiService {
     @GET("users/{id}")
     Call<User> getUserById(@Path("id") long ownerKey);
 
+    @PATCH("users/{id}")
+    Call<ResponseBody> editUser(@Path("id") long userKey, @Body Map<String, Object> updates);
+
     @PUT("users/{id}/token")
     Call<ResponseBody> updateToken(@Path("id") long userKey, @Body TokenInfo tokenInfo);
 
     @GET("users/{id}/events")
     Call<List<Event>> listUserEvents(@Path("id") long userKey);
+
+
+
 
 
 }

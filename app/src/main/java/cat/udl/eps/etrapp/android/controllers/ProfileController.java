@@ -17,6 +17,7 @@ import java.util.Random;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.ui.activities.EventActivity;
+import cat.udl.eps.etrapp.android.ui.activities.RegisterActivity;
 import cat.udl.eps.etrapp.android.ui.adapters.ProfileEventsAdapter;
 import cat.udl.eps.etrapp.android.ui.views.PaddingItemDecoration;
 
@@ -82,6 +83,7 @@ public class ProfileController {
         if (UserController.getInstance().isCurrentUser(theUser)) {
             user_events_title.setText(R.string.my_events);
             floatingActionButton.setVisibility(View.VISIBLE);
+            floatingActionButton.setOnClickListener(view -> activity.get().startActivity(RegisterActivity.edit(context, UserController.getInstance().getCurrentUser().getId())));
         } else {
             user_events_title.setText(String.format(context.getString(R.string.user_events), theUser.getUsername()));
         }

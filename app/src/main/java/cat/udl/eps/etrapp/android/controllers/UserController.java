@@ -4,6 +4,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.Map;
+
 import cat.udl.eps.etrapp.android.api.ApiServiceManager;
 import cat.udl.eps.etrapp.android.api.requests.SignInRequest;
 import cat.udl.eps.etrapp.android.api.requests.TokenInfo;
@@ -17,6 +19,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 public class UserController {
 
@@ -191,5 +194,23 @@ public class UserController {
             }
         }
         return false;
+    }
+
+    public Task<Void> editUser(long id, Map<String, Object> updates) {
+        final TaskCompletionSource<Void> tcs = new TaskCompletionSource<>();
+
+        ApiServiceManager.getService().editUser(id, updates).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) tcs.setResult(null);
+                else tcs.trySetException(new Exception(""));
+            }
+
+            @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
+                tcs.trySetException(new Exception(t.getCause()));
+            }
+        });
+
+        return tcs.getTask();
     }
 }

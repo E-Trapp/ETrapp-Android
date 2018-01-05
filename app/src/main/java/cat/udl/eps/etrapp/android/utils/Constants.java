@@ -9,6 +9,7 @@ public class Constants {
 
     // Intent extra args
     public static final String EXTRA_EVENT_ID = "eventKey";
+    public static final String EXTRA_USER_ID = "userKey";
 
     // Request codes
     public static final int RC_SIGN_IN = 0x0A;
