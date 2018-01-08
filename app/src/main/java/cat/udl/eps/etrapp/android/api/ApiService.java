@@ -9,6 +9,7 @@ import cat.udl.eps.etrapp.android.api.requests.SendMessage;
 import cat.udl.eps.etrapp.android.api.requests.SignInRequest;
 import cat.udl.eps.etrapp.android.api.requests.TokenInfo;
 import cat.udl.eps.etrapp.android.api.responses.ResponseUser;
+import cat.udl.eps.etrapp.android.models.Category;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.models.UserAuth;
@@ -66,7 +67,8 @@ public interface ApiService {
     @GET("users/{id}/events")
     Call<List<Event>> listUserEvents(@Path("id") long userKey);
 
-
+    @GET("categories")
+    Call<List<Category>> listCategories();
 
 
 

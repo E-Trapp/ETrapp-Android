@@ -18,22 +18,22 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EventController {
+public class CategoryController {
 
-    private static EventController instance;
+    private static CategoryController instance;
 
-    private EventController() {
+    private CategoryController() {
         //Empty Constructor
     }
 
-    public static synchronized EventController getInstance() {
+    public static synchronized CategoryController getInstance() {
         if (instance == null)
-            instance = new EventController();
+            instance = new CategoryController();
         return instance;
     }
 
 
-    public Task<List<Event>> getAllEvents() {
+    public Task<List<Event>> getAllCategories() {
         final TaskCompletionSource<List<Event>> tcs = new TaskCompletionSource<>();
 
         ApiServiceManager.getService().listEvents().enqueue(new Callback<List<Event>>() {
@@ -52,7 +52,8 @@ public class EventController {
         return tcs.getTask();
     }
 
-    public Task<Event> getEventById(long eventKey) {
+    /*
+    public Task<Event> getCategoriesById(long eventKey) {
         final TaskCompletionSource<Event> tcs = new TaskCompletionSource<>();
 
         ApiServiceManager.getService().getEvent(eventKey).enqueue(new Callback<Event>() {
@@ -90,7 +91,7 @@ public class EventController {
         return tcs.getTask();
     }
 
-    public Task<List<Event>> getUserEvents(long id) {
+    public Task<List<Event>> getUserCategories(long id) {
         final TaskCompletionSource<List<Event>> tcs = new TaskCompletionSource<>();
 
         ApiServiceManager.getService().listUserEvents(id).enqueue(new Callback<List<Event>>() {
@@ -111,7 +112,7 @@ public class EventController {
         return tcs.getTask();
     }
 
-    public Task<Void> editEvent(long id, Map<String, Object> updates) {
+    public Task<Void> editCategory(long id, Map<String, Object> updates) {
         final TaskCompletionSource<Void> tcs = new TaskCompletionSource<>();
 
         ApiServiceManager.getService().editEvent(id, updates).enqueue(new Callback<ResponseBody>() {
@@ -129,7 +130,7 @@ public class EventController {
         return tcs.getTask();
     }
 
-    public Task<Void> createEvent(Event event) {
+    public Task<Void> createCategory(Event event) {
         final TaskCompletionSource<Void> tcs = new TaskCompletionSource<>();
 
         ApiServiceManager.getService().createEvent(EventRequest.fromEvent(event)).enqueue(new Callback<ResponseBody>() {
@@ -169,4 +170,6 @@ public class EventController {
         });
         return tcs.getTask();
     }
+
+    */
 }
