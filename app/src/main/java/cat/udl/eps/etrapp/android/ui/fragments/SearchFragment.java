@@ -1,5 +1,6 @@
 package cat.udl.eps.etrapp.android.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,11 +24,15 @@ import java.util.List;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.EventController;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.User;
+import cat.udl.eps.etrapp.android.ui.activities.EventActivity;
+import cat.udl.eps.etrapp.android.ui.adapters.HomeAdapter;
 import cat.udl.eps.etrapp.android.ui.adapters.SearchResultsAdapter;
 import cat.udl.eps.etrapp.android.ui.base.ScrollableFragment;
 import cat.udl.eps.etrapp.android.ui.views.PaddingItemDecoration;
+import cat.udl.eps.etrapp.android.utils.Toaster;
 import cat.udl.eps.etrapp.android.utils.Utils;
 import cat.udl.eps.etrapp.android.utils.search.HighlightedResult;
 import cat.udl.eps.etrapp.android.utils.search.SearchResultsJsonParser;
@@ -56,12 +61,30 @@ public class SearchFragment extends ScrollableFragment implements SearchView.OnQ
         return R.layout.fragment_search;
     }
 
+    /*
     @Override
     protected void configView(View fragmentView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new PaddingItemDecoration(getContext()));
         searchResultsAdapter = new SearchResultsAdapter();
         recyclerView.setAdapter(searchResultsAdapter);
+    }
+*/
+
+    @Override
+    protected void configView(View fragmentView) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.addItemDecoration(new PaddingItemDecoration(getContext()));
+        searchResultsAdapter = new SearchResultsAdapter();
+        recyclerView.setAdapter(searchResultsAdapter);
+
+        searchResultsAdapter.setOnClickListener(v -> {
+            startActivity(EventActivity.start(getContext(), (long) v.getTag()));
+
+            Toaster.show(getContext(),"Item clicked");
+        });
+
+
     }
 
     @Override
@@ -119,6 +142,9 @@ public class SearchFragment extends ScrollableFragment implements SearchView.OnQ
                 public void requestCompleted(JSONObject content, AlgoliaException error) {
                     List<HighlightedResult> results = new ArrayList<>();
                     try {
+
+                        //System.out.println(content);
+
                         results.addAll(eventParser.parseResults("title", content.getJSONArray("results").getJSONObject(1)));
                         results.addAll(userParser.parseResults("username", content.getJSONArray("results").getJSONObject(0)));
                     } catch (JSONException e) {

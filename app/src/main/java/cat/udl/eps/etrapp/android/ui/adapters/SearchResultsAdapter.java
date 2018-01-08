@@ -3,7 +3,9 @@ package cat.udl.eps.etrapp.android.ui.adapters;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.regex.Pattern;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.User;
+import cat.udl.eps.etrapp.android.ui.viewHolders.HomeContentViewHolder;
 import cat.udl.eps.etrapp.android.ui.viewHolders.SearchResultViewHolder;
 import cat.udl.eps.etrapp.android.utils.search.HighlightedResult;
 
@@ -20,6 +23,7 @@ import cat.udl.eps.etrapp.android.utils.search.HighlightedResult;
 public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultViewHolder> {
 
     private List<HighlightedResult> items;
+    private View.OnClickListener clickListener;
 
     public void setItems(List<HighlightedResult> items) {
         this.items = items;
@@ -30,6 +34,11 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultViewH
         return new SearchResultViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_search_result, parent, false));
     }
 
+    public void setOnClickListener(View.OnClickListener listener) {
+        this.clickListener = listener;
+        Log.d("tag","SearchResult");
+    }
+
     @Override public void onBindViewHolder(SearchResultViewHolder holder, int position) {
         HighlightedResult highlightedResult = items.get(position);
         final String title;
@@ -37,12 +46,22 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultViewH
         // TODO fetch image from network;
         final String imageUrl;
         final String highlighted;
+
+        HighlightedResult searchResult = items.get(position);
+        SearchResultViewHolder viewHolder = (SearchResultViewHolder) holder;
+        viewHolder.container.setOnClickListener(clickListener);
+
+        //viewHolder.container.setTag(searchResult.getId());
+
+        viewHolder.container.setTag(Long.valueOf(55));
+
         if (highlightedResult.getResult() instanceof Event) {
             Event e =  ((Event) highlightedResult.getResult());
             holder.search_result_image.setImageResource(R.drawable.event_placeholder);
             highlighted = "title";
             title = e.getTitle();
             imageUrl = e.getImageUrl();
+
         } else if (highlightedResult.getResult() instanceof User) {
             User user = ((User) highlightedResult.getResult());
             holder.search_result_image.setImageResource(R.drawable.profile_placeholder);

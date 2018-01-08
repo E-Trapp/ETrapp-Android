@@ -2,6 +2,7 @@ package cat.udl.eps.etrapp.android.ui.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,9 +39,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void setOnClickListener(View.OnClickListener listener) {
-        this.clickListener = listener;
-    }
+    public void setOnClickListener(View.OnClickListener listener) {this.clickListener = listener;}
 
     @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
