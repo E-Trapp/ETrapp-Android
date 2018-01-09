@@ -15,12 +15,16 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.CategoryController;
 import cat.udl.eps.etrapp.android.controllers.EventController;
 import cat.udl.eps.etrapp.android.controllers.UserController;
+import cat.udl.eps.etrapp.android.models.Category;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.ui.activities.CreateOrEditEvent;
 import cat.udl.eps.etrapp.android.ui.activities.EventActivity;
@@ -113,13 +117,33 @@ public class HomeFragment extends ScrollableFragment {
             case R.id.action_filter:
 
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Filtro por categoria: ");
-                String[] categories = {"Deporte", "Social", "Culturales", "Religion"};
 
-                builder.setItems(categories, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+
+
+                CategoryController.getInstance().getAllCategories().addOnSuccessListener(categories -> {
+                    System.out.println(categories);
+                    List<Category> listCategories = new ArrayList<>();
+                    for (Category c: categories) {
+                        listCategories.add(c);
+                    }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Filtro por categoria: ");
+
+                    Map<Integer, Category> categorias = new HashMap<Integer, Category>();
+                    List<String> showCategories = new ArrayList<String>();
+
+                    int pos = 0;
+                    for (Category c : listCategories) {
+                        categorias.put(pos, c);
+                        showCategories.add(c.getName());
+                        pos++;
+                    }
+
+                    System.out.println(showCategories.toArray(new String[0]));
+                    //String[] categories = {"Deporte", "Social", "Culturales", "Religion"};
+                    builder.setItems(showCategories.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
 //                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 //                        recyclerView.addItemDecoration(new PaddingItemDecoration(getContext()));
@@ -129,8 +153,8 @@ public class HomeFragment extends ScrollableFragment {
 //                            startActivity(EventActivity.start(getContext(), (long) v.getTag()));
 //                        });
 
-                        // Llamada para hacer la busqueda por categorias y cambiarlos.
-                        // Ejemplo
+                            // Llamada para hacer la busqueda por categorias y cambiarlos.
+                            // Ejemplo
 //                        EventController.getInstance().getAllEvents()
 //                                .addOnSuccessListener(events -> {
 //                                    List<Event> tmpEvents = new ArrayList<>();
@@ -145,18 +169,18 @@ public class HomeFragment extends ScrollableFragment {
 //                                })
 //                                .addOnFailureListener(e -> Toaster.show(getContext(), e.getMessage()));
 
+                            Integer selectedId = (int) categorias.get(which).getId();
+                            System.out.println("selecteId :" + selectedId + ".");
+                        }
+                    });
 
-                    }
-                });
+                    // create and show the alert dialog
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
 
 
+                }).addOnFailureListener(e -> Toaster.show(getContext(), e.getMessage()));
 
-
-
-
-                // create and show the alert dialog
-                AlertDialog dialog = builder.create();
-                dialog.show();
 
 
                 return true;

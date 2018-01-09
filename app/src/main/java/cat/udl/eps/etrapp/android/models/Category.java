@@ -7,7 +7,7 @@ package cat.udl.eps.etrapp.android.models;
 public class Category {
 
     private long id;
-    private String nomes;
+    private String name;
     private long parent_id;
 
     public long getId() {
@@ -18,12 +18,12 @@ public class Category {
         this.id = id;
     }
 
-    public String getNomes() {
-        return nomes;
+    public String getName() {
+        return name;
     }
 
-    public void setNomes(String nomes) {
-        this.nomes = nomes;
+    public void setName(String nomes) {
+        this.name = nomes;
     }
 
     public long getParent_id() {

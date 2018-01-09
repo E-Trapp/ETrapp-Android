@@ -12,6 +12,7 @@ import cat.udl.eps.etrapp.android.api.ApiServiceManager;
 import cat.udl.eps.etrapp.android.api.requests.EventRequest;
 import cat.udl.eps.etrapp.android.api.requests.SendComment;
 import cat.udl.eps.etrapp.android.api.requests.SendMessage;
+import cat.udl.eps.etrapp.android.models.Category;
 import cat.udl.eps.etrapp.android.models.Event;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -33,18 +34,18 @@ public class CategoryController {
     }
 
 
-    public Task<List<Event>> getAllCategories() {
-        final TaskCompletionSource<List<Event>> tcs = new TaskCompletionSource<>();
+    public Task<List<Category>> getAllCategories() {
+        final TaskCompletionSource<List<Category>> tcs = new TaskCompletionSource<>();
 
-        ApiServiceManager.getService().listEvents().enqueue(new Callback<List<Event>>() {
+        ApiServiceManager.getService().listCategories().enqueue(new Callback<List<Category>>() {
             @Override
-            public void onResponse(@NonNull Call<List<Event>> call, @NonNull Response<List<Event>> response) {
+            public void onResponse(@NonNull Call<List<Category>> call, @NonNull Response<List<Category>> response) {
                 if (response.isSuccessful()) tcs.trySetResult(response.body());
                 else tcs.trySetException(new Exception());
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Event>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<Category>> call, @NonNull Throwable t) {
                 tcs.trySetException(new Exception(t.getCause()));
             }
         });
