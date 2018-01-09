@@ -53,12 +53,14 @@ public class HomeFragment extends ScrollableFragment {
         return R.layout.fragment_home;
     }
 
+    HomeAdapter homeAdapter;
+
     @Override
     protected void configView(View fragmentView) {
         setHasOptionsMenu(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new PaddingItemDecoration(getContext()));
-        HomeAdapter homeAdapter = new HomeAdapter(this);
+        homeAdapter = new HomeAdapter(this);
         recyclerView.setAdapter(homeAdapter);
         homeAdapter.setOnClickListener(v -> {
             startActivity(EventActivity.start(getContext(), (long) v.getTag()));
@@ -115,11 +117,6 @@ public class HomeFragment extends ScrollableFragment {
                 startActivity(CreateOrEditEvent.startCreateMode(getContext()));
                 return true;
             case R.id.action_filter:
-
-
-
-
-
                 CategoryController.getInstance().getAllCategories().addOnSuccessListener(categories -> {
                     System.out.println(categories);
                     List<Category> listCategories = new ArrayList<>();
@@ -144,33 +141,17 @@ public class HomeFragment extends ScrollableFragment {
                     builder.setItems(showCategories.toArray(new String[0]), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                                                        EventController.getInstance().getEventsFromCategory(categorias.get(which).getId()).addOnSuccessListener(events -> {
+                                List<Event> tmpEvents = new ArrayList<>();
+                                List<Event> tmpFeatured = new ArrayList<>();
 
-//                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-//                        recyclerView.addItemDecoration(new PaddingItemDecoration(getContext()));
-//                        HomeAdapter homeAdapter = new HomeAdapter(getParentFragment());
-//                        recyclerView.setAdapter(homeAdapter);
-//                        homeAdapter.setOnClickListener(v -> {
-//                            startActivity(EventActivity.start(getContext(), (long) v.getTag()));
-//                        });
 
-                            // Llamada para hacer la busqueda por categorias y cambiarlos.
-                            // Ejemplo
-//                        EventController.getInstance().getAllEvents()
-//                                .addOnSuccessListener(events -> {
-//                                    List<Event> tmpEvents = new ArrayList<>();
-//                                    List<Event> tmpFeatured = new ArrayList<>();
-//
-//                                    for (Event e: events) {
-//                                        if(e.isFeatured()) tmpFeatured.add(e); else tmpEvents.add(e);
-//                                        break;
-//                                    }
-//
-//                                    homeAdapter.setBothEvents(tmpFeatured, tmpEvents);
-//                                })
-//                                .addOnFailureListener(e -> Toaster.show(getContext(), e.getMessage()));
+                                for (Event e: events) {
+                                    if(e.isFeatured()) tmpFeatured.add(e); else tmpEvents.add(e);
+                                }
 
-                            Integer selectedId = (int) categorias.get(which).getId();
-                            System.out.println("selecteId :" + selectedId + ".");
+                                homeAdapter.setBothEvents(tmpFeatured, tmpEvents);
+                            });
                         }
                     });
 

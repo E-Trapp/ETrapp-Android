@@ -169,4 +169,10 @@ public class EventController {
         });
         return tcs.getTask();
     }
+
+    public Task<List<Event>> getEventsFromCategory(long id) {
+        final TaskCompletionSource<List<Event>> tcs = new TaskCompletionSource<>();
+
+        return tcs.getTask();
+    }
 }

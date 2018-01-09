@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
@@ -28,6 +29,7 @@ import cat.udl.eps.etrapp.android.controllers.EventController;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.ui.activities.EventActivity;
+import cat.udl.eps.etrapp.android.ui.activities.UserProfileActivity;
 import cat.udl.eps.etrapp.android.ui.adapters.HomeAdapter;
 import cat.udl.eps.etrapp.android.ui.adapters.SearchResultsAdapter;
 import cat.udl.eps.etrapp.android.ui.base.ScrollableFragment;
@@ -79,7 +81,14 @@ public class SearchFragment extends ScrollableFragment implements SearchView.OnQ
         recyclerView.setAdapter(searchResultsAdapter);
 
         searchResultsAdapter.setOnClickListener(v -> {
-            startActivity(EventActivity.start(getContext(), (long) v.getTag()));
+
+            Map<String, Object> data = (Map<String, Object>)v.getTag();
+
+            String type = (String) data.get("type");
+            long searchId = (long) data.get("id");
+
+            if ("event".equals(type)) startActivity(EventActivity.start(getContext(), searchId));
+            else if ("user".equals(type)) startActivity(UserProfileActivity.start(getContext(), searchId));
 
             Toaster.show(getContext(),"Item clicked");
         });

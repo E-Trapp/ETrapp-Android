@@ -56,6 +56,9 @@ public class SearchResultsJsonParser<T> {
         if (jsonObject == null)
             return null;
 
+
+        Timber.d(jsonObject.toString());
+
         List<HighlightedResult> results = new ArrayList<>();
         JSONArray hits = jsonObject.optJSONArray("hits");
         Timber.d(jsonObject.toString());

@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,13 +49,24 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultViewH
         final String imageUrl;
         final String highlighted;
 
-        HighlightedResult searchResult = items.get(position);
         SearchResultViewHolder viewHolder = (SearchResultViewHolder) holder;
         viewHolder.container.setOnClickListener(clickListener);
 
         //viewHolder.container.setTag(searchResult.getId());
 
-        viewHolder.container.setTag(Long.valueOf(55));
+        long searchId = 0;
+        String type = null;
+        Map<String, Object> data = new HashMap<>();
+        if (highlightedResult.getResult() instanceof Event) {
+            type = "event";
+            searchId = ((Event)highlightedResult.getResult()).getId();
+        } else if (highlightedResult.getResult() instanceof User) {
+            type = "user";
+            searchId = ((User)highlightedResult.getResult()).getId();
+        }
+        data.put("type", type);
+        data.put("id", searchId);
+        viewHolder.container.setTag(data);
 
         if (highlightedResult.getResult() instanceof Event) {
             Event e =  ((Event) highlightedResult.getResult());
