@@ -173,6 +173,21 @@ public class EventController {
     public Task<List<Event>> getEventsFromCategory(long id) {
         final TaskCompletionSource<List<Event>> tcs = new TaskCompletionSource<>();
 
+        ApiServiceManager.getService().getCategoriesById(id).enqueue(new Callback<List<Event>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Event>> call, @NonNull Response<List<Event>> response) {
+                System.out.println("Entrei aqui11111111");
+                if (response.isSuccessful()) tcs.trySetResult(response.body());
+                else tcs.trySetException(new Exception());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Event>> call, @NonNull Throwable t) {
+                System.out.println("Entrei aqui2222222");
+                tcs.trySetException(new Exception(t.getCause()));
+            }
+        });
+
         return tcs.getTask();
     }
 }

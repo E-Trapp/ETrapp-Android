@@ -117,6 +117,7 @@ public class HomeFragment extends ScrollableFragment {
                 startActivity(CreateOrEditEvent.startCreateMode(getContext()));
                 return true;
             case R.id.action_filter:
+
                 CategoryController.getInstance().getAllCategories().addOnSuccessListener(categories -> {
                     System.out.println(categories);
                     List<Category> listCategories = new ArrayList<>();
@@ -136,12 +137,18 @@ public class HomeFragment extends ScrollableFragment {
                         pos++;
                     }
 
+                    System.out.println("Inicio retorno categorias");
+                    System.out.println(showCategories.toString());
+                    System.out.println("Fim retorno categorias");
                     System.out.println(showCategories.toArray(new String[0]));
                     //String[] categories = {"Deporte", "Social", "Culturales", "Religion"};
                     builder.setItems(showCategories.toArray(new String[0]), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                                                        EventController.getInstance().getEventsFromCategory(categorias.get(which).getId()).addOnSuccessListener(events -> {
+
+                            System.out.println("Ooooooooooi" + categorias.get(which).getId());
+                            EventController.getInstance().getEventsFromCategory(categorias.get(which).getId()).addOnSuccessListener(events -> {
+                                System.out.println("entrei aqui");
                                 List<Event> tmpEvents = new ArrayList<>();
                                 List<Event> tmpFeatured = new ArrayList<>();
 
