@@ -66,9 +66,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 viewHolder.container.setOnClickListener(clickListener);
                 viewHolder.home_content_title.setText(event.getTitle());
                 viewHolder.home_content_updated.setText(new Date(event.getStartsAt()).toString());
+                /*
                 UserController.getInstance().getUserById(event.getOwner()).addOnSuccessListener(user -> {
                     viewHolder.home_content_owner.setText(user.getUsername());
                 });
+                */
         }
 
     }

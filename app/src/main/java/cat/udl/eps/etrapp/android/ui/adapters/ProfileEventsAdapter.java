@@ -41,9 +41,11 @@ public class ProfileEventsAdapter extends RecyclerView.Adapter<HomeContentViewHo
         holder.container.setOnClickListener(clickListener);
         holder.home_content_title.setText(event.getTitle());
         holder.home_content_updated.setText(new Date(event.getStartsAt()).toString());
+        /*
         UserController.getInstance().getUserById(event.getOwner()).addOnSuccessListener(user -> {
             holder.home_content_owner.setText(user.getUsername());
         });
+        */
     }
 
     @Override public int getItemCount() {
