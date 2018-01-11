@@ -14,9 +14,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -32,16 +34,20 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.CategoryController;
 import cat.udl.eps.etrapp.android.controllers.EventController;
 import cat.udl.eps.etrapp.android.controllers.UserController;
+import cat.udl.eps.etrapp.android.models.Category;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.ui.base.BaseActivity;
 import cat.udl.eps.etrapp.android.utils.Toaster;
@@ -67,6 +73,7 @@ public class CreateOrEditEvent extends BaseActivity
     @BindView(R.id.create_event_location) EditText eventLocation;
     @BindView(R.id.create_event_time) EditText eventTime;
     @BindView(R.id.create_event_image) EditText eventImage;
+    @BindView(R.id.category_spinner) Spinner categorySpinner;
     @BindView(R.id.event_create_button) Button event_create_button;
     private GoogleApiClient mGoogleApiClient;
     private Event event;
@@ -130,6 +137,28 @@ public class CreateOrEditEvent extends BaseActivity
             newFragment.show(getSupportFragmentManager(), "datePicker");
         });
         event_create_button.setOnClickListener(view -> createEvent());
+
+
+        CategoryController.getInstance()
+                .getAllCategories()
+                .addOnSuccessListener(categories -> {
+                    List<Category> listCategories = new ArrayList<>();
+                    listCategories.addAll(categories);
+
+                    List<String> showCategories = new ArrayList<>();
+
+                    for (Category c : listCategories) {
+                        showCategories.add(c.getName());
+                    }
+
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, showCategories);
+                    categorySpinner.setAdapter(adapter);
+
+                })
+                .addOnFailureListener(e -> Toaster.show(getBaseContext(), e.getMessage()));
+
+
     }
 
     private void setupUI() {
@@ -177,6 +206,9 @@ public class CreateOrEditEvent extends BaseActivity
                         finish();
                     });
         });
+
+
+
     }
 
     private void handleIntent(Intent i) {
