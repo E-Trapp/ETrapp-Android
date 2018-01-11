@@ -1,8 +1,7 @@
 package cat.udl.eps.etrapp.android.ui.fragments;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,14 +9,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
@@ -41,19 +37,17 @@ public class HomeFragment extends ScrollableFragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    HomeAdapter homeAdapter;
+    private AlertDialog alerta;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
 
-    private AlertDialog alerta;
-
     @Override
     protected int getLayout() {
         return R.layout.fragment_home;
     }
-
-    HomeAdapter homeAdapter;
 
     @Override
     protected void configView(View fragmentView) {
@@ -72,8 +66,9 @@ public class HomeFragment extends ScrollableFragment {
                     List<Event> tmpFeatured = new ArrayList<>();
 
 
-                    for (Event e: events) {
-                        if(e.isFeatured()) tmpFeatured.add(e); else tmpEvents.add(e);
+                    for (Event e : events) {
+                        if (e.isFeatured()) tmpFeatured.add(e);
+                        else tmpEvents.add(e);
                     }
 
                     homeAdapter.setBothEvents(tmpFeatured, tmpEvents);
@@ -118,57 +113,42 @@ public class HomeFragment extends ScrollableFragment {
                 return true;
             case R.id.action_filter:
 
-                CategoryController.getInstance().getAllCategories().addOnSuccessListener(categories -> {
-                    System.out.println(categories);
-                    List<Category> listCategories = new ArrayList<>();
-                    for (Category c: categories) {
-                        listCategories.add(c);
-                    }
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Filtro por categoria: ");
+                CategoryController.getInstance()
+                        .getAllCategories()
+                        .addOnSuccessListener(categories -> {
+                            System.out.println(categories);
+                            List<Category> listCategories = new ArrayList<>();
+                            listCategories.addAll(categories);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setTitle("Filtro por categoria: ");
 
-                    Map<Integer, Category> categorias = new HashMap<Integer, Category>();
-                    List<String> showCategories = new ArrayList<String>();
+                            List<String> showCategories = new ArrayList<String>();
 
-                    int pos = 0;
-                    for (Category c : listCategories) {
-                        categorias.put(pos, c);
-                        showCategories.add(c.getName());
-                        pos++;
-                    }
+                            for (Category c : listCategories) {
+                                showCategories.add(c.getName());
+                            }
 
-                    System.out.println("Inicio retorno categorias");
-                    System.out.println(showCategories.toString());
-                    System.out.println("Fim retorno categorias");
-                    System.out.println(showCategories.toArray(new String[0]));
-                    //String[] categories = {"Deporte", "Social", "Culturales", "Religion"};
-                    builder.setItems(showCategories.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                            builder.setItems(showCategories.toArray(new String[0]), (dialog, which) ->
+                                    EventController.getInstance()
+                                            .getEventsFromCategory(categories.get(which).getId())
+                                            .addOnSuccessListener(events -> {
+                                                List<Event> tmpEvents = new ArrayList<>();
+                                                List<Event> tmpFeatured = new ArrayList<>();
 
-                            System.out.println("Ooooooooooi" + categorias.get(which).getId());
-                            EventController.getInstance().getEventsFromCategory(categorias.get(which).getId()).addOnSuccessListener(events -> {
-                                System.out.println("entrei aqui");
-                                List<Event> tmpEvents = new ArrayList<>();
-                                List<Event> tmpFeatured = new ArrayList<>();
+                                                for (Event e : events) {
+                                                    if (e.isFeatured()) tmpFeatured.add(e);
+                                                    else tmpEvents.add(e);
+                                                }
+                                                homeAdapter.setBothEvents(tmpFeatured, tmpEvents);
+                                            })
+                                            .addOnFailureListener(e -> Toaster.show(getContext(), "No events in this category"))
+                            );
 
-
-                                for (Event e: events) {
-                                    if(e.isFeatured()) tmpFeatured.add(e); else tmpEvents.add(e);
-                                }
-
-                                homeAdapter.setBothEvents(tmpFeatured, tmpEvents);
-                            });
-                        }
-                    });
-
-                    // create and show the alert dialog
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-
-
-                }).addOnFailureListener(e -> Toaster.show(getContext(), e.getMessage()));
-
+                            // create and show the alert dialog
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        })
+                        .addOnFailureListener(e -> Toaster.show(getContext(), e.getMessage()));
 
 
                 return true;

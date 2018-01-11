@@ -27,10 +27,7 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     @GET("events")
-    Call<List<Event>> listEvents();
-
-    @GET("events")
-    Call<List<Event>> getCategoriesById(@Query("category") long idCategory);
+    Call<List<Event>> listEvents(@Query("category") Long category);
 
     @POST("events")
     Call<ResponseBody> createEvent(@Body EventRequest event);
