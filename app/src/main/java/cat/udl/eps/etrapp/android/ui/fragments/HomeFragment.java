@@ -1,6 +1,8 @@
 package cat.udl.eps.etrapp.android.ui.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -119,11 +121,21 @@ public class HomeFragment extends ScrollableFragment {
         }
     }
 
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 345) {
+            if (resultCode == Activity.RESULT_OK) {
+                loadAllEvents();
+            }
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case ID_MENU_ITEM_CREATE_EVENT:
-                startActivity(CreateOrEditEvent.startCreateMode(getContext()));
+                startActivityForResult(CreateOrEditEvent.startCreateMode(getContext()), 345);
                 return true;
             case R.id.action_filter:
 
