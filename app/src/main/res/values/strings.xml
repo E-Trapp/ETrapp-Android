@@ -117,4 +117,6 @@
     <string name="ok">ok</string>
     <string name="cancel">cancel</string>
     <string name="dialog_error_connection">Error establishing a etrapp server connection.You\'re in offline mode.</string>
+    <string name="remove_filter">Remove filter</string>
+    <string name="filter">Filtro por categoria:</string>
 </resources>

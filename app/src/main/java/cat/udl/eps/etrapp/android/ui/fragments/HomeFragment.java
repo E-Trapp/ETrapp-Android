@@ -3,14 +3,19 @@ package cat.udl.eps.etrapp.android.ui.fragments;
 import android.app.AlertDialog;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.tasks.OnFailureListener;
+import com.robertlevonyan.views.chip.Chip;
+import com.robertlevonyan.views.chip.OnCloseClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +40,11 @@ import static cat.udl.eps.etrapp.android.utils.Constants.ID_MENU_ITEM_CREATE_EVE
 public class HomeFragment extends ScrollableFragment {
 
 
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    HomeAdapter homeAdapter;
-    private AlertDialog alerta;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.chip_container) ViewGroup chipContainer;
+//    @BindView(R.id.chip) Chip chip;
+
+    private HomeAdapter homeAdapter;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -60,11 +66,19 @@ public class HomeFragment extends ScrollableFragment {
             startActivity(EventActivity.start(getContext(), (long) v.getTag()));
         });
 
+//        chip.setOnCloseClickListener(v -> {
+//            loadAllEvents();
+//            chipContainer.setVisibility(View.GONE);
+//        });
+
+        loadAllEvents();
+    }
+
+    private void loadAllEvents() {
         EventController.getInstance().getAllEvents()
                 .addOnSuccessListener(events -> {
                     List<Event> tmpEvents = new ArrayList<>();
                     List<Event> tmpFeatured = new ArrayList<>();
-
 
                     for (Event e : events) {
                         if (e.isFeatured()) tmpFeatured.add(e);
@@ -120,29 +134,53 @@ public class HomeFragment extends ScrollableFragment {
                             List<Category> listCategories = new ArrayList<>();
                             listCategories.addAll(categories);
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setTitle("Filtro por categoria: ");
+                            builder.setTitle(getString(R.string.filter));
 
-                            List<String> showCategories = new ArrayList<String>();
+                            List<String> showCategories = new ArrayList<>();
 
                             for (Category c : listCategories) {
                                 showCategories.add(c.getName());
                             }
 
-                            builder.setItems(showCategories.toArray(new String[0]), (dialog, which) ->
-                                    EventController.getInstance()
-                                            .getEventsFromCategory(categories.get(which).getId())
-                                            .addOnSuccessListener(events -> {
-                                                List<Event> tmpEvents = new ArrayList<>();
-                                                List<Event> tmpFeatured = new ArrayList<>();
+                            builder.setItems(showCategories.toArray(new String[0]), (dialog, which) -> {
+                                EventController.getInstance()
+                                        .getEventsFromCategory(categories.get(which).getId())
+                                        .addOnSuccessListener(events -> {
 
-                                                for (Event e : events) {
-                                                    if (e.isFeatured()) tmpFeatured.add(e);
-                                                    else tmpEvents.add(e);
-                                                }
-                                                homeAdapter.setBothEvents(tmpFeatured, tmpEvents);
-                                            })
-                                            .addOnFailureListener(e -> Toaster.show(getContext(), "No events in this category"))
-                            );
+
+                                            Chip chip = new Chip(getContext());
+                                            chip.setLayoutParams(new ViewGroup.LayoutParams(
+                                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                                    ViewGroup.LayoutParams.WRAP_CONTENT)
+                                            );
+                                            chip.setChipText(categories.get(which).getName());
+                                            chip.setClosable(true);
+                                            chip.changeBackgroundColor(R.color.md_amber400);
+                                            chip.setCloseColor(R.color.md_amber900);
+                                            chip.changeSelectedBackgroundColor(R.color.md_amber400);
+                                            chip.setSelectedCloseColor(R.color.md_pink200);
+                                            chip.setOnCloseClickListener(v -> {
+                                                ((ViewGroup)chipContainer.findViewById(R.id.real_chip_container)).removeAllViews();
+                                                chipContainer.setVisibility(View.GONE);
+                                                loadAllEvents();
+                                            });
+                                            ((ViewGroup)chipContainer.findViewById(R.id.real_chip_container)).addView(chip);
+                                            chipContainer.setVisibility(View.VISIBLE);
+
+                                            List<Event> tmpEvents = new ArrayList<>();
+                                            List<Event> tmpFeatured = new ArrayList<>();
+
+                                            for (Event e : events) {
+                                                if (e.isFeatured()) tmpFeatured.add(e);
+                                                else tmpEvents.add(e);
+                                            }
+
+                                            homeAdapter.setBothEvents(tmpFeatured, tmpEvents);
+
+                                        })
+                                        .addOnFailureListener(e -> Toaster.show(getContext(), "No events in this category"));
+
+                            });
 
                             // create and show the alert dialog
                             AlertDialog dialog = builder.create();

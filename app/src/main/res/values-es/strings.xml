@@ -33,4 +33,6 @@
     <string name="event_start_time">Start time</string>
     <string name="save_changes">Save changes</string>
     <string name="event_location">Location</string>
+    <string name="remove_filter">Remove filter</string>
+    <string name="filter">Filtro por categoria:</string>
 </resources>
