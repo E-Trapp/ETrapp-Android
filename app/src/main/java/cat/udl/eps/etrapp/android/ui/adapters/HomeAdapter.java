@@ -25,6 +25,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_HEADER = 0;
     private static final int VIEW_TYPE_CONTENT = 1;
 
+    private SimpleDateFormat time = new SimpleDateFormat("HH:mm");
+    private SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+
     private final Fragment fragment;
     private List<Event> events; //Mockups.mockEventList;
     private List<Event> featuredEvents; //Mockups.mockFeaturedEventList;
@@ -65,12 +68,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 viewHolder.container.setTag(event.getId());
                 viewHolder.container.setOnClickListener(clickListener);
                 viewHolder.home_content_title.setText(event.getTitle());
-                viewHolder.home_content_updated.setText(new Date(event.getStartsAt()).toString());
-                /*
-                UserController.getInstance().getUserById(event.getOwner()).addOnSuccessListener(user -> {
-                    viewHolder.home_content_owner.setText(user.getUsername());
-                });
-                */
+                viewHolder.home_content_date.setText(date.format(event.getStartsAt()));
+                viewHolder.home_content_time.setText(time.format(event.getStartsAt()));
+
         }
 
     }

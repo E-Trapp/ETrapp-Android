@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import cat.udl.eps.etrapp.android.R;
@@ -22,6 +23,9 @@ public class ProfileEventsAdapter extends RecyclerView.Adapter<HomeContentViewHo
     public ProfileEventsAdapter(List<Event> eventList) {
         this.eventList = eventList;
     }
+
+    private SimpleDateFormat time = new SimpleDateFormat("HH:mm");
+    private SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 
     private final List<Event> eventList;
 
@@ -40,7 +44,8 @@ public class ProfileEventsAdapter extends RecyclerView.Adapter<HomeContentViewHo
         holder.container.setTag(event.getId());
         holder.container.setOnClickListener(clickListener);
         holder.home_content_title.setText(event.getTitle());
-        holder.home_content_updated.setText(new Date(event.getStartsAt()).toString());
+        holder.home_content_date.setText(date.format(event.getStartsAt()));
+        holder.home_content_time.setText(time.format(event.getStartsAt()));
         /*
         UserController.getInstance().getUserById(event.getOwner()).addOnSuccessListener(user -> {
             holder.home_content_owner.setText(user.getUsername());
