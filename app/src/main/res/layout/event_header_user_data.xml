@@ -41,29 +41,49 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:gravity="center">
+            android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center">
 
-            <ImageView
-                android:id="@+id/event_header_rate_user_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="16dp"
-                android:paddingEnd="10dp"
-                android:paddingStart="10dp"
-                android:paddingTop="16dp"
-                android:src="@drawable/ic_thumb_up_grey600_24dp" />
+                    <ImageView
+                        android:id="@+id/event_header_rate_user_up"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingTop="16dp"
+                        android:src="@drawable/ic_thumb_up_grey600_24dp" />
 
-            <ImageView
-                android:id="@+id/event_header_rate_user_down"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="16dp"
-                android:paddingEnd="10dp"
-                android:paddingStart="10dp"
-                android:paddingTop="16dp"
-                android:src="@drawable/ic_thumb_down_grey600_24dp" />
+                    <ImageView
+                        android:id="@+id/event_header_rate_user_down"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="10dp"
+                        android:paddingTop="16dp"
+                        android:src="@drawable/ic_thumb_down_grey600_24dp" />
 
+                </LinearLayout>
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="22dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginStart="20dp"
+                android:background="@color/material_red900"
+                android:gravity="center"
+                android:text="subscribe"
+                android:textAlignment="center"
+                android:textColor="@color/textWhite"
+                android:textSize="11sp" />
         </LinearLayout>
+
+
     </RelativeLayout>
 
     <!--Event info-->
