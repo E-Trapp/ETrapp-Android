@@ -71,6 +71,7 @@
                 </LinearLayout>
 
             <Button
+                android:id="@+id/subscribe_event"
                 android:layout_width="80dp"
                 android:layout_height="22dp"
                 android:layout_marginLeft="30dp"

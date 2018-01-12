@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,8 +16,10 @@ import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.controllers.EventController;
 import cat.udl.eps.etrapp.android.controllers.FirebaseController;
+import cat.udl.eps.etrapp.android.controllers.SubscribeController;
 import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
+import cat.udl.eps.etrapp.android.models.Subscribe;
 import cat.udl.eps.etrapp.android.ui.activities.UserProfileActivity;
 import cat.udl.eps.etrapp.android.ui.adapters.EventStreamAdapter;
 import cat.udl.eps.etrapp.android.ui.base.BaseFragment;
@@ -41,6 +44,7 @@ public class EventFragment extends BaseFragment {
     private ImageView rateDown;
     private ImageView sendButton;
     private EditText sendText;
+    private Button subscribeEvent;
 
     public static EventFragment newInstance(Event e) {
         EventFragment fragment = new EventFragment();
@@ -58,6 +62,7 @@ public class EventFragment extends BaseFragment {
         created_date = header.findViewById(R.id.event_header_created);
         rateUp = header.findViewById(R.id.event_header_rate_user_up);
         rateDown = header.findViewById(R.id.event_header_rate_user_down);
+        subscribeEvent = header.findViewById(R.id.subscribe_event);
         location = header.findViewById(R.id.event_header_location);
         description = header.findViewById(R.id.event_header_description);
 
@@ -75,6 +80,19 @@ public class EventFragment extends BaseFragment {
                 case R.id.event_header_rate_user_down:
                     Toaster.show(getContext(), "ETrapper Downvoted!");
                     break;
+                case R.id.subscribe_event:
+
+                    Subscribe subscribe = new Subscribe();
+                    subscribe.setEvent_id(event.getId());
+                    subscribe.setUser_id(UserController.getInstance().getCurrentUser().getId());
+
+                    SubscribeController.getInstance()
+                            .subscribeEvent(subscribe)
+                            .addOnSuccessListener(aVoid -> {
+                                Toaster.show(getContext(), "Subscribe Event!");
+                            });
+
+                    break;
             }
         };
 
@@ -82,6 +100,7 @@ public class EventFragment extends BaseFragment {
         header.setOnClickListener(clickListener);
         rateUp.setOnClickListener(clickListener);
         rateDown.setOnClickListener(clickListener);
+        subscribeEvent.setOnClickListener(clickListener);
 
         setupUI();
     }
@@ -146,6 +165,7 @@ public class EventFragment extends BaseFragment {
         @BindView(R.id.event_header_created) TextView created_date;
         @BindView(R.id.event_header_rate_user_up) ImageView rateUp;
         @BindView(R.id.event_header_rate_user_down) ImageView rateDown;
+        @BindView(R.id.subscribe_event) Button subscribeEvent;
         @BindView(R.id.event_header_container) ViewGroup headerContainer;
     }
 

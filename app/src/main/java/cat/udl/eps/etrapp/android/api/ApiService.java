@@ -11,6 +11,7 @@ import cat.udl.eps.etrapp.android.api.requests.TokenInfo;
 import cat.udl.eps.etrapp.android.api.responses.ResponseUser;
 import cat.udl.eps.etrapp.android.models.Category;
 import cat.udl.eps.etrapp.android.models.Event;
+import cat.udl.eps.etrapp.android.models.Subscribe;
 import cat.udl.eps.etrapp.android.models.User;
 import cat.udl.eps.etrapp.android.models.UserAuth;
 import okhttp3.ResponseBody;
@@ -71,6 +72,7 @@ public interface ApiService {
     @GET("categories")
     Call<List<Category>> listCategories();
 
-
+    @POST("subscribe")
+    Call<ResponseBody> subscribeEvent(@Body Subscribe subscribe);
 
 }
