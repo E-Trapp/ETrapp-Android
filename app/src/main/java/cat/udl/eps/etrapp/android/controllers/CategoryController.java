@@ -54,7 +54,7 @@ public class CategoryController {
     }
 
 
-    public Task<Event> getCategoriesById(long eventKey) {
+    /*public Task<Event> getCategoriesById(long eventKey) {
         final TaskCompletionSource<Event> tcs = new TaskCompletionSource<>();
 
         ApiServiceManager.getService().getEvent(eventKey).enqueue(new Callback<Event>() {
@@ -73,7 +73,7 @@ public class CategoryController {
         return tcs.getTask();
     }
 
-    /*public Task<Void> writeMessage(long eventKey, String s) {
+    public Task<Void> writeMessage(long eventKey, String s) {
         final TaskCompletionSource<Void> tcs = new TaskCompletionSource<>();
         ApiServiceManager.getService().writeMessage(eventKey, new SendMessage(s)).enqueue(new Callback<ResponseBody>() {
             @Override

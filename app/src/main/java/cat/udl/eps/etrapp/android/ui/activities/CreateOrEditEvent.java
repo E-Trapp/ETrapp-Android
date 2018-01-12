@@ -79,6 +79,8 @@ public class CreateOrEditEvent extends BaseActivity
     private Event event;
     private boolean playServicesAvailable = false;
 
+    List<Category> listCategories = new ArrayList<>();
+
     public static Intent startEditMode(Context context, long eventKey) {
         Intent i = new Intent(context, CreateOrEditEvent.class);
         i.putExtra(EXTRA_EVENT_ID, eventKey);
@@ -136,21 +138,20 @@ public class CreateOrEditEvent extends BaseActivity
             DialogFragment newFragment = DatePickerFragment.newInstance(this);
             newFragment.show(getSupportFragmentManager(), "datePicker");
         });
+
+
         event_create_button.setOnClickListener(view -> createEvent());
 
 
         CategoryController.getInstance()
                 .getAllCategories()
                 .addOnSuccessListener(categories -> {
-                    List<Category> listCategories = new ArrayList<>();
                     listCategories.addAll(categories);
-
                     List<String> showCategories = new ArrayList<>();
 
                     for (Category c : listCategories) {
                         showCategories.add(c.getName());
                     }
-
 
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, showCategories);
                     categorySpinner.setAdapter(adapter);
@@ -242,6 +243,10 @@ public class CreateOrEditEvent extends BaseActivity
         event.setImageUrl(eventImage.getText().toString());
         event.setLocation(eventLocation.getText().toString());
         event.setOwner(UserController.getInstance().getCurrentUser().getId());
+        long selectCategoryId = listCategories.get(categorySpinner.getSelectedItemPosition()).getId();
+        System.out.println("Id de la categoria: " + (int) selectCategoryId);
+        event.setCategory(selectCategoryId);
+
         try {
             long newTime = 0;
             String dateString = eventDate.getText().toString() + " " + eventTime.getText().toString();

@@ -5,6 +5,7 @@ public class Event {
     private long id;
     private long owner;
     private String title;
+    private long category;
     private String description;
     private String imageUrl;
     private long startsAt;
@@ -66,4 +67,8 @@ public class Event {
     public boolean isFeatured() {
         return isFeatured;
     }
+
+    public long getCategory() { return category; }
+
+    public void setCategory(long category) { this.category = category; }
 }

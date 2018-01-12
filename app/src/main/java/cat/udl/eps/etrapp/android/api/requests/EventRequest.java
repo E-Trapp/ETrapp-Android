@@ -9,6 +9,7 @@ public class EventRequest {
 
         eventRequest.owner = event.getOwner();
         eventRequest.title = event.getTitle();
+        eventRequest.category = event.getCategory();
         eventRequest.description = event.getDescription();
         eventRequest.imageUrl = event.getImageUrl();
         eventRequest.startsAt = event.getStartsAt();
@@ -21,6 +22,7 @@ public class EventRequest {
     private long owner;
     private String title;
     private String description;
+    private long category;
     private String imageUrl;
     private long startsAt;
     private String location;
@@ -72,5 +74,9 @@ public class EventRequest {
     public long getStartsAt() {
         return startsAt;
     }
+
+    public long getCategory() { return category; }
+
+    public void setCategory(long category) { this.category = category; }
 
 }
