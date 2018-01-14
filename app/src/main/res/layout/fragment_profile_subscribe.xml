@@ -4,9 +4,11 @@
     android:layout_height="match_parent"
     tools:context="cat.udl.eps.etrapp.android.ProfileSubscribeFragment">
 
-    <TextView
+    <!--<TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="dsdasdasdasd" />
+        android:text="111111dsdasdasdasd" />-->
+
+    <include layout="@layout/recycler" />
 
 </FrameLayout>

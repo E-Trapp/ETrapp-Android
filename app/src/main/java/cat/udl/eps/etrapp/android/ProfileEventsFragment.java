@@ -62,7 +62,5 @@ public class ProfileEventsFragment extends BaseFragment {
                     });
                     recyclerView.setAdapter(profileEventsAdapter);
                 });
-
     }
-
 }
