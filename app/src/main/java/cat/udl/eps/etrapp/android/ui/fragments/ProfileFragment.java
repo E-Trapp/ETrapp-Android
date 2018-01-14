@@ -2,6 +2,8 @@ package cat.udl.eps.etrapp.android.ui.fragments;
 
 import android.app.Activity;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,9 +20,12 @@ import java.util.Random;
 
 import butterknife.BindView;
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.MyProfileController;
 import cat.udl.eps.etrapp.android.controllers.ProfileController;
 import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.ui.activities.MainActivity;
+import cat.udl.eps.etrapp.android.ui.adapters.EventPagerAdapter;
+import cat.udl.eps.etrapp.android.ui.adapters.ProfilePagerAdapter;
 import cat.udl.eps.etrapp.android.ui.base.BaseFragment;
 import cat.udl.eps.etrapp.android.ui.base.ScrollableFragment;
 import cat.udl.eps.etrapp.android.utils.Toaster;
@@ -32,10 +37,13 @@ public class ProfileFragment extends ScrollableFragment {
     @BindView(R.id.profile_followers_container) ViewGroup followers;
     @BindView(R.id.profile_following_container) ViewGroup following;
     @BindView(R.id.profile_user_image) SimpleDraweeView profilePicture;
-    @BindView(R.id.userEventsText) TextView user_events_title;
+    //@BindView(R.id.userEventsText) TextView user_events_title;
     @BindView(R.id.profile_name) TextView user_name;
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    //@BindView(R.id.recyclerView) RecyclerView recyclerView;
     @BindView(R.id.profile_floating_button) FloatingActionButton floatingActionButton;
+
+    @BindView(R.id.eventPagerProfile) ViewPager pager;
+    @BindView(R.id.tabsProfile) TabLayout tabLayout;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -50,20 +58,22 @@ public class ProfileFragment extends ScrollableFragment {
     protected void configView(View fragmentView) {
         setHasOptionsMenu(true);
 
-        ProfileController.newBuilder(new WeakReference<Activity>(getActivity()), getContext())
+        MyProfileController.newBuilder(new WeakReference<Activity>(getActivity()), getContext())
                 .setFloatingActionButton(floatingActionButton)
                 .setFollowers(followers)
                 .setFollowing(following)
                 .setProfilePicture(profilePicture)
-                .setUser_events_title(user_events_title)
                 .setUser_followers_count(followers.findViewById(R.id.layout_follow_count))
                 .setUser_followers_text(followers.findViewById(R.id.layout_follow_text))
                 .setUser_following_count(following.findViewById(R.id.layout_follow_count))
                 .setUser_following_text(following.findViewById(R.id.layout_follow_text))
                 .setUser_name(user_name)
                 .setTheUser(UserController.getInstance().getCurrentUser())
-                .setRecyclerView(recyclerView)
                 .build().load();
+
+        pager.setAdapter(new ProfilePagerAdapter(this.getFragmentManager(), UserController.getInstance().getCurrentUser()));
+        tabLayout.setupWithViewPager(pager);
+
     }
 
     @Override

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp">
+
+        <RelativeLayout
+            android:id="@+id/profile_header"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="@color/md_indigo200">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/profile_user_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="24dp"
+                android:layout_marginStart="24dp"
+                app:placeholderImage="@drawable/profile_placeholder"
+                app:roundAsCircle="true"
+                app:roundingBorderColor="@color/material_black"
+                app:roundingBorderWidth="2dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/profile_user_image"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:weightSum="10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <include
+                        android:id="@+id/profile_followers_container"
+                        layout="@layout/layout_follow_counters"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:layout_weight="5" />
+
+                    <include
+                        android:id="@+id/profile_following_container"
+                        layout="@layout/layout_follow_counters"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="5" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/profile_name"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="18sp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/profile_floating_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_pencil_white_24dp"
+            android:visibility="gone"
+            app:elevation="4dp"
+            app:layout_anchor="@+id/profile_header"
+            app:layout_anchorGravity="bottom|right|end" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabsProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        app:tabGravity="fill"/>
+
+
+    <include layout="@layout/content_profile" />
+
+
+
+</LinearLayout>
