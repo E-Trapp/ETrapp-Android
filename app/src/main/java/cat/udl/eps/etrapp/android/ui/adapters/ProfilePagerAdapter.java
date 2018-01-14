@@ -5,12 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import cat.udl.eps.etrapp.android.ProfileEventsFragment;
-import cat.udl.eps.etrapp.android.ProfileSubscribeFragment;
-import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.User;
-import cat.udl.eps.etrapp.android.ui.fragments.event.CommentsFragment;
-import cat.udl.eps.etrapp.android.ui.fragments.event.EventFragment;
+import cat.udl.eps.etrapp.android.ui.fragments.profile.ProfileEventsFragment;
 
 public class ProfilePagerAdapter extends FragmentStatePagerAdapter {
 
@@ -24,9 +20,12 @@ public class ProfilePagerAdapter extends FragmentStatePagerAdapter {
     @Override public Fragment getItem(int position) {
         System.out.println("Entrou aqui??" + position);
         switch (position) {
-            case 0: return ProfileEventsFragment.newInstance(user);
-            case 1: return ProfileSubscribeFragment.newInstance(user);
-            default: return null;
+            case 0:
+                return ProfileEventsFragment.newInstance(user, ProfileEventsFragment.ProfileType.MYEVENTS);
+            case 1:
+                return ProfileEventsFragment.newInstance(user, ProfileEventsFragment.ProfileType.SUBSCRIBED);
+            default:
+                return null;
         }
     }
 
@@ -36,9 +35,12 @@ public class ProfilePagerAdapter extends FragmentStatePagerAdapter {
 
     @Nullable @Override public CharSequence getPageTitle(int position) {
         switch (position) {
-            case 0: return "My events";
-            case 1: return "My suscribes";
-            default: return null;
+            case 0:
+                return "My events";
+            case 1:
+                return "My suscribes";
+            default:
+                return null;
         }
     }
 }

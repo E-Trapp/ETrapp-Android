@@ -6,7 +6,6 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import java.util.List;
 
 import cat.udl.eps.etrapp.android.api.ApiServiceManager;
-import cat.udl.eps.etrapp.android.api.requests.EventRequest;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.models.Subscribe;
 import okhttp3.ResponseBody;
@@ -51,10 +50,10 @@ public class SubscribeController {
         return tcs.getTask();
     }
 
-    public Task<List<Event>> getUserEventsSubscribe(long id) {
+    public Task<List<Event>> getSubscribedEvents(long id) {
         final TaskCompletionSource<List<Event>> tcs = new TaskCompletionSource<>();
 
-        ApiServiceManager.getService().getUserEventsSubscribe(id).enqueue(new Callback<List<Event>>() {
+        ApiServiceManager.getService().getSubscribedEvents(id).enqueue(new Callback<List<Event>>() {
             @Override
             public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                 if (response.isSuccessful()) {

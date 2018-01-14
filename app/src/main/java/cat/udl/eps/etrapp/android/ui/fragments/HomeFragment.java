@@ -44,7 +44,6 @@ public class HomeFragment extends ScrollableFragment {
 
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     @BindView(R.id.chip_container) ViewGroup chipContainer;
-//    @BindView(R.id.chip) Chip chip;
 
     private HomeAdapter homeAdapter;
 
@@ -67,11 +66,6 @@ public class HomeFragment extends ScrollableFragment {
         homeAdapter.setOnClickListener(v -> {
             startActivity(EventActivity.start(getContext(), (long) v.getTag()));
         });
-
-//        chip.setOnCloseClickListener(v -> {
-//            loadAllEvents();
-//            chipContainer.setVisibility(View.GONE);
-//        });
 
         loadAllEvents();
     }
@@ -158,8 +152,7 @@ public class HomeFragment extends ScrollableFragment {
                                 EventController.getInstance()
                                         .getEventsFromCategory(categories.get(which).getId())
                                         .addOnSuccessListener(events -> {
-
-
+                                            ((ViewGroup)chipContainer.findViewById(R.id.real_chip_container)).removeAllViews();
                                             Chip chip = new Chip(getContext());
                                             chip.setLayoutParams(new ViewGroup.LayoutParams(
                                                     ViewGroup.LayoutParams.WRAP_CONTENT,

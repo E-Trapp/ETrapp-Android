@@ -70,7 +70,7 @@ public interface ApiService {
     Call<List<Event>> listUserEvents(@Path("id") long userKey);
 
     @GET("users/{id}/subscribe")
-    Call<List<Event>> getUserEventsSubscribe(@Path("id") long userKey);
+    Call<List<Event>> getSubscribedEvents(@Path("id") long userKey);
 
     @GET("categories")
     Call<List<Category>> listCategories();

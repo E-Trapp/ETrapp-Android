@@ -90,17 +90,17 @@ public class ProfileController {
     }
 
     private void loadEvents() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        recyclerView.addItemDecoration(new PaddingItemDecoration(context));
+        ProfileEventsAdapter profileEventsAdapter = new ProfileEventsAdapter();
+        profileEventsAdapter.setOnClickListener(v -> {
+            activity.get().startActivity(EventActivity.start(context, (long) v.getTag()));
+        });
+        recyclerView.setAdapter(profileEventsAdapter);
+
         EventController.getInstance()
                 .getUserEvents(theUser.getId())
-                .addOnSuccessListener(events -> {
-                    recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                    recyclerView.addItemDecoration(new PaddingItemDecoration(context));
-                    ProfileEventsAdapter profileEventsAdapter = new ProfileEventsAdapter(events);
-                    profileEventsAdapter.setOnClickListener(v -> {
-                        activity.get().startActivity(EventActivity.start(context, (long) v.getTag()));
-                    });
-                    recyclerView.setAdapter(profileEventsAdapter);
-                });
+                .addOnSuccessListener(profileEventsAdapter::setItems);
     }
 
 

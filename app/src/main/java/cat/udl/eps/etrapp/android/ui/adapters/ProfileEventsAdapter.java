@@ -20,14 +20,10 @@ import cat.udl.eps.etrapp.android.ui.viewHolders.HomeContentViewHolder;
 
 public class ProfileEventsAdapter extends RecyclerView.Adapter<HomeContentViewHolder>{
 
-    public ProfileEventsAdapter(List<Event> eventList) {
-        this.eventList = eventList;
-    }
-
     private SimpleDateFormat time = new SimpleDateFormat("HH:mm");
     private SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 
-    private final List<Event> eventList;
+    private List<Event> eventList;
 
     private View.OnClickListener clickListener;
 
@@ -46,14 +42,14 @@ public class ProfileEventsAdapter extends RecyclerView.Adapter<HomeContentViewHo
         holder.home_content_title.setText(event.getTitle());
         holder.home_content_date.setText(date.format(event.getStartsAt()));
         holder.home_content_time.setText(time.format(event.getStartsAt()));
-        /*
-        UserController.getInstance().getUserById(event.getOwner()).addOnSuccessListener(user -> {
-            holder.home_content_owner.setText(user.getUsername());
-        });
-        */
     }
 
     @Override public int getItemCount() {
-        return eventList.size();
+        return (eventList != null) ? eventList.size() : 0;
+    }
+
+    public void setItems(List<Event> eventList) {
+        this.eventList = eventList;
+        notifyDataSetChanged();
     }
 }
