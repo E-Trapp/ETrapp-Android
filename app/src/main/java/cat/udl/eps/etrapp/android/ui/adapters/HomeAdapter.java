@@ -15,10 +15,12 @@ import java.util.List;
 import java.util.TimeZone;
 
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.EventController;
 import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.ui.viewHolders.HomeContentViewHolder;
 import cat.udl.eps.etrapp.android.ui.viewHolders.HomeHeaderViewHolder;
+import timber.log.Timber;
 
 public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -70,7 +72,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 viewHolder.home_content_title.setText(event.getTitle());
                 viewHolder.home_content_date.setText(date.format(event.getStartsAt()));
                 viewHolder.home_content_time.setText(time.format(event.getStartsAt()));
-
+                EventController.getInstance()
+                        .getScores()
+                        .addOnSuccessListener(scores -> {
+                            viewHolder.home_content_score_likes.setText(String.valueOf(scores.get("likes")));
+                            viewHolder.home_content_score_dislikes.setText(String.valueOf(scores.get("dislikes")));
+                            viewHolder.home_content_progress.setProgress(scores.get("score"));
+                        });
         }
 
     }

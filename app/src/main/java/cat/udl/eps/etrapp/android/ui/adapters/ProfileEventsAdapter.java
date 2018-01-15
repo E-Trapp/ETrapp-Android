@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import cat.udl.eps.etrapp.android.R;
+import cat.udl.eps.etrapp.android.controllers.EventController;
 import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.ui.viewHolders.HomeContentViewHolder;
@@ -42,6 +43,13 @@ public class ProfileEventsAdapter extends RecyclerView.Adapter<HomeContentViewHo
         holder.home_content_title.setText(event.getTitle());
         holder.home_content_date.setText(date.format(event.getStartsAt()));
         holder.home_content_time.setText(time.format(event.getStartsAt()));
+        EventController.getInstance()
+                .getScores(event.getId())
+                .addOnSuccessListener(scores -> {
+                    holder.home_content_score_likes.setText(String.valueOf(scores.get("likes")));
+                    holder.home_content_score_dislikes.setText(String.valueOf(scores.get("dislikes")));
+                    holder.home_content_progress.setProgress(scores.get("score").intValue());
+                });
     }
 
     @Override public int getItemCount() {

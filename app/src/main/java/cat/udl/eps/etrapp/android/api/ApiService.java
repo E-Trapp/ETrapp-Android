@@ -39,6 +39,9 @@ public interface ApiService {
     @PATCH("events/{id}")
     Call<ResponseBody> editEvent(@Path("id") long eventKey, @Body Map<String, Object> updates);
 
+    @GET("events/{id}/scores")
+    Call<Map<String, Long>> getScores(@Path("id") long eventKey);
+
     @POST("events/{id}/messages")
     Call<ResponseBody> writeMessage(@Path("id") long eventKey, @Body SendMessage eventMessage);
 

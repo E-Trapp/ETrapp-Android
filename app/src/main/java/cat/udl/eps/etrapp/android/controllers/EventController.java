@@ -5,8 +5,10 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import cat.udl.eps.etrapp.android.api.ApiServiceManager;
 import cat.udl.eps.etrapp.android.api.requests.EventRequest;
@@ -17,6 +19,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 public class EventController {
 
@@ -182,6 +185,27 @@ public class EventController {
 
             @Override
             public void onFailure(@NonNull Call<List<Event>> call, @NonNull Throwable t) {
+                tcs.trySetException(new Exception(t.getCause()));
+            }
+        });
+
+        return tcs.getTask();
+    }
+
+    public Task<Map<String, Long>> getScores(long id) {
+        final TaskCompletionSource<Map<String, Long>> tcs = new TaskCompletionSource<>();
+
+        ApiServiceManager.getService().getScores(id).enqueue(new Callback<Map<String, Long>>() {
+            @Override
+            public void onResponse(Call<Map<String, Long>> call, Response<Map<String, Long>> response) {
+                if (response.isSuccessful()) {
+                    tcs.trySetResult(response.body());
+                }                 else tcs.trySetException(new Exception());
+
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, Long>> call, Throwable t) {
                 tcs.trySetException(new Exception(t.getCause()));
             }
         });

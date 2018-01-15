@@ -53,7 +53,7 @@ public class ApiServiceManager {
 
     private static void reset() {
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/etrapp-server/v1/")
+                .baseUrl("https://rysite.eu/etrapp-server/v1/")
                 //.baseUrl("http://10.10.10.20:8080/etrapp-server/v1/")
                 .client(getHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
