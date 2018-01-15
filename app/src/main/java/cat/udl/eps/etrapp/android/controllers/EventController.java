@@ -245,4 +245,12 @@ public class EventController {
 
         return tcs.getTask();
     }
+
+    public Task<Boolean> alreadyLiked() {
+        final TaskCompletionSource<Boolean> tcs = new TaskCompletionSource<>();
+
+        tcs.setResult(false);
+
+        return tcs.getTask();
+    }
 }

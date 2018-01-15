@@ -60,6 +60,9 @@ public class EventFragment extends BaseFragment {
         return R.layout.fragment_event;
     }
 
+
+    boolean alreadyLiked = false;
+
     @Override
     protected void configView(View fragmentView) {
         eventStreamAdapter = new EventStreamAdapter();
@@ -75,17 +78,24 @@ public class EventFragment extends BaseFragment {
         sendButton = sendContainer.findViewById(R.id.event_stream_send_button);
         sendText = sendContainer.findViewById(R.id.event_stream_send_text);
 
+
+        EventController.getInstance()
+                .alreadyLiked()
+                .addOnSuccessListener(aBool -> alreadyLiked = aBool);
+
         View.OnClickListener clickListener = view -> {
             switch (view.getId()) {
                 case R.id.event_stream_header:
                     startActivity(UserProfileActivity.start(getContext(), event.getOwner()));
                     break;
                 case R.id.event_header_rate_user_up:
+                    if (!alreadyLiked)
                     EventController.getInstance()
                             .like(event.getId(), 1)
                             .addOnSuccessListener(aVoid -> Toaster.show(getContext(), "ETrapper Upvoted!"));
                     break;
                 case R.id.event_header_rate_user_down:
+                    if (!alreadyLiked)
                     EventController.getInstance()
                             .like(event.getId(), 0)
                             .addOnSuccessListener(aVoid -> Toaster.show(getContext(), "ETrapper Downvoted!"));
