@@ -83,12 +83,12 @@ public class EventFragment extends BaseFragment {
                 case R.id.event_header_rate_user_up:
                     EventController.getInstance()
                             .like(event.getId(), 1)
-                            .addOnSuccessListener(aVoid -> Toaster.show(getContext(), "ETrapper Upvoted!"))
+                            .addOnSuccessListener(aVoid -> Toaster.show(getContext(), "ETrapper Upvoted!"));
                     break;
                 case R.id.event_header_rate_user_down:
                     EventController.getInstance()
                             .like(event.getId(), 0)
-                            .addOnSuccessListener(aVoid -> Toaster.show(getContext(), "ETrapper Downvoted!"))
+                            .addOnSuccessListener(aVoid -> Toaster.show(getContext(), "ETrapper Downvoted!"));
                     break;
                 case R.id.subscribe_event:
 

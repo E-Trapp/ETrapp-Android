@@ -83,8 +83,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             viewHolder.home_content_progress.setProgress(scores.get("score").intValue());
                         })
                 .addOnFailureListener(e -> {
-                    viewHolder.home_content_score_likes.setText(0);
-                    viewHolder.home_content_score_dislikes.setText(0);
+                    viewHolder.home_content_score_likes.setText(String.valueOf(0));
+                    viewHolder.home_content_score_dislikes.setText(String.valueOf(0));
                     viewHolder.home_content_progress.setProgress(0);
                 });
         }

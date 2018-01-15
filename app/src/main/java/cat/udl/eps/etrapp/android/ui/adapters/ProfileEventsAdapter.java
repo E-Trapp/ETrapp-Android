@@ -48,8 +48,8 @@ public class ProfileEventsAdapter extends RecyclerView.Adapter<HomeContentViewHo
                     holder.home_content_progress.setProgress(scores.get("score").intValue());
                 })
                 .addOnFailureListener(e -> {
-                    holder.home_content_score_likes.setText(0);
-                    holder.home_content_score_dislikes.setText(0);
+                    holder.home_content_score_likes.setText(String.valueOf(0));
+                    holder.home_content_score_dislikes.setText(String.valueOf(0));
                     holder.home_content_progress.setProgress(0);
                 });
     }
