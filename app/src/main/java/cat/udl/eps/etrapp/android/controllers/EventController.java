@@ -212,4 +212,37 @@ public class EventController {
 
         return tcs.getTask();
     }
+
+    public Task<Void> like(long id, int i) {
+        final TaskCompletionSource<Void> tcs = new TaskCompletionSource<>();
+
+        if (i == 1) {
+            ApiServiceManager.getService().like(id).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    tcs.trySetResult(null);
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    tcs.trySetException(new Exception(t.getCause()));
+
+                }
+            });
+        } else {
+            ApiServiceManager.getService().dislike(id).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    tcs.trySetResult(null);
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    tcs.trySetException(new Exception(t.getCause()));
+                }
+            });
+        }
+
+        return tcs.getTask();
+    }
 }

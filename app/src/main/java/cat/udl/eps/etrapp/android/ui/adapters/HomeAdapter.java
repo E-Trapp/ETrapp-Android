@@ -1,5 +1,6 @@
 package cat.udl.eps.etrapp.android.ui.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -7,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+import com.google.android.gms.tasks.OnFailureListener;
 
 import java.sql.Date;
 import java.text.Format;
@@ -78,7 +81,12 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             viewHolder.home_content_score_likes.setText(String.valueOf(scores.get("likes")));
                             viewHolder.home_content_score_dislikes.setText(String.valueOf(scores.get("dislikes")));
                             viewHolder.home_content_progress.setProgress(scores.get("score").intValue());
-                        });
+                        })
+                .addOnFailureListener(e -> {
+                    viewHolder.home_content_score_likes.setText(0);
+                    viewHolder.home_content_score_dislikes.setText(0);
+                    viewHolder.home_content_progress.setProgress(0);
+                });
         }
 
     }

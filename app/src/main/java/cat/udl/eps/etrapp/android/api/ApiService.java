@@ -42,6 +42,12 @@ public interface ApiService {
     @GET("events/{id}/scores")
     Call<Map<String, Long>> getScores(@Path("id") long eventKey);
 
+    @GET("events/{id}/like")
+    Call<ResponseBody> like(@Path("id") long eventKey);
+
+    @GET("events/{id}/dislike")
+    Call<ResponseBody> dislike(@Path("id") long eventKey);
+
     @POST("events/{id}/messages")
     Call<ResponseBody> writeMessage(@Path("id") long eventKey, @Body SendMessage eventMessage);
 

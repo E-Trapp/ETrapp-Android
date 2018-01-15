@@ -5,21 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 import cat.udl.eps.etrapp.android.R;
 import cat.udl.eps.etrapp.android.controllers.EventController;
-import cat.udl.eps.etrapp.android.controllers.UserController;
 import cat.udl.eps.etrapp.android.models.Event;
 import cat.udl.eps.etrapp.android.ui.viewHolders.HomeContentViewHolder;
 
-/**
- * Created by ry on 11/12/2017.
- */
 
-public class ProfileEventsAdapter extends RecyclerView.Adapter<HomeContentViewHolder>{
+public class ProfileEventsAdapter extends RecyclerView.Adapter<HomeContentViewHolder> {
 
     private SimpleDateFormat time = new SimpleDateFormat("HH:mm");
     private SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
@@ -32,11 +27,13 @@ public class ProfileEventsAdapter extends RecyclerView.Adapter<HomeContentViewHo
         this.clickListener = clickListener;
     }
 
-    @Override public HomeContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override
+    public HomeContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new HomeContentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_home_content, parent, false));
     }
 
-    @Override public void onBindViewHolder(HomeContentViewHolder holder, int position) {
+    @Override
+    public void onBindViewHolder(HomeContentViewHolder holder, int position) {
         Event event = eventList.get(position);
         holder.container.setTag(event.getId());
         holder.container.setOnClickListener(clickListener);
@@ -49,10 +46,16 @@ public class ProfileEventsAdapter extends RecyclerView.Adapter<HomeContentViewHo
                     holder.home_content_score_likes.setText(String.valueOf(scores.get("likes")));
                     holder.home_content_score_dislikes.setText(String.valueOf(scores.get("dislikes")));
                     holder.home_content_progress.setProgress(scores.get("score").intValue());
+                })
+                .addOnFailureListener(e -> {
+                    holder.home_content_score_likes.setText(0);
+                    holder.home_content_score_dislikes.setText(0);
+                    holder.home_content_progress.setProgress(0);
                 });
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
         return (eventList != null) ? eventList.size() : 0;
     }
 

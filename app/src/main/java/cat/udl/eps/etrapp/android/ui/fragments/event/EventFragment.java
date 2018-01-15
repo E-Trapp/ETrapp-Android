@@ -30,11 +30,13 @@ import cat.udl.eps.etrapp.android.utils.Utils;
 
 public class EventFragment extends BaseFragment {
 
-    @BindView(R.id.event_stream_header) ViewGroup header;
-    @BindView(R.id.event_stream_recycler) RecyclerView recyclerView;
-    @BindView(R.id.event_stream_send_container) ViewGroup sendContainer;
-
     private static Event event;
+    @BindView(R.id.event_stream_header)
+    ViewGroup header;
+    @BindView(R.id.event_stream_recycler)
+    RecyclerView recyclerView;
+    @BindView(R.id.event_stream_send_container)
+    ViewGroup sendContainer;
     private ViewGroup buttonsContainer;
     private EventStreamAdapter eventStreamAdapter;
     private TextView userName;
@@ -53,11 +55,13 @@ public class EventFragment extends BaseFragment {
         return fragment;
     }
 
-    @Override protected int getLayout() {
+    @Override
+    protected int getLayout() {
         return R.layout.fragment_event;
     }
 
-    @Override protected void configView(View fragmentView) {
+    @Override
+    protected void configView(View fragmentView) {
         eventStreamAdapter = new EventStreamAdapter();
         userName = header.findViewById(R.id.event_header_user_name);
         created_date = header.findViewById(R.id.event_header_created);
@@ -77,10 +81,14 @@ public class EventFragment extends BaseFragment {
                     startActivity(UserProfileActivity.start(getContext(), event.getOwner()));
                     break;
                 case R.id.event_header_rate_user_up:
-                    Toaster.show(getContext(), "ETrapper Upvoted!");
+                    EventController.getInstance()
+                            .like(event.getId(), 1)
+                            .addOnSuccessListener(aVoid -> Toaster.show(getContext(), "ETrapper Upvoted!"))
                     break;
                 case R.id.event_header_rate_user_down:
-                    Toaster.show(getContext(), "ETrapper Downvoted!");
+                    EventController.getInstance()
+                            .like(event.getId(), 0)
+                            .addOnSuccessListener(aVoid -> Toaster.show(getContext(), "ETrapper Downvoted!"))
                     break;
                 case R.id.subscribe_event:
 
@@ -147,7 +155,8 @@ public class EventFragment extends BaseFragment {
 
             boolean loading = false;
 
-            @Override public void onScrolledToEnd() {
+            @Override
+            public void onScrolledToEnd() {
                 if (!loading) {
                     if (eventStreamAdapter.getItemCount() >= 5) {
                         recyclerView.post(() -> {
@@ -164,15 +173,22 @@ public class EventFragment extends BaseFragment {
     }
 
     static class IncludedLayout1 {
-        @BindView(R.id.event_header_user_name) TextView userName;
-        @BindView(R.id.event_header_created) TextView created_date;
-        @BindView(R.id.event_header_rate_user_up) ImageView rateUp;
-        @BindView(R.id.event_header_rate_user_down) ImageView rateDown;
-        @BindView(R.id.subscribe_event) Button subscribeEvent;
-        @BindView(R.id.event_header_container) ViewGroup headerContainer;
+        @BindView(R.id.event_header_user_name)
+        TextView userName;
+        @BindView(R.id.event_header_created)
+        TextView created_date;
+        @BindView(R.id.event_header_rate_user_up)
+        ImageView rateUp;
+        @BindView(R.id.event_header_rate_user_down)
+        ImageView rateDown;
+        @BindView(R.id.subscribe_event)
+        Button subscribeEvent;
+        @BindView(R.id.event_header_container)
+        ViewGroup headerContainer;
     }
 
     static class IncludedLayout2 {
-        @BindView(R.id.recyclerView) RecyclerView recyclerView;
+        @BindView(R.id.recyclerView)
+        RecyclerView recyclerView;
     }
 }
