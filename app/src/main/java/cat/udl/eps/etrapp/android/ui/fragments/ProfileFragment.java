@@ -71,7 +71,8 @@ public class ProfileFragment extends ScrollableFragment {
                 .setTheUser(UserController.getInstance().getCurrentUser())
                 .build().load();
 
-        pager.setAdapter(new ProfilePagerAdapter(this.getFragmentManager(), UserController.getInstance().getCurrentUser()));
+
+        pager.setAdapter(new ProfilePagerAdapter(this.getChildFragmentManager(), UserController.getInstance().getCurrentUser()));
         tabLayout.setupWithViewPager(pager);
 
     }
