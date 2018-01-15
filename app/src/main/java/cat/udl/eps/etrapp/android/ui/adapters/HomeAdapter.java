@@ -73,11 +73,11 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 viewHolder.home_content_date.setText(date.format(event.getStartsAt()));
                 viewHolder.home_content_time.setText(time.format(event.getStartsAt()));
                 EventController.getInstance()
-                        .getScores()
+                        .getScores(event.getId())
                         .addOnSuccessListener(scores -> {
                             viewHolder.home_content_score_likes.setText(String.valueOf(scores.get("likes")));
                             viewHolder.home_content_score_dislikes.setText(String.valueOf(scores.get("dislikes")));
-                            viewHolder.home_content_progress.setProgress(scores.get("score"));
+                            viewHolder.home_content_progress.setProgress(scores.get("score").intValue());
                         });
         }
 
