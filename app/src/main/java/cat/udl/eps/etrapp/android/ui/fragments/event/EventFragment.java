@@ -35,6 +35,7 @@ public class EventFragment extends BaseFragment {
     @BindView(R.id.event_stream_send_container) ViewGroup sendContainer;
 
     private static Event event;
+    private ViewGroup buttonsContainer;
     private EventStreamAdapter eventStreamAdapter;
     private TextView userName;
     private TextView created_date;
@@ -65,6 +66,7 @@ public class EventFragment extends BaseFragment {
         subscribeEvent = header.findViewById(R.id.subscribe_event);
         location = header.findViewById(R.id.event_header_location);
         description = header.findViewById(R.id.event_header_description);
+        buttonsContainer = header.findViewById(R.id.event_header_rate_user_container);
 
         sendButton = sendContainer.findViewById(R.id.event_stream_send_button);
         sendText = sendContainer.findViewById(R.id.event_stream_send_text);
@@ -106,7 +108,6 @@ public class EventFragment extends BaseFragment {
     }
 
     private void setupUI() {
-
         if (UserController.getInstance().isUserLoggedIn()) {
             if (UserController.getInstance().getCurrentUser().getId() == event.getOwner()) {
                 sendContainer.setVisibility(View.VISIBLE);
@@ -119,6 +120,8 @@ public class EventFragment extends BaseFragment {
                             });
                 });
             }
+        } else {
+            buttonsContainer.setVisibility(View.GONE);
         }
 
         UserController.getInstance()
