@@ -18,7 +18,6 @@ public class ProfilePagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override public Fragment getItem(int position) {
-        System.out.println("Entrou aqui??" + position);
         switch (position) {
             case 0:
                 return ProfileEventsFragment.newInstance(user, ProfileEventsFragment.ProfileType.MYEVENTS);
