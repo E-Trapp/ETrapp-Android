@@ -69,8 +69,8 @@ public class ProfileController {
         user_following_text.setText(context.getString(R.string.following));
         user_followers_text.setText(context.getString(R.string.followers));
 
-        user_following_count.setText("" + (Math.abs(new Random().nextInt() % 14522)));
-        user_followers_count.setText("" + (Math.abs(new Random().nextInt() % 14522)));
+        user_following_count.setText("" + (Math.abs(new Random().nextInt() % 20)));
+        user_followers_count.setText("" + (Math.abs(new Random().nextInt() % 30)));
 
         if (theUser.getFirstName() == null && theUser.getLastName() == null) {
             user_name.setText(theUser.getUsername());
